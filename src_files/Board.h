@@ -10,6 +10,7 @@
 #include "Util.h"
 #include "vector"
 
+#include <iterator>
 #include <ostream>
 #include <sstream>    // std::stringstream
 #include <stdio.h>
@@ -45,6 +46,20 @@ static constexpr Score vals[] {100, 325, 325, 500, 1000, 10000};
 struct seeCacheEntry {
     U64   key;
     Score score;
+};
+
+struct PieceList {
+    uint8_t pieceCount {0};
+    Square indices[32] {};
+    
+    typedef Square* iterator;
+    typedef const Square* const_iterator;
+    
+    iterator begin() { return &indices[0]; }
+    const_iterator begin() const { return &indices[0]; }
+    iterator end() { return &indices[pieceCount]; }
+    const_iterator end() const { return &indices[pieceCount]; }
+    
 };
 
 struct BoardStatus {
@@ -92,16 +107,18 @@ struct BoardStatus {
 
 class Board {
     private:
-    U64 m_pieces[12];
-    U64 m_teamOccupied[2];
-    U64 m_occupied;
-
 #ifdef SEE_CACHE_SIZE
     struct seeCacheEntry seeCache[SEE_CACHE_SIZE] {};
 #endif
-    Piece m_pieceBoard[64];
 
+    U64   m_pieces[12];
+    U64   m_teamOccupied[2];
+    U64   m_occupied;
+    Piece m_pieceBoard[64];
     Color m_activePlayer;
+
+    uint8_t   m_indexBoard[64]{};
+    PieceList m_pieceLists[12]{};
 
     std::vector<BoardStatus> m_boardStatusHistory;
 
@@ -111,11 +128,13 @@ class Board {
     Board(std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
     Board(Board* board);
-
+    
     virtual ~Board();
-
+    
     friend std::ostream& operator<<(std::ostream& os, Board& board);
 
+    bool integrity();
+    
     std::string fen();
 
     U64 zobrist();
@@ -188,6 +207,8 @@ class Board {
 
     const U64* getPieces() const;
 
+    PieceList& getPieceList(Color color, Piece piece);
+    
     U64 getPieces(Color color, Piece piece);
 };
 

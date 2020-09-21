@@ -321,25 +321,18 @@ bb::Score Evaluator::evaluate(Board* b) {
     
     
     k = whitePawns;
-    while (k) {
-        square = bitscanForward(k);
-    
+    for (Square square:b->getPieceList(WHITE, PAWN)) {
         features[INDEX_PAWN_PSQT] += psqt_pawn[squareIndex(rankIndex(square), (wKSide ? fileIndex(square) : 7 - fileIndex(square)))] * earlyPSTScalar;
         features[INDEX_PAWN_PSQT] += psqt_pawn_endgame[square] * latePSTScalar;
-        
-        k = lsbReset(k);
     }
     
     k = b->getPieces()[BLACK_PAWN];
-    while (k) {
-        square = bitscanForward(k);
-    
+    for (Square square:b->getPieceList(BLACK, PAWN)) {
         features[INDEX_PAWN_PSQT] -=
                 psqt_pawn[squareIndex(7 - rankIndex(square), (bKSide ? fileIndex(square) : 7 - fileIndex(square)))] * earlyPSTScalar;
         features[INDEX_PAWN_PSQT] -=
                 psqt_pawn_endgame[squareIndex(7 - rankIndex(square), fileIndex(square))] * latePSTScalar;
         
-        k = lsbReset(k);
     }
     
     
@@ -389,12 +382,10 @@ bb::Score Evaluator::evaluate(Board* b) {
     /**********************************************************************************
      *                                  K N I G H T S                                 *
      **********************************************************************************/
-
     
     
-    k = b->getPieces()[WHITE_KNIGHT];
-    while (k) {
-        square  = bitscanForward(k);
+    
+    for (Square square:b->getPieceList(WHITE, KNIGHT)) {
         attacks = KNIGHT_ATTACKS[square];
     
     
@@ -411,12 +402,9 @@ bb::Score Evaluator::evaluate(Board* b) {
                         2);
         
         
-        k = lsbReset(k);
     }
     
-    k = b->getPieces()[BLACK_KNIGHT];
-    while (k) {
-        square  = bitscanForward(k);
+    for (Square square:b->getPieceList(BLACK, KNIGHT)) {
         attacks = KNIGHT_ATTACKS[square];
     
     
@@ -431,17 +419,14 @@ bb::Score Evaluator::evaluate(Board* b) {
         addToKingSafety(attacks, whiteKingZone, whitekingSafety_attackingPiecesCount, whitekingSafety_valueOfAttacks,
                         2);
         
-        k = lsbReset(k);
     }
     features[INDEX_KNIGHT_VALUE] = (bitCount(b->getPieces()[WHITE_KNIGHT]) -
                                     bitCount(b->getPieces()[BLACK_KNIGHT]));
     /**********************************************************************************
      *                                  B I S H O P S                                 *
      **********************************************************************************/
-
-    k = b->getPieces()[WHITE_BISHOP];
-    while (k) {
-        square  = bitscanForward(k);
+    
+    for (Square square:b->getPieceList(WHITE, BISHOP)) {
         attacks = lookUpBishopAttack(square, occupied);
 
 #ifdef TUNE_PST
@@ -476,9 +461,7 @@ bb::Score Evaluator::evaluate(Board* b) {
         k = lsbReset(k);
     }
     
-    k = b->getPieces()[BLACK_BISHOP];
-    while (k) {
-        square  = bitscanForward(k);
+    for (Square square:b->getPieceList(BLACK, BISHOP)) {
         attacks = lookUpBishopAttack(square, occupied);
 
 #ifdef TUNE_PST
@@ -516,10 +499,8 @@ bb::Score Evaluator::evaluate(Board* b) {
     /**********************************************************************************
      *                                  R O O K S                                     *
      **********************************************************************************/
-
-    k = b->getPieces()[WHITE_ROOK];
-    while (k) {
-        square  = bitscanForward(k);
+    
+    for (Square square:b->getPieceList(WHITE, ROOK)) {
         attacks = lookUpRookAttack(square, occupied);
     
     
@@ -550,9 +531,7 @@ bb::Score Evaluator::evaluate(Board* b) {
         k = lsbReset(k);
     }
     
-    k = b->getPieces()[BLACK_ROOK];
-    while (k) {
-        square  = bitscanForward(k);
+    for (Square square:b->getPieceList(BLACK, ROOK)) {
         attacks = lookUpRookAttack(square, occupied);
     
     
@@ -587,11 +566,9 @@ bb::Score Evaluator::evaluate(Board* b) {
     /**********************************************************************************
      *                                  Q U E E N S                                   *
      **********************************************************************************/
-
     
-    k = b->getPieces()[WHITE_QUEEN];
-    while (k) {
-        square  = bitscanForward(k);
+    
+    for (Square square:b->getPieceList(WHITE, QUEEN)) {
         attacks = lookUpRookAttack(square, occupied) | lookUpBishopAttack(square, occupied);
     
     
@@ -608,9 +585,7 @@ bb::Score Evaluator::evaluate(Board* b) {
         k = lsbReset(k);
     }
     
-    k = b->getPieces()[BLACK_QUEEN];
-    while (k) {
-        square  = bitscanForward(k);
+    for (Square square:b->getPieceList(BLACK, QUEEN)) {
         attacks = lookUpRookAttack(square, occupied) | lookUpBishopAttack(square, occupied);
     
     

@@ -122,6 +122,10 @@ Board::Board(std::string fen) {
 Board::Board(Board* board) {
     for (int i = 0; i < 12; i++) {
         m_pieces[i] = 0;
+        m_pieceLists[i].pieceCount = board->m_pieceLists[i].pieceCount;
+        for(int n = 0; n < m_pieceLists[i].pieceCount; n++){
+            m_pieceLists[i].indices[n] = board->m_pieceLists[i].indices[n];
+        }
     }
 
     m_occupied = 0;
@@ -152,6 +156,68 @@ Board::Board(Board* board) {
 }
 
 Board::~Board() {}
+
+bool Board::integrity() {
+    
+    
+    bool intact = true;
+    //checking piecelists
+    
+    for(int i = 0; i < 12; i++){
+        int index = 0;
+        for(Square s:m_pieceLists[i]){
+            int seen = 0;
+            for(Square s2:m_pieceLists[i]){
+                if(s == s2){
+                    seen ++;
+                }
+            }
+            if(seen != 1){
+                std::cerr << "found value " << (int)s << " twice in piecelist: " << (int)i << std::endl;
+                intact = false;
+            }
+            if(m_pieceBoard[s] != i){
+                std::cerr << "piece board contains " << (int)m_pieceBoard[s] << " instead of "<< (int)s <<" which is contained in the pieceList" << std::endl;
+                intact = false;
+            }
+            if(m_indexBoard[s] != index){
+                std::cerr << "index board contains wrong index (" << (int)m_indexBoard[s] << ") where " << (int)index <<" would be correct"<<std::endl;
+                    intact = false;
+            }
+            
+            index ++;
+        }
+    }
+    
+    if(!intact){
+        
+        std::cerr << "overview of wrong data: " << std::endl;
+        
+        std::cerr << *this << std::endl;
+    
+        std::cerr << "pieceLists:" << std::endl;
+        for(int i = 0; i < 12; i++){
+            for(Square s:m_pieceLists[i]){
+                std::cerr << (int)s << " ";
+            }
+            std::cerr << std::endl;
+        }
+    
+        std::cerr << "index board:" << std::endl;
+        for(int n = 7; n>= 0; n--){
+            for(int i = 0; i < 8; i++){
+                std::cerr << (int)m_indexBoard[squareIndex(n,i)] << " ";
+    
+            }
+            std::cerr << std::endl;
+    
+        }
+        
+    }
+    
+    return intact;
+}
+
 
 std::string Board::fen() {
 
@@ -235,13 +301,21 @@ Piece Board::getPiece(Square sq) { return m_pieceBoard[sq]; }
 void Board::setPiece(Square sq, Piece piece) {
 
     m_pieceBoard[sq] = piece;
-
+    
+    //adding the piece to the piece list
+    m_pieceLists[piece].indices[m_pieceLists[piece].pieceCount] = sq;
+    m_indexBoard[sq] = m_pieceLists[piece].pieceCount;
+    m_pieceLists[piece].pieceCount ++;
+    
+    
+    //adding the piece to the bitboard.
     U64 sqBB = (ONE << sq);
 
     m_pieces[piece] |= sqBB;
     m_teamOccupied[piece / 6] |= sqBB;
     m_occupied |= sqBB;
 
+    //adjusting zobrist key
     BoardStatus* st = getBoardStatus();
     st->zobrist ^= getHash(piece, sq);
 }
@@ -249,7 +323,13 @@ void Board::setPiece(Square sq, Piece piece) {
 void Board::unsetPiece(Square sq) {
 
     Piece p = getPiece(sq);
-
+    
+    //removing the piece from the piece list
+    m_pieceLists[p].indices[m_indexBoard[sq]] = m_pieceLists[p].indices[m_pieceLists[p].pieceCount-1];
+    m_indexBoard[m_pieceLists[p].indices[m_pieceLists[p].pieceCount-1]] = m_indexBoard[sq];
+    m_pieceLists[p].pieceCount --;
+    m_indexBoard[sq] = 0;
+    
     U64 sqBB = ~(ONE << sq);
     m_pieces[p] &= sqBB;
     m_teamOccupied[p / 6] &= sqBB;
@@ -263,9 +343,19 @@ void Board::unsetPiece(Square sq) {
 
 void Board::replacePiece(Square sq, Piece piece) {
     Piece p = getPiece(sq);
-
+    
+    
+    //removing the replaced piece from the piece list
+    m_pieceLists[p].indices[m_indexBoard[sq]] = m_pieceLists[p].indices[m_pieceLists[p].pieceCount-1];
+    m_indexBoard[m_pieceLists[p].indices[m_pieceLists[p].pieceCount-1]] = m_indexBoard[sq];
+    m_pieceLists[p].pieceCount --;
+    m_pieceLists[piece].indices[m_pieceLists[piece].pieceCount] = sq;
+    m_indexBoard[sq] = m_pieceLists[piece].pieceCount;
+    m_pieceLists[piece].pieceCount ++;
+    
+    
     U64 sqBB = (ONE << sq);
-
+    
     m_pieces[p] &= ~sqBB;                 // unset
     m_pieces[piece] |= sqBB;              // set
     m_teamOccupied[p / 6] &= ~sqBB;       // unset
@@ -296,11 +386,14 @@ void Board::move(Move m) {
     Type   mType  = getType(m);
     Color  color  = getActivePlayer();
     int    factor = getActivePlayer() == 0 ? 1 : -1;
-
+    
+    
+    assert(integrity());
+    
     if (isCapture(m)) {
         // reset fifty move counter if a piece has been captured
         newBoardStatus.fiftyMoveCounter = 0;
-        
+
         if(getPiece(sqTo) % 6 == ROOK){
             if (color == BLACK) {
                 if (sqTo == A1) {
@@ -409,18 +502,14 @@ void Board::move(Move m) {
                 newBoardStatus.metaInformation &= ~(ONE << (color * 2 + 1));
             }
         }
-        //        if (f == 0) {
-        //            newBoardStatus.metaInformation &= ~(ONE << (color * 2));
-        //        } else {
-        //            newBoardStatus.metaInformation &= ~(ONE << (color * 2 + 1));
-        //        }
     }
 
     m_boardStatusHistory.emplace_back(std::move(newBoardStatus));
+    
 
-    // doing the initial move
+    
     this->unsetPiece(sqFrom);
-
+    
     if (mType != EN_PASSANT && isCapture(m)) {
         this->replacePiece(sqTo, pFrom);
     } else {
@@ -429,11 +518,20 @@ void Board::move(Move m) {
 
     this->changeActivePlayer();
     this->computeNewRepetition();
+
+    
+    
+    assert(integrity());
+
+    
 }
 
 void Board::undoMove() {
-
+    
     Move m = getBoardStatus()->move;
+    
+    
+    
 
     changeActivePlayer();
 
@@ -466,6 +564,10 @@ void Board::undoMove() {
     setPiece(sqFrom, pFrom);
 
     m_boardStatusHistory.pop_back();
+    
+    
+   
+    
 }
 
 void Board::move_null() {
@@ -513,12 +615,6 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
 
         attackableSquares = ~m_teamOccupied[WHITE];
         opponents         = m_teamOccupied[BLACK];
-
-        knights = m_pieces[WHITE_KNIGHT];
-        bishops = m_pieces[WHITE_BISHOP];
-        rooks   = m_pieces[WHITE_ROOK];
-        queens  = m_pieces[WHITE_QUEEN];
-        kings   = m_pieces[WHITE_KING];
 
         U64 pawnsLeft   = shiftNorthWest(m_pieces[WHITE_PAWN] & ~FILE_A);
         U64 pawnsRight  = shiftNorthEast(m_pieces[WHITE_PAWN] & ~FILE_H);
@@ -603,11 +699,6 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
         attackableSquares = ~m_teamOccupied[BLACK];
         opponents         = m_teamOccupied[WHITE];
 
-        knights = m_pieces[BLACK_KNIGHT];
-        bishops = m_pieces[BLACK_BISHOP];
-        rooks   = m_pieces[BLACK_ROOK];
-        queens  = m_pieces[BLACK_QUEEN];
-        kings   = m_pieces[BLACK_KING];
 
         U64 pawnsLeft   = shiftSouthWest(m_pieces[BLACK_PAWN] & ~FILE_A);
         U64 pawnsRight  = shiftSouthEast(m_pieces[BLACK_PAWN] & ~FILE_H);
@@ -685,8 +776,7 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
         }
     }
 
-    while (knights) {
-        s       = bitscanForward(knights);
+    for(Square s:getPieceList(m_activePlayer, KNIGHT)){
         attacks = KNIGHT_ATTACKS[s] & attackableSquares;
         while (attacks) {
             target = bitscanForward(attacks);
@@ -699,10 +789,8 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
 
             attacks = lsbReset(attacks);
         }
-        knights = lsbReset(knights);
     }
-    while (bishops) {
-        s       = bitscanForward(bishops);
+    for(Square s:getPieceList(m_activePlayer, BISHOP)){
         attacks = lookUpBishopAttack(s, m_occupied) & attackableSquares;
         while (attacks) {
             target = bitscanForward(attacks);
@@ -713,11 +801,9 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
             }
             attacks = lsbReset(attacks);
         }
-        bishops = lsbReset(bishops);
     }
-
-    while (rooks) {
-        s       = bitscanForward(rooks);
+    
+    for(Square s:getPieceList(m_activePlayer, ROOK)){
         attacks = lookUpRookAttack(s, m_occupied) & attackableSquares;
 
         while (attacks) {
@@ -730,12 +816,10 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
             }
             attacks = lsbReset(attacks);
         }
-        rooks = lsbReset(rooks);
     }
-
-    while (queens) {
-        s = bitscanForward(queens);
-
+    
+    
+    for(Square s:getPieceList(m_activePlayer, QUEEN)){
         attacks = (lookUpRookAttack(s, m_occupied) | lookUpBishopAttack(s, m_occupied)) & attackableSquares;
 
         while (attacks) {
@@ -751,11 +835,9 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
             attacks &= (attacks - 1);
         }
 
-        queens &= (queens - 1);
     }
-
-    while (kings) {
-        s       = bitscanForward(kings);
+    
+    for(Square s:getPieceList(m_activePlayer, KING)){
         attacks = KING_ATTACKS[s] & attackableSquares;
         while (attacks) {
             target = bitscanForward(attacks);
@@ -769,7 +851,7 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
             attacks = lsbReset(attacks);
         }
 
-        if (getActivePlayer() == WHITE) {
+        if (m_activePlayer == WHITE) {
 
             if (getCastlingChance(STATUS_INDEX_WHITE_QUEENSIDE_CASTLING) && getPiece(A1) == WHITE_ROOK
                 && (m_occupied & CASTLING_WHITE_QUEENSIDE_MASK) == 0) {
@@ -792,7 +874,6 @@ void Board::getPseudoLegalMoves(MoveList* moves) {
                 moves->add(genMove(E8, G8, KING_CASTLE, BLACK_KING));
             }
         }
-        kings = lsbReset(kings);
     }
 }
 
@@ -1528,6 +1609,10 @@ const U64* Board::getPieces() const { return m_pieces; }
 const U64* Board::getTeamOccupied() const { return m_teamOccupied; }
 
 U64 Board::getPieces(Color color, Piece piece) { return m_pieces[color * 6 + piece]; }
+
+PieceList& Board::getPieceList(Color color, Piece piece) {
+    return m_pieceLists[color * 6 + piece];
+}
 
 U64 Board::getPinnedPieces(Color color, U64& pinners) {
     U64 pinned = 0;
