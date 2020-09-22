@@ -5,12 +5,12 @@
 #include "Network.h"
 
 fecppnn::Loss*      fecppnn::Network::getLoss() const { return loss; }
-void       fecppnn::Network::setLoss(Loss* loss) { Network::loss = loss; }
+void                fecppnn::Network::setLoss(Loss* loss) { Network::loss = loss; }
 fecppnn::Optimiser* fecppnn::Network::getOptimiser() const { return optimiser; }
-void       fecppnn::Network::setOptimiser(Optimiser* optimiser) { Network::optimiser = optimiser; }
+void                fecppnn::Network::setOptimiser(Optimiser* optimiser) { Network::optimiser = optimiser; }
 fecppnn::Layer*     fecppnn::Network::getLayer(int index) { return layers.at(index); }
-void       fecppnn::Network::updateWeights() { optimiser->update(); }
-double     fecppnn::Network::backprop(Data* target) {
+void                fecppnn::Network::updateWeights() { optimiser->update(); }
+double              fecppnn::Network::backprop(Data* target) {
 
     double l = loss->computeLoss(layers.at(layers.size() - 1)->getOutput(), target);
 
@@ -47,8 +47,7 @@ void fecppnn::Network::prepareTraining() {
     if (loss == nullptr) {
         std::cerr << "no loss is set for the network." << std::endl;
     }
-    
-    
+
     optimiser->init(weights);
 }
 void fecppnn::Network::loadWeights(const std::string& path) {
@@ -77,14 +76,13 @@ void fecppnn::Network::writeNetworkStructure(const std::string& path) {
         Layer* layer = layers.at(i);
 
         std::string layerName = layer->name();
-        
-        
+
         if (layerName == "InputLayer") {
             myfile << "InputLayer " << layer->getOutput()->getSize() << "\n";
         } else if (layerName == "DenseLayer_Sparse_NF") {
-            myfile << "DenseLayer_Sparse_NF " <<
-                dynamic_cast<DenseLayer_Sparse_NF*>(layer)->getInput()->getSize() << " " <<
-                layer->getOutput()->getSize() << "\n";
+            myfile << "DenseLayer_Sparse_NF " << layer->getOutput()->getSize()
+                   << dynamic_cast<DenseLayer_Sparse_NF*>(layer)->getInput()->getSize() << " "
+                   << "\n";
         } else if (layerName == "Concat") {
 
             auto it1 = std::find(layers.begin(), layers.end(), layer->getPreviousLayers().at(0));

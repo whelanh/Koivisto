@@ -153,13 +153,33 @@ void main_tune_pst() {
 }
 #endif
 
+#include "fecppnn/network/Network.h"
+#include "fecppnn/special/KingPawnNetwork.h"
+
 int main(int argc, char* argv[]) {
 
-    if (argc == 1) {
-        uci_loop(false);
-    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
-        uci_loop(true);
-    }
+//    if (argc == 1) {
+//        uci_loop(false);
+//    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
+//        uci_loop(true);
+//    }
+
+    
+    bb_init();
+
+    fecppnn::Network* net = fecppnn::createNetwork("net1.structure");
+    fecppnn::KingPawnNetwork worker{net};
+
+    Board b {"rnbq1bnr/p1ppp1p1/1p2k2p/8/4Pp1P/PP6/2PPKPP1/RNB1QBNR w - - 1 9"};
+
+    worker.resetInput(&b);
+    worker.printInputs();
+    
+    std::cout << worker.validateInput(&b) << std::endl;
+    
+    
+    bb_cleanUp();
+
 
     /**********************************************************************************
      *                                  T U N I N G                                   *

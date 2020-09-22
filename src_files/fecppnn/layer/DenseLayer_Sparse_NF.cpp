@@ -26,7 +26,8 @@ void fecppnn::DenseLayer_Sparse_NF::compute() {
 void              fecppnn::DenseLayer_Sparse_NF::backprop() {}
 const std::string fecppnn::DenseLayer_Sparse_NF::name() { return "DenseLayer_Sparse_NF"; }
 void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float val) {
-
+    
+    
     if (val == input->get(index)) {
         return;
     }
@@ -36,7 +37,8 @@ void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float va
     } else {
         inputTracker.put(index);
     }
-
+    input->get(index) = val;
+    
     changedSinceLastComputation = true;
 
     float difference = val - input->get(index);
@@ -44,6 +46,7 @@ void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float va
     __m256 dif = _mm256_set1_ps(difference);
 
     for (int o = 0; o < getOutput()->getSize(); o += 8) {
+        
         __m256 mat0 = _mm256_load_ps(&weights->getValues()[o + getOutput()->getSize() * index]);
         __m256 out  = _mm256_load_ps(&getOutput()->getValues()[o]);
 

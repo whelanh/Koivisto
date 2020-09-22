@@ -78,17 +78,17 @@ static Network* createNetwork(const std::string& file) {
     std::ifstream infile(file);
     Network*      network = new Network();
     std::string   line;
+    
+    
     while (std::getline(infile, line)) {
         std::istringstream iss(line);
-
+        
         std::vector<std::string> splits;
         splitString(line, splits, ' ');
 
         std::string id   = splits.at(0);
         int         size = stoi(splits.at(1));
-
         
-
         if (id == "InputLayer"){
             network->addLayer(new InputLayer(size));
             continue;
@@ -107,7 +107,6 @@ static Network* createNetwork(const std::string& file) {
             network->addLayer(new Concat(prevLayer, network->getLayer(stoi(splits.at(3)))));
         if (id == "DenseLayer")
             network->addLayer(new DenseLayer(prevLayer, size));
-        
         if (id == "ReLU")
             network->addLayer(new ReLU(prevLayer));
         if (id == "ClippedReLU")

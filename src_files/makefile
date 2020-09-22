@@ -1,6 +1,6 @@
 CC      = g++
 #SRC     = *.cpp syzygy/*.c nn/*.cpp nn/data/*.cpp
-SRC     = *.cpp syzygy/tbprobe.c
+SRC     = *.cpp syzygy/tbprobe.c fecppnn/data/*.cpp fecppnn/layer/*.cpp fecppnn/loss/*.cpp fecppnn/network/*.cpp fecppnn/optimiser/*.cpp
 LIBS    = -lpthread -lm
 EXE     = ../Koivisto
 
