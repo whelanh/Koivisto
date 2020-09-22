@@ -10,12 +10,16 @@
 #include <iostream>
 #include <thread>
 
+#include "fecppnn/network/Network.h"
+
 #define MAJOR_VERSION 2
 #define MINOR_VERSION 1
 
 TimeManager* timeManager;
 Board*       board;
 std::thread* searchThread = nullptr;
+
+fecppnn::Network* network;
 
 void uci_loop(bool bench) {
 
@@ -183,6 +187,25 @@ void uci_processCommand(std::string str) {
         std::cout << *board << std::endl;
     } else if (split.at(0) == "eval") {
         printEvaluation(board);
+    } else if (split.at(0) == "nn"){
+    
+    
+        if(split.at(1) == "load"){
+            if(split.at(2) == "structure"){
+                network = fecppnn::createNetwork(split.at(3));
+            } else if(split.at(2) == "weights"){
+                network->loadWeights(split.at(3));
+            }
+        }else if(split.at(1) == "write"){
+            if(split.at(2) == "structure"){
+                network->writeNetworkStructure(split.at(3));
+            } else if(split.at(2) == "weights"){
+                network->writeWeights(split.at(3));
+            }
+        }else if(split.at(1) == "eval"){
+        
+        }
+    
     }
 }
 

@@ -1,9 +1,19 @@
-
+/***********************************************************************************
+ * Copyright (C) 2020-2021 {Finn Eggers} <{mail@finneggers.de}>                    *
+ *                                                                                 *
+ * This file is part of fecppnn.                                                   *
+ *                                                                                 *
+ * fecppnn can not be copied and/or distributed without the express                *
+ * permission of Finn Eggers                                                       *
+ ***********************************************************************************/
 
 #ifndef KOIVISTO_MSE_H
 #define KOIVISTO_MSE_H
 
 #include "Loss.h"
+
+namespace fecppnn {
+
 class MSE : public Loss {
     public:
     float computeLoss(Data* output, Data* expected) override {
@@ -17,8 +27,10 @@ class MSE : public Loss {
             loss += difference * difference;
         }
 
-        return loss;
+        return loss / output->getSize();
     }
 };
+
+}    // namespace fecppnn
 
 #endif    // KOIVISTO_MSE_H

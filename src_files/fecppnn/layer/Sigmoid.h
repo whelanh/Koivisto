@@ -1,33 +1,29 @@
+/***********************************************************************************
+ * Copyright (C) 2020-2021 {Finn Eggers} <{mail@finneggers.de}>                    *
+ *                                                                                 *
+ * This file is part of fecppnn.                                                   *
+ *                                                                                 *
+ * fecppnn can not be copied and/or distributed without the express                *
+ * permission of Finn Eggers                                                       *
+ ***********************************************************************************/
 
-
-#ifndef KOIVISTO_RELU_H
-#define KOIVISTO_RELU_H
+#ifndef KOIVISTO_SIGMOID_H
+#define KOIVISTO_SIGMOID_H
 
 #include "Layer.h"
 
 #include <cmath>
+namespace fecppnn {
 class Sigmoid : public Layer {
     public:
     Sigmoid(Layer* prevLayer) : Layer(prevLayer->getOutput()->getSize()) { this->connect(prevLayer); };
 
-    void compute() override {
-        float* outputVals = getOutput()->getValues();
-        float* inputVals  = getInput()->getValues();
+    void compute() override;
+    void backprop() override;
 
-        for (int i = 0; i < getOutput()->getSize(); i++) {
-            outputVals[i] = 1.0 / (1+exp(-inputVals[i]));
-        }
-    }
-    void backprop() override {
-
-        float* outputGrads = getOutput()->getGradient()->getValues();
-        float* outputVals  = getOutput()->getValues();
-        float* inputGrads  = getInput()->getGradient()->getValues();
-
-        for (int i = 0; i < getOutput()->getSize(); i++) {
-            inputGrads[i] = outputGrads[i] * (outputVals[i] * (1 - outputVals[i]));
-        }
-    }
+    void              collectOptimisableData(std::vector<Data*>& vec) override;
+    const std::string name() override;
 };
+}    // namespace fecppnn
 
 #endif    // KOIVISTO_RELU_H

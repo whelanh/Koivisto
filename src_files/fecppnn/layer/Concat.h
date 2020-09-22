@@ -1,8 +1,17 @@
+/***********************************************************************************
+ * Copyright (C) 2020-2021 {Finn Eggers} <{mail@finneggers.de}>                    *
+ *                                                                                 *
+ * This file is part of fecppnn.                                                   *
+ *                                                                                 *
+ * fecppnn can not be copied and/or distributed without the express                *
+ * permission of Finn Eggers                                                       *
+ ***********************************************************************************/
 
 #ifndef KOIVISTO_CONCAT_H
 #define KOIVISTO_CONCAT_H
 
 #include "Layer.h"
+namespace fecppnn {
 class Concat : public Layer {
 
     public:
@@ -10,6 +19,10 @@ class Concat : public Layer {
 
     void compute() override;
     void backprop() override;
+
+    void              collectOptimisableData(std::vector<Data*>& vec) override {}
+    const std::string name() override;
 };
+}    // namespace fecppnn
 
 #endif    // KOIVISTO_CONCAT_H

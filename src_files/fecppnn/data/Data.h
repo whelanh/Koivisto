@@ -1,11 +1,11 @@
-/******************************************************************************************************************
- *                     This piece of software is original from Koivisto UCI engine.                               *
- * Using the code must be explicitly granted by the authors as well as the rights to use the code can be revoked. *
- *                          Removing this header from the files is forbidden.                                     *
- *           Any changes to the code must be marked as those and do not change the copyright.                     *
- *                                                                                                                *
- * Written by: Finn Eggers                                                                                        *
- ******************************************************************************************************************/
+/***********************************************************************************
+ * Copyright (C) 2020-2021 {Finn Eggers} <{mail@finneggers.de}>                    *
+ *                                                                                 *
+ * This file is part of fecppnn.                                                   *
+ *                                                                                 *
+ * fecppnn can not be copied and/or distributed without the express                *
+ * permission of Finn Eggers                                                       *
+ ***********************************************************************************/
 
 #ifndef KOIVISTO_DATA_H
 #define KOIVISTO_DATA_H
@@ -14,6 +14,8 @@
 #include <iomanip>
 #include <new>
 #include <ostream>
+
+namespace fecppnn {
 class Data {
 
     private:
@@ -25,10 +27,10 @@ class Data {
     Data*  gradient = nullptr;
 
     public:
-    Data(int width, bool createGradients) {
-        this->width  = width;
+    Data(int p_width, bool createGradients) {
+        this->width  = p_width;
         this->height = 1;
-        this->size   = width;
+        this->size   = p_width;
 
         assert(this->width % 8 == 0);
 
@@ -39,10 +41,10 @@ class Data {
         }
     }
 
-    Data(int width, int height, bool createGradients) {
-        this->width  = width;
-        this->height = height;
-        this->size   = width * height;
+    Data(int p_width, int p_height, bool createGradients) {
+        this->width  = p_width;
+        this->height = p_height;
+        this->size   = p_width * p_height;
 
         assert(this->width % 8 == 0);
         assert(this->height % 8 == 0 || this->height == 1);
@@ -62,15 +64,15 @@ class Data {
 
     bool hasGradient() { return gradient != nullptr; }
 
-    float  get(int width) const { return values[width]; }
-    float& get(int width) { return values[width]; }
-    float  get(int width, int height) const { return values[width + height * this->width]; }
-    float& get(int width, int height) { return values[width + height * this->width]; }
+    float  get(int p_width) const { return values[p_width]; }
+    float& get(int p_width) { return values[p_width]; }
+    float  get(int p_width, int p_height) const { return values[p_width + p_height * this->width]; }
+    float& get(int p_width, int p_height) { return values[p_width + p_height * this->width]; }
 
-    float  operator()(int width) const { return get(width); }
-    float& operator()(int width) { return get(width); }
-    float  operator()(int width, int height) const { return get(width, height); }
-    float& operator()(int width, int height) { return get(width, height); }
+    float  operator()(int p_width) const { return get(p_width); }
+    float& operator()(int p_width) { return get(p_width); }
+    float  operator()(int p_width, int p_height) const { return get(p_width, p_height); }
+    float& operator()(int p_width, int p_height) { return get(p_width, p_height); }
 
     friend std::ostream& operator<<(std::ostream& os, const Data& data) {
 
@@ -98,5 +100,6 @@ class Data {
 
     Data* getGradient() const { return gradient; }
 };
+}    // namespace fecppnn
 
 #endif    // KOIVISTO_DATA_H

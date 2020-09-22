@@ -1,13 +1,21 @@
+/***********************************************************************************
+ * Copyright (C) 2020-2021 {Finn Eggers} <{mail@finneggers.de}>                    *
+ *                                                                                 *
+ * This file is part of fecppnn.                                                   *
+ *                                                                                 *
+ * fecppnn can not be copied and/or distributed without the express                *
+ * permission of Finn Eggers                                                       *
+ ***********************************************************************************/
 
 
 #include "Concat.h"
 
-Concat::Concat(Layer* prev1, Layer* prev2) : Layer(prev1->getOutput()->getSize() + prev2->getOutput()->getSize()){
+fecppnn::Concat::Concat(Layer* prev1, Layer* prev2) : Layer(prev1->getOutput()->getSize() + prev2->getOutput()->getSize()){
     connect(prev1);
     connect(prev2);
 }
 
-void Concat::compute() {
+void fecppnn::Concat::compute() {
     
     float* in1 = getInput(0)->getValues();
     float* in2 = getInput(1)->getValues();
@@ -21,7 +29,7 @@ void Concat::compute() {
     memcpy(&out[in1Size], in2, sizeof(float) * in2Size);
     
 }
-void Concat::backprop() {
+void fecppnn::Concat::backprop() {
     float* in1 = getInput(0)->getGradient()->getValues();
     float* in2 = getInput(1)->getGradient()->getValues();
     
@@ -33,3 +41,5 @@ void Concat::backprop() {
     memcpy(in1,&out[0], sizeof(float) * in1Size);
     memcpy(in2, &out[in1Size], sizeof(float) * in2Size);
 }
+
+const std::string fecppnn::Concat::name() { return "Concat"; }

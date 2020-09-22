@@ -1,13 +1,18 @@
-//
-// Created by finne on 9/13/2020.
-//
+/***********************************************************************************
+ * Copyright (C) 2020-2021 {Finn Eggers} <{mail@finneggers.de}>                    *
+ *                                                                                 *
+ * This file is part of fecppnn.                                                   *
+ *                                                                                 *
+ * fecppnn can not be copied and/or distributed without the express                *
+ * permission of Finn Eggers                                                       *
+ ***********************************************************************************/
 
 #include "ClippedReLU.h"
 
-ClippedReLU::ClippedReLU(Layer* prevLayer) : Layer(prevLayer->getOutput()->getSize()) { this->connect(prevLayer); }
+fecppnn::ClippedReLU::ClippedReLU(Layer* prevLayer) : Layer(prevLayer->getOutput()->getSize()) { this->connect(prevLayer); }
 
 
-void ClippedReLU::compute() {
+void fecppnn::ClippedReLU::compute() {
     
     static __m256 lower = _mm256_set1_ps(0);
     static __m256 upper = _mm256_set1_ps(1);
@@ -27,7 +32,7 @@ void ClippedReLU::compute() {
         _mm256_store_ps(&(outputVals[i]), out);
     }
 }
-void ClippedReLU::backprop() {
+void fecppnn::ClippedReLU::backprop() {
     
     float* outputGrads = getOutput()->getGradient()->getValues();
     float* outputVals  = getOutput()->getValues();
@@ -37,3 +42,5 @@ void ClippedReLU::backprop() {
         inputGrads[i] = outputVals[i] > 0 && outputVals[i] < 1 ? outputGrads[i] : 0;
     }
 }
+
+const std::string fecppnn::ClippedReLU::name() { return "ClippedReLU"; }
