@@ -694,6 +694,9 @@ bb::Score Evaluator::evaluate(Board* b) {
     
     res = sumE[0] * (1 - phase) + sumL[0] * (phase);
     res += (b->getActivePlayer() == WHITE ? 15 : -15);
+
+    if (phase>0.9 && b->getPieces()[WHITE_BISHOP] && b->getPieces()[BLACK_BISHOP] && bitCount(WHITE_SQUARES&(b->getPieces()[WHITE_BISHOP]|b->getPieces()[BLACK_BISHOP])) == 1)res = res/2; 
+
     return res;
     // clang-format on
 }
