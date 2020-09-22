@@ -11,6 +11,7 @@
 #include <thread>
 
 #include "fecppnn/network/Network.h"
+#include "fecppnn/special/KingPawnNetwork.h"
 
 #define MAJOR_VERSION 2
 #define MINOR_VERSION 1
@@ -19,7 +20,7 @@ TimeManager* timeManager;
 Board*       board;
 std::thread* searchThread = nullptr;
 
-fecppnn::Network* network;
+fecppnn::KingPawnNetwork* kingPawnNetwork;
 
 void uci_loop(bool bench) {
 
@@ -192,18 +193,19 @@ void uci_processCommand(std::string str) {
     
         if(split.at(1) == "load"){
             if(split.at(2) == "structure"){
-                network = fecppnn::createNetwork(split.at(3));
+                kingPawnNetwork = new fecppnn::KingPawnNetwork(fecppnn::createNetwork(split.at(3)));
             } else if(split.at(2) == "weights"){
-                network->loadWeights(split.at(3));
+                kingPawnNetwork->getNetwork()->loadWeights(split.at(3));
             }
         }else if(split.at(1) == "write"){
             if(split.at(2) == "structure"){
-                network->writeNetworkStructure(split.at(3));
+                kingPawnNetwork->getNetwork()->writeNetworkStructure(split.at(3));
             } else if(split.at(2) == "weights"){
-                network->writeWeights(split.at(3));
+                kingPawnNetwork->getNetwork()->writeWeights(split.at(3));
             }
         }else if(split.at(1) == "eval"){
-        
+            kingPawnNetwork->resetInput(board);
+            std::cout << "net eval: " << kingPawnNetwork->compute() << std::endl;
         }
     
     }

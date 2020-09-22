@@ -91,6 +91,11 @@ class KingPawnNetwork {
         printArrayBinary(inputLayer->getInput()->getValues(), 4*64 - 4 * 8);
     }
 
+    double compute(){
+        fecppnn::Data* g = network->compute();
+        return g->get(0);
+    }
+    
     void onMove(Move m) {
         Square sqFrom = getSquareFrom(m);
         Square sqTo   = getSquareTo(m);
@@ -152,6 +157,11 @@ class KingPawnNetwork {
             inputLayer->adjustInput(KING_INDEX(us, sqTo), 0);
         }
     }
+
+    Network*              getNetwork() const { return network; }
+    void                  setNetwork(Network* network) { KingPawnNetwork::network = network; }
+    DenseLayer_Sparse_NF* getInputLayer() const { return inputLayer; }
+    void                  setInputLayer(DenseLayer_Sparse_NF* inputLayer) { KingPawnNetwork::inputLayer = inputLayer; }
 };
 
 }    // namespace fecppnn
