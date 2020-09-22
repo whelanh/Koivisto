@@ -39,7 +39,6 @@ void fecppnn::Network::addLayer(Layer* layer) {
 
     // keep track of all weights
     layer->collectOptimisableData(weights);
-    std::cout << weights.size() << std::endl;
 }
 void fecppnn::Network::prepareTraining() {
     if (optimiser == nullptr) {
@@ -78,11 +77,14 @@ void fecppnn::Network::writeNetworkStructure(const std::string& path) {
         Layer* layer = layers.at(i);
 
         std::string layerName = layer->name();
-
+        
+        
         if (layerName == "InputLayer") {
             myfile << "InputLayer " << layer->getOutput()->getSize() << "\n";
         } else if (layerName == "DenseLayer_Sparse_NF") {
-            myfile << "DenseLayer_Sparse_NF " << layer->getOutput()->getSize() << "\n";
+            myfile << "DenseLayer_Sparse_NF " <<
+                dynamic_cast<DenseLayer_Sparse_NF*>(layer)->getInput()->getSize() << " " <<
+                layer->getOutput()->getSize() << "\n";
         } else if (layerName == "Concat") {
 
             auto it1 = std::find(layers.begin(), layers.end(), layer->getPreviousLayers().at(0));

@@ -54,6 +54,7 @@ class DenseLayer_Sparse_NF : public Layer {
     InputTracker inputTracker;
     Data*        weights;
     Data*        bias;
+    Data*        input;
 
     int  skippedComputations         = 0;
     bool changedSinceLastComputation = false;
@@ -67,7 +68,11 @@ class DenseLayer_Sparse_NF : public Layer {
     }
 
     public:
-    DenseLayer_Sparse_NF(int size) : Layer(size) {}
+    DenseLayer_Sparse_NF(int inSize, int outSize) : Layer(outSize) {
+        input = new Data(inSize, true);
+        weights = new Data(inSize * outSize, true);
+        bias = new Data(outSize, true);
+    }
     void adjustInput(int index, float val);
     void clearInput(){
         inputTracker.clear();
@@ -79,6 +84,11 @@ class DenseLayer_Sparse_NF : public Layer {
     void  setWeights(Data* weights) { DenseLayer_Sparse_NF::weights = weights; }
     Data* getBias() const { return bias; }
     void  setBias(Data* bias) { DenseLayer_Sparse_NF::bias = bias; }
+
+    const InputTracker& getInputTracker() const;
+    Data*               getInput() const;
+    int                 getSkippedComputations() const;
+    bool                isChangedSinceLastComputation() const;
 };
 }    // namespace fecppnn
 #endif    // KOIVISTO_DENSELAYER_SPARSE_NF_H
