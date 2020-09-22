@@ -87,19 +87,27 @@ static Network* createNetwork(const std::string& file) {
         std::string id   = splits.at(0);
         int         size = stoi(splits.at(1));
 
+        
+
+        if (id == "InputLayer"){
+            network->addLayer(new InputLayer(size));
+            continue;
+        }
+        if (id == "DenseLayer_Sparse_NF"){
+            network->addLayer(new DenseLayer_Sparse_NF(stoi(splits.at(2)), size));
+            continue;
+        }
+        
         Layer* prevLayer = nullptr;
         if (splits.size() > 2) {
             prevLayer = network->getLayer(stoi(splits.at(2)));
         }
-
-        if (id == "InputLayer")
-            network->addLayer(new InputLayer(size));
+        
         if (id == "Concat")
             network->addLayer(new Concat(prevLayer, network->getLayer(stoi(splits.at(3)))));
         if (id == "DenseLayer")
             network->addLayer(new DenseLayer(prevLayer, size));
-        if (id == "DenseLayer_Sparse_NF")
-            network->addLayer(new DenseLayer_Sparse_NF(size));
+        
         if (id == "ReLU")
             network->addLayer(new ReLU(prevLayer));
         if (id == "ClippedReLU")
