@@ -56,7 +56,7 @@ void fecppnn::Network::loadWeights(const std::string& path) {
     for (Data* d : weights) {
         fread(d->getValues(), sizeof(float), d->getSize(), infile);
     }
-
+    
     fclose(infile);
 }
 void fecppnn::Network::writeWeights(const std::string& path) {

@@ -55,6 +55,7 @@ class DenseLayer_Sparse_NF : public Layer {
     Data*        weights;
     Data*        bias;
     Data*        input;
+    Data*        intermediateOutput;
 
     int  skippedComputations         = 0;
     bool changedSinceLastComputation = false;
@@ -69,26 +70,30 @@ class DenseLayer_Sparse_NF : public Layer {
 
     public:
     DenseLayer_Sparse_NF(int inSize, int outSize) : Layer(outSize) {
-        input = new Data(inSize, true);
+        input   = new Data(inSize, true);
         weights = new Data(inSize * outSize, true);
+        weights->randomise(-1, 1);
         bias = new Data(outSize, true);
+        bias->randomise(-1, 1);
+        
+        intermediateOutput = new Data(outSize, true);
     }
     void adjustInput(int index, float val);
-    void clearInput(){
+    void clearInput() {
         inputTracker.clear();
         memset(getInput()->getValues(), 0, sizeof(float) * getInput()->getSize());
         memset(getOutput()->getValues(), 0, sizeof(float) * getOutput()->getSize());
     }
-    
-    Data* getWeights() const { return weights; }
+
+    Data* getWeights() { return weights; }
     void  setWeights(Data* weights) { DenseLayer_Sparse_NF::weights = weights; }
-    Data* getBias() const { return bias; }
+    Data* getBias() { return bias; }
     void  setBias(Data* bias) { DenseLayer_Sparse_NF::bias = bias; }
 
-    const InputTracker& getInputTracker() const;
-    Data*               getInput() const;
-    int                 getSkippedComputations() const;
-    bool                isChangedSinceLastComputation() const;
+    InputTracker& getInputTracker() ;
+    Data*         getInput() const;
+    int           getSkippedComputations() const;
+    bool          isChangedSinceLastComputation() const;
 };
 }    // namespace fecppnn
 #endif    // KOIVISTO_DENSELAYER_SPARSE_NF_H

@@ -34,7 +34,6 @@ class KingPawnNetwork {
         }
         bb = board->getPieces(BLACK, KING);
         while (bb) {
-            std::cout << KING_INDEX(BLACK, bitscanForward(bb)) << std::endl;
             inputLayer->adjustInput(KING_INDEX(BLACK, bitscanForward(bb)), 1);
             bb = lsbReset(bb);
         }
@@ -88,6 +87,11 @@ class KingPawnNetwork {
     }
 
     void printInputs() {
+        
+        for(int i = 0; i < inputLayer->getInputTracker().count(); i++){
+            std::cout << inputLayer->getInputTracker().at(i) << std::endl;
+        }
+        
         printArrayBinary(inputLayer->getInput()->getValues(), 4*64 - 4 * 8);
     }
 
