@@ -11,7 +11,7 @@
 #include <thread>
 
 #include "fecppnn/network/Network.h"
-#include "fecppnn/special/KingPawnNetwork.h"
+//#include "fecppnn/special/KingPawnNetwork.h"
 
 #define MAJOR_VERSION 2
 #define MINOR_VERSION 1
@@ -206,6 +206,7 @@ void uci_processCommand(std::string str) {
         }else if(split.at(1) == "eval"){
             kingPawnNetwork->resetInput(board);
             std::cout << "net eval: " << kingPawnNetwork->compute() << std::endl;
+            printArray(kingPawnNetwork->getNetwork()->getLayer(0)->getOutput()->getValues(), 32);
         }
     
     }

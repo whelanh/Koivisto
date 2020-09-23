@@ -154,7 +154,7 @@ void main_tune_pst() {
 #endif
 
 #include "fecppnn/network/Network.h"
-#include "fecppnn/special/KingPawnNetwork.h"
+//#include "fecppnn/special/KingPawnNetwork.h"
 
 int main(int argc, char* argv[]) {
 
@@ -169,13 +169,25 @@ int main(int argc, char* argv[]) {
 //
 //    fecppnn::Network* net = fecppnn::createNetwork("net1.structure");
 //    fecppnn::KingPawnNetwork worker{net};
+//    worker.getNetwork()->loadWeights("nn.bin");
 //
-//    Board b {"rnbq1bnr/p1ppp1p1/1p2k2p/8/4Pp1P/PP6/2PPKPP1/RNB1QBNR w - - 1 9"};
+//
+//
+//
+//    Board b {"rk1Br1B1/p2n4/b7/1p6/1p1P1pp1/P4PP1/2P1N3/RNK4R b - - 0 34"};
 //
 //    worker.resetInput(&b);
-//    worker.printInputs();
+//    worker.compute();
 //
-//    std::cout << worker.validateInput(&b) << std::endl;
+//    startMeasure();
+//    for(int i = 0; i < 1e7; i++){
+//        worker.getInputLayer()->adjustInput(128, i%2);
+//        worker.getInputLayer()->adjustInput(64, i%2);
+//        worker.getInputLayer()->adjustInput(17, i%2);
+//        worker.compute();
+//    }
+//
+//    std::cout << stopMeasure() << std::endl;
 //
 //
 //    bb_cleanUp();

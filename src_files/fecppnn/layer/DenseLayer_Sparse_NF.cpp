@@ -51,7 +51,7 @@ void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float va
     input->get(index) = val;
     
     __m256 dif = _mm256_set1_ps(difference);
-
+    
     for (int o = 0; o < getOutput()->getSize(); o += 8) {
         
         __m256 mat0 = _mm256_load_ps(&weights->getValues()[o + getOutput()->getSize() * index]);

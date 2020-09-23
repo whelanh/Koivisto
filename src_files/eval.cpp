@@ -4,6 +4,7 @@
 
 #include "eval.h"
 
+
 #include <immintrin.h>
 #include <iomanip>
 
@@ -696,7 +697,15 @@ bb::Score Evaluator::evaluate(Board* b) {
     
     res = sumE[0] * (1 - phase) + sumL[0] * (phase);
     res += (b->getActivePlayer() == WHITE ? 15 : -15);
-    return res;
+    
+
+//    std::cout << "before computation" << std::endl;
+//
+//    kpNetwork->resetInput(b);
+    float correction = kpNetwork->compute();
+//    std::cout << "after computation" << std::endl;
+
+    return res + correction;
     // clang-format on
 }
 
@@ -853,6 +862,11 @@ float* Evaluator::getPSQT(Piece piece, bool early) {
     return nullptr;
 }
 float* Evaluator::getPhaseValues() { return phaseValues; }
+Evaluator::Evaluator() {
+    
+    kpNetwork = new fecppnn::KingPawnNetwork(fecppnn::createNetwork("net1.structure"));
+    kpNetwork->getNetwork()->loadWeights("bb.bin");
+}
 #ifdef TUNE_PST
 float* Evaluator::getTunablePST_MG() { return psqt_bishop; }
 

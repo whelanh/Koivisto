@@ -26,7 +26,9 @@ class KingPawnNetwork {
         inputLayer = dynamic_cast<DenseLayer_Sparse_NF*>(network->getLayer(0));
     }
     void resetInput(Board* board) {
-
+        
+        inputLayer->clearInput();
+        
         U64 bb = board->getPieces(WHITE, KING);
         while (bb) {
             inputLayer->adjustInput(KING_INDEX(WHITE, bitscanForward(bb)), 1);
@@ -46,9 +48,9 @@ class KingPawnNetwork {
         bb = board->getPieces(BLACK, PAWN);
         while (bb) {
             inputLayer->adjustInput(PAWN_INDEX(BLACK, bitscanForward(bb)), 1);
-
             bb = lsbReset(bb);
         }
+        
     }
 
     bool validateInput(Board* board) {

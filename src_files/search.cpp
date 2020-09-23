@@ -738,7 +738,8 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
                 lmr = depth - 2;
             }
         }
-
+        
+        sd->evaluator.kpNetwork->onMove(m);
         b->move(m);
         
         if (legalMoves == 0) {
@@ -752,7 +753,8 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
                 score = -pvSearch(b, -beta, -alpha, depth - ONE_PLY + extension, ply + ONE_PLY, td,
                                   0);    // re-search
         }
-        
+    
+        sd->evaluator.kpNetwork->onUndoMove(m);
         b->undoMove();
         
         // if we got a new best score for this node, update the highest score and keep track of the best move
@@ -898,11 +900,13 @@ Score qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* td) {
         
         if (!inCheck && (getCapturedPiece(m) % 6) < (getMovingPiece(m) % 6) && b->staticExchangeEvaluation(m) < 0)
             continue;
-        
+    
+        sd->evaluator.kpNetwork->onMove(m);
         b->move(m);
         
         Score score = -qSearch(b, -beta, -alpha, ply + ONE_PLY, td);
-        
+    
+        sd->evaluator.kpNetwork->onUndoMove(m);
         b->undoMove();
         
         if (score > bestScore) {
