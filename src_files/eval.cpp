@@ -17,6 +17,9 @@ float sqrts[28] = {
     4.47214, 4.58258, 4.69042, 4.79583, 4.89898, 5,       5.09902, 5.19615,
 };
 
+float passer_rank[16] = {             0,    -18.000015,           -14,           2.3,     18.599987,     23.999985,     16.299986,             0,             0,    0.99999994,    -41.700001,    -16.700014,           -14,    -29.000015,    -31.700001,             0,
+};
+
 float psqt_pawn_endgame[64] = {
     0,  0,  0,  0,  0,   0,   0,   0,   12,  -1,  3,   6,   9,  -3, -11, -1, 2,  2,  -6, -3, -4, -4,
     -8, -5, 15, 8,  -3,  -15, -12, -5,  0,   4,   29,  22,  13, -1, -1,  7,  15, 17, 84, 88, 77, 58,
@@ -95,25 +98,11 @@ float* tunablePST_EG_grad = new float[64] {};
 #endif
 
 float* _pieceValuesEarly = new float[unusedVariable] {
-    90.612625,  52.992596,  5.3940973,  -2.5785639, -8.8384104, 8.0322876,  -5.2987285, -12.69003,
-    13.774286,  461.8082,   48.244282,  27.408546,  25.548733,  477.50644,  32.163502,  24.40115,
-    41.309193,  -5.9049501, 12.095577,  582.96118,  96.298126,  21.105064,  61.523682,  17.76198,
-    14.738617,  1344.8832,  105.14661,  12.180225,  377.4198,   242.59882,  -54.686356, 11.756104,
-    -5.9028187, 3.9798086,  20.540142,  -8.871707,  1.9888093,  -38.071625, -41.082283, -40.033123,
-    -17.044693, -65.15358,  15.851129,  -61.761784, -6.1620493, -12.029309, -203.16486, -342.46075,
-    -13.027541, -7.6117043, -18.215183, -11.174079, -9.8015833, -8.0599508, 12.237782,  0,
-
+     90.211487,     69.899239,     6.2228494,      2.967576,    -9.1678696,     8.7445889,    -4.0076895,    -11.351655,     14.176047,     463.04376,     47.557571,     26.782915,     22.808609,     473.91107,     31.915777,     24.075211,     41.845776,    -5.8912878,     13.943347,     574.08636,     101.79205,     22.015999,     61.792591,     17.496267,     12.106392,     1350.0123,     49.171928,     8.0235796,     378.32214,     253.04475,    -51.211845,     10.589941,    -6.3968649,     6.3443727,     19.223135,    -13.720773,    0.25771901,    -40.303791,    -41.210938,    -35.532829,    -19.787298,    -68.714424,     9.4156246,     -62.58881,    -14.393072,    -10.375373,    -183.67802,    -316.65826,     -12.65072,    -7.1560545,    -18.819189,    -10.803145,    -12.076631,    -10.146332,     11.989947,    -6.6928525,     4.9275126,             0,             0,             0,
 };
 
 float* _pieceValuesLate = new float[unusedVariable] {
-    102.09441,  174.62131,  12.113035,  43.921768,  -8.8293295, -5.7698684, -20.551733, 2.1095219,
-    -4.4272146, 327.82663,  89.724663,  19.159079,  18.673559,  292.28979,  8.8539467,  31.280064,
-    53.719395,  5.7388086,  28.595366,  595.83856,  100.94516,  29.340246,  -15.963839, 2.4505064,
-    5.2854605,  1131.0789,  39.692463,  55.545258,  -124.80446, 44.435101,  54.995464,  -2.1891308,
-    -1.3747581, -24.002651, -39.86771,  19.803225,  25.614729,  -153.57431, -51.70187,  -19.080151,
-    -10.514104, -65.737129, -93.600891, -387.21597, -10.381309, -71.168625, -488.58844, -595.0282,
-    -14.574704, 1.8221486,  -2.3508673, -9.2667027, -8.6066637, -9.1349344, -2.7119722, 0,
-
+     104.82733,     130.21487,     11.598015,     41.836597,    -7.8446722,    -4.1840973,    -15.864173,    0.44860947,    -6.6336184,     327.79779,     81.411537,     16.900436,     17.016239,     287.31894,     8.0259972,     30.608137,     51.638828,     5.4482141,     18.636389,     590.33789,     100.65056,      27.68157,    -17.710117,     1.9092197,     6.6818852,     1121.1086,     27.764854,       57.6642,    -129.18095,     41.508553,     52.540432,     1.0327644,    -1.8575548,    -28.430937,    -38.164093,     24.079365,     30.723057,    -144.93318,     -50.13253,    -11.376001,    -8.0586424,    -61.548996,    -81.147713,    -381.26257,    -7.7224793,    -74.114044,    -515.90515,    -630.17755,    -16.433153,     2.7820337,    -2.0064692,    -7.3157744,    -5.1838088,    -8.3675108,    -3.3051472,    -11.926251,     16.130898,             0,             0,             0,
 };
 
 float* phaseValues = new float[6] {
@@ -320,6 +309,8 @@ bb::Score Evaluator::evaluate(Board* b) {
     U64 whiteIsolatedPawns = whitePawns & ~(fillFile(shiftWest(whitePawns) | shiftEast(whitePawns)));
     U64 blackIsolatedPawns = blackPawns & ~(fillFile(shiftWest(blackPawns) | shiftEast(blackPawns)));
     
+    U64 whiteBlockedPawns = shiftNorth(whitePawns)&(whiteTeam|blackTeam);
+    U64 blackBlockedPawns = shiftSouth(blackPawns)&(whiteTeam|blackTeam);
     
     k = whitePawns;
     while (k) {
@@ -328,6 +319,8 @@ bb::Score Evaluator::evaluate(Board* b) {
         features[INDEX_PAWN_PSQT] += psqt_pawn[squareIndex(rankIndex(square), (wKSide ? fileIndex(square) : 7 - fileIndex(square)))] * earlyPSTScalar;
         features[INDEX_PAWN_PSQT] += psqt_pawn_endgame[square] * latePSTScalar;
         
+        if (getBit(whitePassers,square)) features[INDEX_PASSER_RANK] += passer_rank[getBit(whiteBlockedPawns,square)*8+rankIndex(square)]/10;
+
         k = lsbReset(k);
     }
     
@@ -340,6 +333,8 @@ bb::Score Evaluator::evaluate(Board* b) {
         features[INDEX_PAWN_PSQT] -=
                 psqt_pawn_endgame[squareIndex(7 - rankIndex(square), fileIndex(square))] * latePSTScalar;
         
+        if (getBit(blackPassers,square)) features[INDEX_PASSER_RANK] -= passer_rank[getBit(blackBlockedPawns,square)*8+7-rankIndex(square)]/10;
+
         k = lsbReset(k);
     }
     
@@ -378,6 +373,9 @@ bb::Score Evaluator::evaluate(Board* b) {
     features[INDEX_PAWN_BACKWARD]             =
             +bitCount(fillSouth(~wAttackFrontSpans(whitePawns) & blackPawnCover) & whitePawns)
             - bitCount(fillNorth(~bAttackFrontSpans(blackPawns) & whitePawnCover) & blackPawns);
+    features[INDEX_BLOCKED_PAWN]              = 
+            +bitCount(whiteBlockedPawns)
+            -bitCount(blackBlockedPawns);
     
     
     
@@ -861,12 +859,7 @@ float* Evaluator::getPSQT(Piece piece, bool early) {
     }
     return nullptr;
 }
-float* Evaluator::getPhaseValues() { return phaseValues; }
-Evaluator::Evaluator() {
-    
-    kpNetwork = new fecppnn::KingPawnNetwork(fecppnn::createNetwork("net1.structure"));
-    kpNetwork->getNetwork()->loadWeights("bb.bin");
-}
+float* Evaluator::getPhaseValues() { return passer_rank; }
 #ifdef TUNE_PST
 float* Evaluator::getTunablePST_MG() { return psqt_bishop; }
 
