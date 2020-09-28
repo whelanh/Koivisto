@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
 
     fecppnn::Network* net = fecppnn::createNetwork("net1.structure");
     fecppnn::KingPieceNetwork worker{net};
-    std::cout << worker.getNetwork() << std::endl;
     
 //    net->writeNetworkStructure("net2.structure");
     
@@ -37,22 +36,27 @@ int main(int argc, char* argv[]) {
 
 
 
+    Move m = genMove(A2,A3,QUIET,WHITE_PAWN);
+    
 
-//    Board b {"rk1Br1B1/p2n4/b7/1p6/1p1P1pp1/P4PP1/2P1N3/RNK4R b - - 0 34"};
-//
-//    worker.resetInput(&b);
-//    worker.compute();
-//
-    startMeasure();
-    for(int i = 0; i < 1e6; i++){
-//        worker.getActiveInput()->adjustInput(128, i%2);
-//        worker.getActiveInput()->adjustInput(64, i%2);
-//        worker.getActiveInput()->adjustInput(17, i%2);
-        worker.compute();
-    }
-//
-    std::cout << stopMeasure() << std::endl;
-//    bb_cleanUp();
+    Board b {};
+
+    worker.resetInput(&b);
+    std::cout << worker.validateInput(&b) << std::endl;
+    
+    
+    b.move(m);
+    worker.onMove(&b, m);
+    
+    std::cout << worker.validateInput(&b) << std::endl;
+    
+    
+    b.undoMove();
+    worker.onUndoMove(&b, m);
+    
+    std::cout << worker.validateInput(&b) << std::endl;
+    
+    bb_cleanUp();
 
 
 

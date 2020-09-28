@@ -10,7 +10,8 @@
 #include "../network/Network.h"
 
 #define WHITE_INDEX(kingPos, piece, square) kingPos * 10 * 64 + piece * 64 + square
-#define BLACK_INDEX(kingPos, piece, square) mirrorSquare(kingPos) * 10 * 64 + (piece + (piece < 6) ? 6:-6) * 64 + mirrorSquare(square)
+#define BLACK_INDEX(kingPos, piece, square)                                                                            \
+    mirrorSquare(kingPos) * 10 * 64 + (piece + (piece < 6) ? 6 : -6) * 64 + mirrorSquare(square)
 
 namespace fecppnn {
 
@@ -28,13 +29,16 @@ class KingPieceNetwork {
         blackInput = dynamic_cast<DenseLayer_Sparse_NF*>(network->getLayer(1));
         concat     = dynamic_cast<Concat*>(network->getLayer(2));
     }
+
+    void setActivePlayer(Board* board) { concat->setFlipInputs(board->getActivePlayer() == BLACK); }
+
     void resetInput(Board* board) {
-        
+
         whiteInput->clearInput();
         blackInput->clearInput();
         Square wKingSq = bitscanForward(board->getPieces(WHITE, KING));
         Square bKingSq = bitscanForward(board->getPieces(BLACK, KING));
-        
+
         for (Piece p = WHITE_PAWN; p < BLACK_KING; p++) {
 
             if (p % 6 == KING)
@@ -43,6 +47,10 @@ class KingPieceNetwork {
             U64 bb = board->getPieces()[p];
             while (bb) {
                 Square s = bitscanForward(bb);
+
+                //                std::cout << WHITE_INDEX(wKingSq, p, s) << " " << (int)wKingSq << " " << (int)p << " "
+                //                << (int)s << std::endl;
+
                 whiteInput->adjustInput(WHITE_INDEX(wKingSq, p, s), 1);
                 blackInput->adjustInput(BLACK_INDEX(bKingSq, p, s), 1);
                 bb = lsbReset(bb);
@@ -52,47 +60,36 @@ class KingPieceNetwork {
     }
 
     bool validateInput(Board* board) {
-        //        U64 bb = board->getPieces(WHITE, KING);
-        //        while (bb) {
-        //            int index = KING_INDEX(WHITE, bitscanForward(bb));
-        //            if (inputLayer->getInput()->get(index) != 1)
-        //                return false;
-        //            bb = lsbReset(bb);
-        //        }
-        //        bb = board->getPieces(BLACK, KING);
-        //        while (bb) {
-        //            int index = KING_INDEX(BLACK, bitscanForward(bb));
-        //            if (inputLayer->getInput()->get(index) != 1)
-        //                return false;
-        //            bb = lsbReset(bb);
-        //        }
-        //
-        //        bb = board->getPieces(WHITE, PAWN);
-        //        while (bb) {
-        //            int index = PAWN_INDEX(WHITE, bitscanForward(bb));
-        //            if (inputLayer->getInput()->get(index) != 1)
-        //                return false;
-        //            bb = lsbReset(bb);
-        //        }
-        //        bb = board->getPieces(BLACK, PAWN);
-        //        while (bb) {
-        //            int index = PAWN_INDEX(BLACK, bitscanForward(bb));
-        //
-        //            if (inputLayer->getInput()->get(index) != 1)
-        //                return false;
-        //
-        //            bb = lsbReset(bb);
-        //        }
-        //        return true;
-    }
 
-    void printInputs() {
+        Square wKingSq = bitscanForward(board->getPieces(WHITE, KING));
+        Square bKingSq = bitscanForward(board->getPieces(BLACK, KING));
 
-        //        for(int i = 0; i < inputLayer->getInputTracker().count(); i++){
-        //            std::cout << inputLayer->getInputTracker().at(i) << std::endl;
-        //        }
-        //
-        //        printArrayBinary(inputLayer->getInput()->getValues(), 4*64 - 4 * 8);
+        for (Piece p = WHITE_PAWN; p < BLACK_KING; p++) {
+
+            if (p % 6 == KING)
+                continue;
+
+            U64 bb = board->getPieces()[p];
+            while (bb) {
+                Square s = bitscanForward(bb);
+
+                if (!whiteInput->getInputTracker().contains(WHITE_INDEX(wKingSq, p, s))) {
+                    return false;
+                }
+                if (!blackInput->getInputTracker().contains(BLACK_INDEX(bKingSq, p, s))) {
+                    return false;
+                }
+
+                bb = lsbReset(bb);
+            }
+        }
+
+        if (whiteInput->getInputTracker().count() + 2 != bitCount(*board->getOccupied()))
+            return false;
+        if (blackInput->getInputTracker().count() + 2 != bitCount(*board->getOccupied()))
+            return false;
+
+        return true;
     }
 
     double compute() {
@@ -100,66 +97,129 @@ class KingPieceNetwork {
         return g->get(0);
     }
 
-    void onMove(Move m) {
-        //        Square sqFrom = getSquareFrom(m);
-        //        Square sqTo   = getSquareTo(m);
-        //        Piece  pFrom  = getMovingPiece(m);
-        //        Type   mType  = getType(m);
-        //        Color  us     = pFrom / 6;
-        //        Color  them   = 1 - us;
-        //        int    factor = us == WHITE ? 1 : -1;
-        //
-        //        if (isCapture(m) && !isEnPassant(m)) {
-        //            Piece capturedPiece = getCapturedPiece(m);
-        //            if (capturedPiece % 6 == PAWN) {
-        //                inputLayer->adjustInput(PAWN_INDEX(them, sqTo), 0);
-        //            }
-        //        }
-        //
-        //        if (pFrom % 6 == PAWN) {
-        //
-        //            inputLayer->adjustInput(PAWN_INDEX(us, sqFrom), 0);
-        //            if (!isPromotion(m))
-        //                inputLayer->adjustInput(PAWN_INDEX(us, sqTo), 1);
-        //
-        //            if (mType == EN_PASSANT) {
-        //                inputLayer->adjustInput(PAWN_INDEX(them, sqTo - 8 * factor), 0);
-        //            }
-        //        } else if (pFrom % 6 == KING) {
-        //            inputLayer->adjustInput(KING_INDEX(us, sqFrom), 0);
-        //            inputLayer->adjustInput(KING_INDEX(us, sqTo), 1);
-        //        }
+    void onMove(Board* b, Move m) {
+        Square sqFrom = getSquareFrom(m);
+        Square sqTo   = getSquareTo(m);
+        Piece  pFrom  = getMovingPiece(m);
+        Type   mType  = getType(m);
+        Color  color  = pFrom / 6;
+        int    factor = color == 0 ? 1 : -1;
+
+        Square wKingSq = bitscanForward(b->getPieces(WHITE, KING));
+        Square bKingSq = bitscanForward(b->getPieces(BLACK, KING));
+
+        concat->setFlipInputs(color == BLACK);
+
+        if (pFrom % 6 == PAWN) {
+
+            if (isPromotion(m)) {
+
+                // setting m_pieces
+                // this->unsetPiece(sqFrom);
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 0);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 0);
+
+                // setting the piece at the target destination
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, promotionPiece(m), sqTo), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, promotionPiece(m), sqTo), 1);
+
+                if (isCapture(m)) {
+                    whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo), 0);
+                    blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo), 0);
+                }
+
+                return;
+            } else if (mType == EN_PASSANT) {
+
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo - 8 * factor), 0);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo - 8 * factor), 0);
+
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 0);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 0);
+
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqTo), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqTo), 1);
+
+                return;
+            }
+        } else if (pFrom % 6 == KING) {
+            resetInput(b);
+            return;
+        }
+
+        whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 0);
+        blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 0);
+
+        whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqTo), 1);
+        blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqTo), 1);
+
+        if (isCapture(m)) {
+            whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo), 0);
+            blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo), 0);
+        }
     }
 
-    void onUndoMove(Move m) {
+    void onUndoMove(Board* b, Move m) {
 
-        //        Square sqFrom = getSquareFrom(m);
-        //        Square sqTo   = getSquareTo(m);
-        //        Piece  pFrom  = getMovingPiece(m);
-        //        Type   mType  = getType(m);
-        //        Color  us     = pFrom / 6;
-        //        Color  them   = 1 - us;
-        //        int    factor = us == WHITE ? 1 : -1;
-        //
-        //        if (isCapture(m) && !isEnPassant(m)) {
-        //            Piece capturedPiece = getCapturedPiece(m);
-        //            if (capturedPiece % 6 == PAWN) {
-        //                inputLayer->adjustInput(PAWN_INDEX(them, sqTo), 1);
-        //            }
-        //        }
-        //
-        //        if (pFrom % 6 == PAWN) {
-        //            inputLayer->adjustInput(PAWN_INDEX(us, sqFrom), 1);
-        //            if (!isPromotion(m))
-        //                inputLayer->adjustInput(PAWN_INDEX(us, sqTo), 0);
-        //
-        //            if (mType == EN_PASSANT) {
-        //                inputLayer->adjustInput(PAWN_INDEX(them, sqTo - 8 * factor), 1);
-        //            }
-        //        } else if (pFrom % 6 == KING) {
-        //            inputLayer->adjustInput(KING_INDEX(us, sqFrom), 1);
-        //            inputLayer->adjustInput(KING_INDEX(us, sqTo), 0);
-        //        }
+        Square sqFrom = getSquareFrom(m);
+        Square sqTo   = getSquareTo(m);
+        Piece  pFrom  = getMovingPiece(m);
+        Type   mType  = getType(m);
+        Color  color  = pFrom / 6;
+        int    factor = color == 0 ? 1 : -1;
+
+        Square wKingSq = bitscanForward(b->getPieces(WHITE, KING));
+        Square bKingSq = bitscanForward(b->getPieces(BLACK, KING));
+
+        concat->setFlipInputs(color == BLACK);
+
+        if (pFrom % 6 == PAWN) {
+
+            if (isPromotion(m)) {
+
+                // setting m_pieces
+                // this->unsetPiece(sqFrom);
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 1);
+
+                // setting the piece at the target destination
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, promotionPiece(m), sqTo), 0);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, promotionPiece(m), sqTo), 0);
+
+                if (isCapture(m)) {
+                    whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo), 1);
+                    blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo), 1);
+                }
+
+                return;
+            } else if (mType == EN_PASSANT) {
+
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo - 8 * factor), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo - 8 * factor), 1);
+
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 1);
+
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqTo), 0);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqTo), 0);
+
+                return;
+            }
+        } else if (pFrom % 6 == KING) {
+            resetInput(b);
+            return;
+        }
+
+        whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 1);
+        blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 1);
+
+        whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqTo), 0);
+        blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqTo), 0);
+
+        if (isCapture(m)) {
+            whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo), 1);
+            blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo), 1);
+        }
     }
 
     Network* getNetwork() const { return network; }
