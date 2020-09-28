@@ -7,8 +7,6 @@
 
 #include "Bitboard.h"
 #include "Board.h"
-#include "fecppnn/network/Network.h"
-#include "fecppnn/special/KingPawnNetwork.h"
 
 static int unusedVariable = 0;
 
@@ -86,10 +84,8 @@ static int SPACER1 = unusedVariable += unusedVariable % 4 == 0 ? 0 : (4 - unused
 class Evaluator {
     public:
     float*                    features = new float[unusedVariable];
-    fecppnn::KingPawnNetwork* kpNetwork;
     float                     phase;
 
-    Evaluator();
 
     void computePinnedPieces(Board* b);
 

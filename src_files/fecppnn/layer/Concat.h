@@ -14,7 +14,7 @@
 namespace fecppnn {
 class Concat : public Layer {
 
-    bool flipInputs = false;
+    bool flipInputs {false};
 
     public:
     Concat(Layer* prev1, Layer* prev2);

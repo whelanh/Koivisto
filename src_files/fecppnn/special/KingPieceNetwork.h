@@ -9,9 +9,10 @@
 #include "../layer/DenseLayer_Sparse_NF.h"
 #include "../network/Network.h"
 
-#define WHITE_INDEX(kingPos, piece, square) kingPos * 10 * 64 + piece * 64 + square
-#define BLACK_INDEX(kingPos, piece, square)                                                                            \
-    mirrorSquare(kingPos) * 10 * 64 + (piece + (piece < 6) ? 6 : -6) * 64 + mirrorSquare(square)
+constexpr int PIECE_INDEX[12]{0,1,2,3,4,4,5,6,7,8,9,9};
+
+#define WHITE_INDEX(kingPos, piece, square) kingPos * 10 * 64 + PIECE_INDEX[piece] * 64 + square
+#define BLACK_INDEX(kingPos, piece, square) kingPos * 10 * 64 + PIECE_INDEX[piece] * 64 + square                                                                           \
 
 namespace fecppnn {
 
@@ -47,9 +48,6 @@ class KingPieceNetwork {
             U64 bb = board->getPieces()[p];
             while (bb) {
                 Square s = bitscanForward(bb);
-
-                //                std::cout << WHITE_INDEX(wKingSq, p, s) << " " << (int)wKingSq << " " << (int)p << " "
-                //                << (int)s << std::endl;
 
                 whiteInput->adjustInput(WHITE_INDEX(wKingSq, p, s), 1);
                 blackInput->adjustInput(BLACK_INDEX(bKingSq, p, s), 1);
@@ -130,9 +128,16 @@ class KingPieceNetwork {
 
                 return;
             } else if (mType == EN_PASSANT) {
-
-                whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo - 8 * factor), 0);
-                blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo - 8 * factor), 0);
+        
+//                std::cout << "e.p." << std::endl;
+                
+//                std::cout << (int)color << std::endl;
+//                std::cout << (int)((color == WHITE)? BLACK_PAWN:WHITE_PAWN) << std::endl;
+//                std::cout << BLACK_INDEX(bKingSq, BLACK_PAWN, sqTo - 8 * factor) << std::endl;
+//                std::cout << BLACK_INDEX(bKingSq, ((color == WHITE)? BLACK_PAWN:WHITE_PAWN), sqTo - 8 * factor) << std::endl;
+                
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, ((color == WHITE)? BLACK_PAWN:WHITE_PAWN), sqTo - 8 * factor), 0);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, ((color == WHITE)? BLACK_PAWN:WHITE_PAWN), sqTo - 8 * factor), 0);
 
                 whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 0);
                 blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 0);
@@ -152,6 +157,7 @@ class KingPieceNetwork {
 
         whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqTo), 1);
         blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqTo), 1);
+//        std::cout << BLACK_INDEX(bKingSq, WHITE_BISHOP, G5) << std::endl;
 
         if (isCapture(m)) {
             whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo), 0);
@@ -193,9 +199,11 @@ class KingPieceNetwork {
 
                 return;
             } else if (mType == EN_PASSANT) {
-
-                whiteInput->adjustInput(WHITE_INDEX(wKingSq, getCapturedPiece(m), sqTo - 8 * factor), 1);
-                blackInput->adjustInput(BLACK_INDEX(bKingSq, getCapturedPiece(m), sqTo - 8 * factor), 1);
+            
+                Piece captured = (int)((color == WHITE)? BLACK_PAWN:WHITE_PAWN);
+                
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, captured, sqTo - 8 * factor), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, captured, sqTo - 8 * factor), 1);
 
                 whiteInput->adjustInput(WHITE_INDEX(wKingSq, pFrom, sqFrom), 1);
                 blackInput->adjustInput(BLACK_INDEX(bKingSq, pFrom, sqFrom), 1);
@@ -224,6 +232,11 @@ class KingPieceNetwork {
 
     Network* getNetwork() const { return network; }
     void     setNetwork(Network* network) { KingPieceNetwork::network = network; }
+
+    DenseLayer_Sparse_NF* getWhiteInput() const { return whiteInput; }
+    void                  setWhiteInput(DenseLayer_Sparse_NF* whiteInput) { KingPieceNetwork::whiteInput = whiteInput; }
+    DenseLayer_Sparse_NF* getBlackInput() const { return blackInput; }
+    void                  setBlackInput(DenseLayer_Sparse_NF* blackInput) { KingPieceNetwork::blackInput = blackInput; }
 };
 
 }    // namespace fecppnn

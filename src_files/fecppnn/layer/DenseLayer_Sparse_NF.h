@@ -10,7 +10,7 @@
 #include <immintrin.h>
 #include <memory.h>
 
-#define NON_FULLY_UPDATED_RUNS 1000000
+#define NON_FULLY_UPDATED_RUNS 100000
 
 namespace fecppnn {
 struct InputTracker {
@@ -72,17 +72,17 @@ class DenseLayer_Sparse_NF : public Layer {
     DenseLayer_Sparse_NF(int inSize, int outSize) : Layer(outSize) {
         input   = new Data(inSize, true);
         weights = new Data(inSize * outSize, true);
-        weights->randomise(-1, 1);
+        weights->randomise(0.01,0.01);
         bias = new Data(outSize, true);
         bias->randomise(-1, 1);
-        
+
         intermediateOutput = new Data(outSize, true);
     }
     void adjustInput(int index, float val);
     void clearInput() {
         inputTracker.clear();
         memset(getInput()->getValues(), 0, sizeof(float) * getInput()->getSize());
-        memset(getOutput()->getValues(), 0, sizeof(float) * getOutput()->getSize());
+        memset(intermediateOutput->getValues(), 0, sizeof(float) * getOutput()->getSize());
     }
 
     Data* getWeights() { return weights; }
@@ -90,7 +90,9 @@ class DenseLayer_Sparse_NF : public Layer {
     Data* getBias() { return bias; }
     void  setBias(Data* bias) { DenseLayer_Sparse_NF::bias = bias; }
 
-    InputTracker& getInputTracker() ;
+    bool          validateInput();
+    float         error();
+    InputTracker& getInputTracker();
     Data*         getInput() const;
     int           getSkippedComputations() const;
     bool          isChangedSinceLastComputation() const;
