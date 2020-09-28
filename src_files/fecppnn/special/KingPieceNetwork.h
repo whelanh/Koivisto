@@ -10,7 +10,7 @@
 #include "../network/Network.h"
 
 #define WHITE_INDEX(kingPos, piece, square) kingPos * 10 * 64 + piece * 64 + square
-#define BLACK_INDEX(kingPos, piece, square) mirrorSquare(kingPos) * 10 * 64 + piece * 64 + mirrorSquare(square)
+#define BLACK_INDEX(kingPos, piece, square) mirrorSquare(kingPos) * 10 * 64 + (piece + (piece < 6) ? 6:-6) * 64 + mirrorSquare(square)
 
 namespace fecppnn {
 
@@ -43,8 +43,8 @@ class KingPieceNetwork {
             U64 bb = board->getPieces()[p];
             while (bb) {
                 Square s = bitscanForward(bb);
-                whiteInput->adjustInput(WHITE_INDEX(wKingSq, p % 6, s), 1);
-                blackInput->adjustInput(BLACK_INDEX(bKingSq, p % 6, s), 1);
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, p, s), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, p, s), 1);
                 bb = lsbReset(bb);
             }
         }
