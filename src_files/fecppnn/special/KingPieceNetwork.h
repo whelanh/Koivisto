@@ -9,8 +9,8 @@
 #include "../layer/DenseLayer_Sparse_NF.h"
 #include "../network/Network.h"
 
-#define KING_INDEX(color, square) color * 64 + square
-#define PAWN_INDEX(color, square) 128 + color * 48 + square - 8
+#define WHITE_INDEX(kingPos, piece, square) kingPos * 10 * 64 + piece * 64 + square
+#define BLACK_INDEX(kingPos, piece, square) mirrorSquare(kingPos) * 10 * 64 + piece * 64 + mirrorSquare(square)
 
 namespace fecppnn {
 
@@ -26,33 +26,29 @@ class KingPieceNetwork {
     KingPieceNetwork(Network* network) : network(network) {
         whiteInput = dynamic_cast<DenseLayer_Sparse_NF*>(network->getLayer(0));
         blackInput = dynamic_cast<DenseLayer_Sparse_NF*>(network->getLayer(1));
-        concat = dynamic_cast<Concat*>(network->getLayer(2));
+        concat     = dynamic_cast<Concat*>(network->getLayer(2));
     }
     void resetInput(Board* board) {
+        
+        whiteInput->clearInput();
+        blackInput->clearInput();
+        Square wKingSq = bitscanForward(board->getPieces(WHITE, KING));
+        Square bKingSq = bitscanForward(board->getPieces(BLACK, KING));
+        
+        for (Piece p = WHITE_PAWN; p < BLACK_KING; p++) {
 
-        //        inputLayer->clearInput();
-        //
-        //        U64 bb = board->getPieces(WHITE, KING);
-        //        while (bb) {
-        //            inputLayer->adjustInput(KING_INDEX(WHITE, bitscanForward(bb)), 1);
-        //            bb = lsbReset(bb);
-        //        }
-        //        bb = board->getPieces(BLACK, KING);
-        //        while (bb) {
-        //            inputLayer->adjustInput(KING_INDEX(BLACK, bitscanForward(bb)), 1);
-        //            bb = lsbReset(bb);
-        //        }
-        //
-        //        bb = board->getPieces(WHITE, PAWN);
-        //        while (bb) {
-        //            inputLayer->adjustInput(PAWN_INDEX(WHITE, bitscanForward(bb)), 1);
-        //            bb = lsbReset(bb);
-        //        }
-        //        bb = board->getPieces(BLACK, PAWN);
-        //        while (bb) {
-        //            inputLayer->adjustInput(PAWN_INDEX(BLACK, bitscanForward(bb)), 1);
-        //            bb = lsbReset(bb);
-        //        }
+            if (p % 6 == KING)
+                continue;
+
+            U64 bb = board->getPieces()[p];
+            while (bb) {
+                Square s = bitscanForward(bb);
+                whiteInput->adjustInput(WHITE_INDEX(wKingSq, p % 6, s), 1);
+                blackInput->adjustInput(BLACK_INDEX(bKingSq, p % 6, s), 1);
+                bb = lsbReset(bb);
+            }
+        }
+        concat->setFlipInputs(board->getActivePlayer() == BLACK);
     }
 
     bool validateInput(Board* board) {
