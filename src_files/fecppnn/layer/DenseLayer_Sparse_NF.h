@@ -10,7 +10,7 @@
 #include <immintrin.h>
 #include <memory.h>
 
-#define NON_FULLY_UPDATED_RUNS 1000
+#define NON_FULLY_UPDATED_RUNS 1000000
 
 namespace fecppnn {
 struct InputTracker {

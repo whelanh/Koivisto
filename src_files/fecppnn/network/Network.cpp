@@ -80,7 +80,7 @@ void fecppnn::Network::writeNetworkStructure(const std::string& path) {
         if (layerName == "InputLayer") {
             myfile << "InputLayer " << layer->getOutput()->getSize() << "\n";
         } else if (layerName == "DenseLayer_Sparse_NF") {
-            myfile << "DenseLayer_Sparse_NF " << layer->getOutput()->getSize()
+            myfile << "DenseLayer_Sparse_NF " << layer->getOutput()->getSize() << " "
                    << dynamic_cast<DenseLayer_Sparse_NF*>(layer)->getInput()->getSize() << " "
                    << "\n";
         } else if (layerName == "Concat") {

@@ -22,19 +22,17 @@ void fecppnn::DenseLayer_Sparse_NF::compute() {
             adjustInput(inputTracker.at(i), input->get(inputTracker.at(i)));
         }
     }
-    
-    for(int i = 0; i < getOutput()->getSize(); i+= 8){
-        __m256 b = _mm256_load_ps(&bias->getValues()[i]);
+
+    for (int i = 0; i < getOutput()->getSize(); i += 8) {
+        __m256 b   = _mm256_load_ps(&bias->getValues()[i]);
         __m256 pre = _mm256_load_ps(&intermediateOutput->getValues()[i]);
         _mm256_store_ps(&getOutput()->getValues()[i], _mm256_add_ps(b, pre));
     }
-    
 }
 void              fecppnn::DenseLayer_Sparse_NF::backprop() {}
 const std::string fecppnn::DenseLayer_Sparse_NF::name() { return "DenseLayer_Sparse_NF"; }
 void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float val) {
-    
-    
+
     if (val == input->get(index)) {
         return;
     }
@@ -44,16 +42,16 @@ void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float va
     } else {
         inputTracker.put(index);
     }
-    
+
     changedSinceLastComputation = true;
 
-    float difference = val - input->get(index);
+    float difference  = val - input->get(index);
     input->get(index) = val;
-    
+
     __m256 dif = _mm256_set1_ps(difference);
-    
+
     for (int o = 0; o < getOutput()->getSize(); o += 8) {
-        
+
         __m256 mat0 = _mm256_load_ps(&weights->getValues()[o + getOutput()->getSize() * index]);
         __m256 out  = _mm256_load_ps(&intermediateOutput->getValues()[o]);
 
@@ -64,7 +62,7 @@ void              fecppnn::DenseLayer_Sparse_NF::adjustInput(int index, float va
         _mm256_store_ps(&intermediateOutput->getValues()[o], out);
     }
 }
- fecppnn::InputTracker& fecppnn::DenseLayer_Sparse_NF::getInputTracker()  { return inputTracker; }
-fecppnn::Data*               fecppnn::DenseLayer_Sparse_NF::getInput() const { return input; }
-int  fecppnn::DenseLayer_Sparse_NF::getSkippedComputations() const { return skippedComputations; }
+fecppnn::InputTracker& fecppnn::DenseLayer_Sparse_NF::getInputTracker() { return inputTracker; }
+fecppnn::Data*         fecppnn::DenseLayer_Sparse_NF::getInput() const { return input; }
+int                    fecppnn::DenseLayer_Sparse_NF::getSkippedComputations() const { return skippedComputations; }
 bool fecppnn::DenseLayer_Sparse_NF::isChangedSinceLastComputation() const { return changedSinceLastComputation; }

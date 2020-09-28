@@ -89,6 +89,8 @@ static Network* createNetwork(const std::string& file) {
         std::string id   = splits.at(0);
         int         size = stoi(splits.at(1));
         
+        std::cout << id << std::endl;
+        
         if (id == "InputLayer"){
             network->addLayer(new InputLayer(size));
             continue;
@@ -113,6 +115,8 @@ static Network* createNetwork(const std::string& file) {
             network->addLayer(new ClippedReLU(prevLayer));
         if (id == "Sigmoid")
             network->addLayer(new Sigmoid(prevLayer));
+    
+    
     }
 
     return network;

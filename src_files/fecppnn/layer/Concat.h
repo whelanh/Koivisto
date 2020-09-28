@@ -14,6 +14,8 @@
 namespace fecppnn {
 class Concat : public Layer {
 
+    bool flipInputs = false;
+
     public:
     Concat(Layer* prev1, Layer* prev2);
 
@@ -22,6 +24,9 @@ class Concat : public Layer {
 
     void              collectOptimisableData(std::vector<Data*>& vec) override {}
     const std::string name() override;
+
+    bool isFlipInputs() const;
+    void setFlipInputs(bool flipInputs);
 };
 }    // namespace fecppnn
 

@@ -5,8 +5,6 @@
 #ifndef KOIVISTO_KINGPAWNMAPPER_H
 #define KOIVISTO_KINGPAWNMAPPER_H
 
-#endif    // KOIVISTO_KINGPAWNMAPPER_H
-
 #include "../../Board.h"
 #include "../layer/DenseLayer_Sparse_NF.h"
 
@@ -26,9 +24,9 @@ class KingPawnNetwork {
         inputLayer = dynamic_cast<DenseLayer_Sparse_NF*>(network->getLayer(0));
     }
     void resetInput(Board* board) {
-        
+
         inputLayer->clearInput();
-        
+
         U64 bb = board->getPieces(WHITE, KING);
         while (bb) {
             inputLayer->adjustInput(KING_INDEX(WHITE, bitscanForward(bb)), 1);
@@ -50,7 +48,6 @@ class KingPawnNetwork {
             inputLayer->adjustInput(PAWN_INDEX(BLACK, bitscanForward(bb)), 1);
             bb = lsbReset(bb);
         }
-        
     }
 
     bool validateInput(Board* board) {
@@ -89,19 +86,19 @@ class KingPawnNetwork {
     }
 
     void printInputs() {
-        
-        for(int i = 0; i < inputLayer->getInputTracker().count(); i++){
+
+        for (int i = 0; i < inputLayer->getInputTracker().count(); i++) {
             std::cout << inputLayer->getInputTracker().at(i) << std::endl;
         }
-        
-        printArrayBinary(inputLayer->getInput()->getValues(), 4*64 - 4 * 8);
+
+        printArrayBinary(inputLayer->getInput()->getValues(), 4 * 64 - 4 * 8);
     }
 
-    double compute(){
+    double compute() {
         fecppnn::Data* g = network->compute();
         return g->get(0);
     }
-    
+
     void onMove(Move m) {
         Square sqFrom = getSquareFrom(m);
         Square sqTo   = getSquareTo(m);
@@ -171,3 +168,5 @@ class KingPawnNetwork {
 };
 
 }    // namespace fecppnn
+
+#endif    // KOIVISTO_KINGPAWNMAPPER_H
