@@ -18,8 +18,8 @@ int                      threadCount = 1;
 bool                     useTB       = false;
 bool                     printInfo   = true;
 
-fecppnn::Network*          nnueNet   = fecppnn::createNetwork("net1.structure");
-fecppnn::KingPieceNetwork* netWorker = new fecppnn::KingPieceNetwork(nnueNet);
+fecppnn::KingPieceNetwork* netWorker;
+float                      netInfluence = 0;
 
 SearchOverview overview;
 
@@ -56,6 +56,19 @@ U64 totalNodes() {
         tn += tds[i]->nodes;
     }
     return tn;
+}
+void search_setNetwork(fecppnn::KingPieceNetwork* net) { netWorker = net; }
+
+fecppnn::KingPieceNetwork* search_getNetwork() { return netWorker; }
+void                       search_setNetworkInfluence(float influence) { netInfluence = influence; }
+
+Score eval(Evaluator* ev, Board* b) {
+
+    if (netWorker == nullptr) {
+        return ev->evaluate(b);
+    } else {
+        return (ev->evaluate(b) * (1 - netInfluence)) + netWorker->compute() * 100 * netInfluence;
+    }
 }
 
 int selDepth() {
@@ -420,9 +433,10 @@ Move bestMove(Board* b, Depth maxDepth, TimeManager* timeManager, int threadId) 
     // start the basic search on all threads
     Depth d = 1;
     Score s = 0;
-    
-    netWorker->resetInput(b);
-    
+
+    if (netWorker != nullptr)
+        netWorker->resetInput(b);
+
     for (d = 1; d <= maxDepth; d++) {
 
         if (d < 6) {
@@ -528,11 +542,10 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
     SearchData* sd      = td->searchData;
     U64         zobrist = b->zobrist();
     bool        pv      = (beta - alpha) != 1;
-//    Score       staticEval =
-//        inCheck ? -MAX_MATE_SCORE + ply : sd->evaluator.evaluate(b) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
-    Score staticEval = netWorker->compute() * 100;
-    
-    
+    Score       staticEval =
+        inCheck ? -MAX_MATE_SCORE + ply : eval(&sd->evaluator, b) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
+    //    Score staticEval = netWorker->compute() * 100;
+
     Score originalAlpha = alpha;
     Score highestScore  = -MAX_MATE_SCORE;
     Score score         = -MAX_MATE_SCORE;
@@ -617,15 +630,21 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
          **************************************************************************************/
         if (staticEval >= beta && !hasOnlyPawns(b, b->getActivePlayer())) {
             b->move_null();
-            netWorker->setActivePlayer(b);
-            assert(netWorker->validateInput(b));
+
+            if (netWorker != nullptr) {
+
+                netWorker->setActivePlayer(b);
+                assert(netWorker->validateInput(b));
+            }
 
             score = -pvSearch(b, -beta, 1 - beta, depth - (depth / 4 + 3) * ONE_PLY, ply + ONE_PLY, td, 0);
-            
+
             b->undoMove_null();
-            netWorker->setActivePlayer(b);
-            assert(netWorker->validateInput(b));
-            
+            if (netWorker != nullptr) {
+
+                netWorker->setActivePlayer(b);
+                assert(netWorker->validateInput(b));
+            }
             if (score >= beta) {
                 return beta;
             }
@@ -675,11 +694,11 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
     int quiets     = 0;
 
     while (moveOrderer.hasNext()) {
-        
+
         Move m = moveOrderer.next();
 
-//        std::cout << m << std::endl;
-        
+        //        std::cout << m << std::endl;
+
         if (!b->isLegal(m))
             continue;
 
@@ -758,13 +777,13 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
                 lmr = depth - 2;
             }
         }
-    
-        assert(netWorker->validateInput(b));
+
         b->move(m);
-        netWorker->onMove(b, m);
-        bool validation = netWorker->validateInput(b);
-        assert(netWorker->validateInput(b));
-//        netWorker->resetInput(b);
+
+        if (netWorker != nullptr) {
+            netWorker->onMove(b, m);
+            assert(netWorker->validateInput(b));
+        }
 
         if (legalMoves == 0) {
             score = -pvSearch(b, -beta, -alpha, depth - ONE_PLY + extension, ply + ONE_PLY, td, 0);
@@ -777,12 +796,13 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
                 score = -pvSearch(b, -beta, -alpha, depth - ONE_PLY + extension, ply + ONE_PLY, td,
                                   0);    // re-search
         }
-    
-        assert(netWorker->validateInput(b));
+
         b->undoMove();
-        netWorker->onUndoMove(b, m);
-        assert(netWorker->validateInput(b));
-//        netWorker->resetInput(b);
+
+        if (netWorker != nullptr) {
+            netWorker->onUndoMove(b, m);
+            assert(netWorker->validateInput(b));
+        }
 
         // if we got a new best score for this node, update the highest score and keep track of the best move
         if (score > highestScore) {
@@ -884,8 +904,7 @@ Score qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* td) {
     bool  inCheck   = b->isInCheck(b->getActivePlayer());
     Score stand_pat = -MAX_MATE_SCORE + ply;
     if (!inCheck) {
-//        stand_pat = sd->evaluator.evaluate(b) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
-        stand_pat = netWorker->compute() * 100;
+        stand_pat = eval(&sd->evaluator, b) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
     }
 
     if (en.zobrist == zobrist) {
@@ -928,22 +947,21 @@ Score qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* td) {
 
         if (!inCheck && (getCapturedPiece(m) % 6) < (getMovingPiece(m) % 6) && b->staticExchangeEvaluation(m) < 0)
             continue;
-    
-        
-        
-        assert(netWorker->validateInput(b));
+
         b->move(m);
-        netWorker->onMove(b, m);
-        
-        assert(netWorker->validateInput(b));
-        
+
+        if (netWorker != nullptr) {
+            netWorker->onMove(b, m);
+            assert(netWorker->validateInput(b));
+        }
+
         Score score = -qSearch(b, -beta, -alpha, ply + ONE_PLY, td);
-    
-        assert(netWorker->validateInput(b));
+
         b->undoMove();
-        netWorker->onUndoMove(b, m);
-        assert(netWorker->validateInput(b));
-//        netWorker->resetInput(b);
+        if (netWorker != nullptr) {
+            netWorker->onUndoMove(b, m);
+            assert(netWorker->validateInput(b));
+        }
 
         if (score > bestScore) {
             bestScore = score;

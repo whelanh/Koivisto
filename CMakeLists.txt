@@ -65,7 +65,7 @@ add_executable(Koivisto
         src_files/fecppnn/optimiser/Optimiser.h
         src_files/fecppnn/network/Network.cpp
         src_files/fecppnn/network/Network.h
-        src_files/fecppnn/special/KingPawnNetwork.h)
+        src_files/fecppnn/special/KingPieceNetwork.h)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopt-info")

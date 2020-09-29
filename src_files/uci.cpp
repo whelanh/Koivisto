@@ -11,7 +11,7 @@
 #include <thread>
 
 #include "fecppnn/network/Network.h"
-//#include "fecppnn/special/KingPawnNetwork.h"
+#include "fecppnn/special/KingPieceNetwork.h"
 
 #define MAJOR_VERSION 2
 #define MINOR_VERSION 1
@@ -20,7 +20,7 @@ TimeManager* timeManager;
 Board*       board;
 std::thread* searchThread = nullptr;
 
-//fecppnn::KingPawnNetwork* kingPawnNetwork;
+fecppnn::KingPieceNetwork* kpNetwork;
 
 void uci_loop(bool bench) {
 
@@ -191,23 +191,26 @@ void uci_processCommand(std::string str) {
     } else if (split.at(0) == "nn"){
     
     
-//        if(split.at(1) == "load"){
-//            if(split.at(2) == "structure"){
-//                kingPawnNetwork = new fecppnn::KingPawnNetwork(fecppnn::createNetwork(split.at(3)));
-//            } else if(split.at(2) == "weights"){
-//                kingPawnNetwork->getNetwork()->loadWeights(split.at(3));
-//            }
-//        }else if(split.at(1) == "write"){
-//            if(split.at(2) == "structure"){
-//                kingPawnNetwork->getNetwork()->writeNetworkStructure(split.at(3));
-//            } else if(split.at(2) == "weights"){
-//                kingPawnNetwork->getNetwork()->writeWeights(split.at(3));
-//            }
-//        }else if(split.at(1) == "eval"){
-//            kingPawnNetwork->resetInput(board);
-//            std::cout << "net eval: " << kingPawnNetwork->compute() << std::endl;
-//            printArray(kingPawnNetwork->getNetwork()->getLayer(0)->getOutput()->getValues(), 32);
-//        }
+        if(split.at(1) == "load"){
+            if(split.at(2) == "structure"){
+                kpNetwork = new fecppnn::KingPieceNetwork(fecppnn::createNetwork(split.at(3)));
+                search_setNetwork(kpNetwork);
+            } else if(split.at(2) == "weights"){
+                kpNetwork->getNetwork()->loadWeights(split.at(3));
+            }
+        }else if(split.at(1) == "write"){
+            if(split.at(2) == "structure"){
+                kpNetwork->getNetwork()->writeNetworkStructure(split.at(3));
+            } else if(split.at(2) == "weights"){
+                kpNetwork->getNetwork()->writeWeights(split.at(3));
+            }
+        }else if(split.at(1) == "eval"){
+            kpNetwork->resetInput(board);
+            std::cout << "net eval: " << kpNetwork->compute() << std::endl;
+            printArray(kpNetwork->getNetwork()->getLayer(0)->getOutput()->getValues(), 32);
+        }else if(split.at(1) == "influence"){
+            search_setNetworkInfluence(stof(split.at(2)));
+        }
     
     }
 }

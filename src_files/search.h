@@ -22,6 +22,7 @@
 #include "TimeManager.h"
 #include "TranspositionTable.h"
 #include "eval.h"
+#include "fecppnn/special/KingPieceNetwork.h"
 
 extern int threadCount;
 
@@ -43,17 +44,21 @@ struct SearchOverview {
     Move  move;
 };
 
-void  initLmr();
-Score getWDL(Board* board);
-void  search_stop();
-void  search_setHashSize(int hashSize);
-void  search_clearHash();
-void  search_useTB(bool val);
-void  search_init(int hashSize);     // used to create arrays, movelists etc
-void  search_cleanUp();              // used to clean up the memory
-SearchOverview search_overview();    // used to get information about the latest search
-void search_enable_infoStrings();
-void search_disable_infoStrings();
+void           initLmr();
+Score          getWDL(Board* board);
+void           search_stop();
+void           search_setHashSize(int hashSize);
+void           search_clearHash();
+void           search_useTB(bool val);
+void           search_init(int hashSize);    // used to create arrays, movelists etc
+void           search_cleanUp();             // used to clean up the memory
+SearchOverview search_overview();            // used to get information about the latest search
+void           search_enable_infoStrings();
+void           search_disable_infoStrings();
+
+void                       search_setNetwork(fecppnn::KingPieceNetwork* net);
+fecppnn::KingPieceNetwork* search_getNetwork();
+void                       search_setNetworkInfluence(float influence);
 
 Move  bestMove(Board* b, Depth maxDepth, TimeManager* timeManager, int threadId = 0);
 Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, ThreadData* sd, Move skipMove);
