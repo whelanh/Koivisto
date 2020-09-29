@@ -67,7 +67,7 @@ Score eval(Evaluator* ev, Board* b) {
     if (netWorker == nullptr) {
         return ev->evaluate(b);
     } else {
-        return (ev->evaluate(b) * (1 - netInfluence)) + netWorker->compute() * 100 * netInfluence;
+        return (ev->evaluate(b) * (1 - netInfluence)) + netWorker->compute() * 100 * netInfluence * (b->getActivePlayer() == WHITE ? 1:-1);
     }
 }
 
