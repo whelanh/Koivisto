@@ -106,7 +106,7 @@ class KingPieceNetwork {
         Square wKingSq = bitscanForward(b->getPieces(WHITE, KING));
         Square bKingSq = bitscanForward(b->getPieces(BLACK, KING));
 
-        concat->setFlipInputs(color == BLACK);
+        concat->setFlipInputs(!(color == BLACK));
 
         if (pFrom % 6 == PAWN) {
 
