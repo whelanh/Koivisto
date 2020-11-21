@@ -37,19 +37,19 @@ add_executable(Koivisto
         src_files/syzygy/tbconfig.h
         src_files/syzygy/tbprobe.c
         src_files/syzygy/tbchess.c
-        src_files/eun/DenseInput.cpp
-        src_files/eun/DenseLayer.cpp
-        src_files/eun/DenseNetwork.cpp
-        src_files/eun/DenseOutput.cpp
-        src_files/eun/DenseInput.h
-        src_files/eun/DenseLayer.h
-        src_files/eun/DenseNetwork.h
-        src_files/eun/DenseOutput.h
-        src_files/eun/nntools.h
-        src_files/eun/data/CompactInput.cpp
-        src_files/eun/data/CompactInput.h
-        src_files/eun/data/Weight.cpp
-        src_files/eun/data/Weight.h)
+        src_files/fecppnn/config.h
+        src_files/fecppnn/Layer.h
+        src_files/fecppnn/Data.h
+        src_files/fecppnn/Data.cpp
+        src_files/fecppnn/activations.h
+        src_files/fecppnn/activations.cpp
+        src_files/fecppnn/affine.h
+        src_files/fecppnn/Network.h
+        src_files/fecppnn/structure.h
+        src_files/fecppnn/transform.h
+        src_files/fecppnn/transform.cpp
+        src_files/fecppnn/sample.h
+        src_files/fecppnn/Network.cpp src_files/fecppnn/affine.cpp src_files/fecppnn/loss.h src_files/fecppnn/loss.cpp src_files/fecppnn/optimiser.cpp src_files/fecppnn/optimiser.h)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMINOR_VERSION=7")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMAJOR_VERSION=4")
