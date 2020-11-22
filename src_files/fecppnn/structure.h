@@ -22,15 +22,15 @@ namespace nn{
 
 
 static Layer layers[LAYER_COUNT]{
-    {12*64  , 32, &activate_relu, &backprop_relu},
-    {8     ,  8, &activate_relu, &backprop_relu},
-    {8     ,  1, &activate_sigmoid, &backprop_sigmoid},
+    {64*12, 32, &activate_relu, &backprop_relu},
+    {32   ,  8, &activate_relu, &backprop_relu},
+    {8    ,  1, &activate_null, &backprop_null},
 };
 
 #ifdef NN_TRAIN
 static Loss lossFunction = &loss_l2;
 
-static Optimiser optimiser{0.1/NN_BATCH_SIZE};
+static Optimiser optimiser{0.001/NN_BATCH_SIZE};
 #endif
 
 

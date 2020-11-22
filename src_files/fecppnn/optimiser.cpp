@@ -15,7 +15,7 @@ void nn::Optimiser::optimise(int size, nn::Data** weights, nn::Data** bias) {
             weights[i]->values[n] += -(weights[i]->getGradient(0)->get(n) * alpha);
         }
         for(int n = 0; n < bias[i]->size; n++){
-            bias[i]->values[n] += -(bias[i]->getGradient(0)->get(n) * alpha);
+            bias   [i]->values[n] += -(bias   [i]->getGradient(0)->get(n) * alpha);
         }
     }
 }

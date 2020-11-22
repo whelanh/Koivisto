@@ -25,15 +25,24 @@ void nn::affine_transformation_input(Sample* in, nn::Data* weights, Data* bias, 
     }
     
     for(uint16_t &index:in->indices){
-    
+        
+        // we can only do the chunks of 8 with avx instructions
+        // the rest must be done manually
+        int size = output->size;
+        if(size % 8 != 0){
+            size -= size % 8;
+        }
         // we assume that the output size of the very first layer is always a multiple of 8!
-        for(int n = 0; n < output->size; n+=8){
+        for(int n = 0; n < size; n+=8){
             // get the gradients into the register aswell as the output which we want to write to
             __m256 wvalues = _mm256_load_ps(&(weightValues[index * output->size + n]));
             __m256 ovalues = _mm256_load_ps(&(outputValues[                       n]));
             // add the element-wise multiplication of the weights. For this, add the weights for the activated
             // input neuron (output = 1) to the output
             _mm256_store_ps(&outputValues[n],_mm256_add_ps(ovalues, wvalues));
+        }
+        for(int n = size; n < output->size; n++){
+            outputValues[n] += weightValues[index * output->size + n];
         }
     }
 }
@@ -57,29 +66,29 @@ void nn::affine_transformation_input_backprop(Sample* in, nn::Data* weights, Dat
     // as the bias is simply added, it can be considered a weight with a standard output of 1.
     // So we only need to add the output gradient
     for(int i = 0; i < output->size; i++){
-//        biasGrad[i] += outputGrad[i];
+        biasGrad[i] += outputGrad[i];
     }
     
     // going through each index, applying the rules described above
     // Note that this assumes, as well as the forwar step, that the output size is a multiple of 8
     // Otherwise a SIGSEGV will occur as we try to load 256 bit into a register to which we dont have access.
     for(uint16_t &index:in->indices){
+        // we can only do the chunks of 8 with avx instructions
+        // the rest must be done manually
         int size = output->size;
         if(size % 8 != 0){
             size -= size % 8;
         }
-//        for(int n = 0; n < size; n+=8){
-//            // get the weight gradient which we want to increment as well as the output gradient
-//            __m256 wgrad = _mm256_load_ps(&(weightsGrad[index * output->size + n]));
-//            __m256 ograd = _mm256_load_ps(&( outputGrad[                       n]));
-//
-//            _mm256_store_ps(&(weightsGrad[index * output->size + n]), _mm256_add_ps(wgrad, ograd));
-//        }
-//        for(int n = size; n < output->size; n++){
-//            weightsGrad[index * output->size + n] += outputGrad[n];
-//            std::cout << "###" << outputGrad[n] << std::endl;
-//            std::cout << weightsGrad[index * output->size + n] << std::endl;
-//        }
+        for(int n = 0; n < size; n+=8){
+            // get the weight gradient which we want to increment as well as the output gradient
+            __m256 wgrad = _mm256_load_ps(&(weightsGrad[index * output->size + n]));
+            __m256 ograd = _mm256_load_ps(&( outputGrad[                       n]));
+
+            _mm256_store_ps(&(weightsGrad[index * output->size + n]), _mm256_add_ps(wgrad, ograd));
+        }
+        for(int n = size; n < output->size; n++){
+            weightsGrad[index * output->size + n] += outputGrad[n];
+        }
     }
 }
 #endif

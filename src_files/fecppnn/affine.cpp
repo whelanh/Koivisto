@@ -8,15 +8,21 @@ void nn::affine_transformation(nn::Data* matrixData, nn::Data* biasData, nn::Dat
     
     int inputSize = inputData->getSize();
     
-    float* outputValues = outputData->values;
-    float* inputValues  = inputData->values;
-    float* bias         = biasData->values;
-    float* weights      = matrixData->values;
+    // we get the output values, input values the bias and weights and perform
+    // the linear operation: o = W * x + b where x is the input, W the weights, o the output and b the bias
+    float* outputValues = outputData ->values;
+    float* inputValues  = inputData  ->values;
+    float* bias         = biasData   ->values;
+    float* weights      = matrixData ->values;
     
+    // we can only do chunks of 8 using AVX instructions. Otherwise a SIGSEGV would occur.
+    // Therefore the legal AVX "area" must be computed first. The remaining values are computed manually.
+    // Note that it still assumes that the input is a multiple of 8!
     int size = outputData->size;
     if(size % 8 != 0){
         size -= size % 8;
     }
+    // doing the AVX matrix-multiplication which does 8 rows at a time
     for (int row = 0; row < size; row += 8) {
         
         __m256 biasV = _mm256_load_ps(&(bias[row]));
@@ -75,7 +81,7 @@ void nn::affine_transformation(nn::Data* matrixData, nn::Data* biasData, nn::Dat
         _mm256_store_ps(&outputValues[row], acc0);
     }
     
-    
+    // doing the remaining rows
     for (int row = size; row < outputData->size; row++){
         __m256 acc0 = _mm256_setzero_ps();
         for (int col = 0; col < inputSize; col += 8) {
