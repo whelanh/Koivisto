@@ -5,6 +5,7 @@
 
 #include <iostream>
 
+#ifdef NN_TRAIN
 float loss_l2(nn::Data* output, const nn::Data* target) {
     
     float loss = 0;
@@ -28,3 +29,4 @@ float loss_l1(nn::Data* output, const nn::Data* target) {
     return loss;
     
 }
+#endif

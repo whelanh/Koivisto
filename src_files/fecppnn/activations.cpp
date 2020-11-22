@@ -36,17 +36,23 @@ void nn::activate_null(nn::Data* input, const nn::Data* output) {
         output->values[i] = input->values[i];
 }
 void nn::backprop_relu(nn::Data* activation, const nn::Data* output) {
+#ifdef NN_TRAIN
     for (int i = 0; i < output->size; i++){
         output->getGradient(0)->get(i) = activation->getGradient(0)->get(i) * relu_prime(output->values[i]);
     }
+#endif
 }
 void nn::backprop_sigmoid(nn::Data* activation, const nn::Data* output) {
+#ifdef NN_TRAIN
     for (int i = 0; i < output->size; i++){
         output->getGradient(0)->get(i) = activation->getGradient(0)->get(i) * sigmoid_prime(output->values[i]);
     }
+#endif
 }
 void nn::backprop_null(nn::Data* activation, const nn::Data* output) {
+#ifdef NN_TRAIN
     for (int i = 0; i < output->size; i++){
         output->getGradient(0)->get(i) = activation->getGradient(0)->get(i);
     }
+#endif
 }

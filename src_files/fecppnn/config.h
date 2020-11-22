@@ -6,7 +6,8 @@
 #define KOIVISTO_CONFIG_H
 
 namespace nn{
-    class Data;
+    class   Data;
+    struct  Optimiser;
 }
 
 typedef void  (*Activation) (nn::Data* output, const nn::Data* activation);

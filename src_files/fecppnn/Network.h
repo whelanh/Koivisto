@@ -13,8 +13,6 @@
 namespace nn{
 
 struct Network{
-
-    int size;
     
     const Layer* layers;
     
@@ -30,15 +28,14 @@ struct Network{
     Data** activations;
 #endif
     Network() {
-        this->size = LAYER_COUNT;
         this->layers = nn::layers;
 #ifdef NN_TRAIN
-        this->weights = new Data*[size];
-        this->biases = new Data*[size];
-        this->outputs = new Data**[size];
-        this->activations = new Data**[size];
+        this->weights = new Data*[LAYER_COUNT];
+        this->biases = new Data*[LAYER_COUNT];
+        this->outputs = new Data**[LAYER_COUNT];
+        this->activations = new Data**[LAYER_COUNT];
 
-        for(int i = 0; i < size; i++){
+        for(int i = 0; i < LAYER_COUNT; i++){
             this->weights[i] = new Data(layers[i].inputSize, layers[i].outputSize, NN_THREADS);
             this->biases[i] = new Data(layers[i].inputSize, layers[i].outputSize, NN_THREADS);
             float k = 1 / sqrt(layers[i].inputSize);
@@ -53,12 +50,12 @@ struct Network{
             }
         }
 #else
-        this->weights = new Data*[size];
-        this->biases = new Data*[size];
-        this->outputs = new Data*[size];
-        this->activations = new Data*[size];
+        this->weights = new Data*[LAYER_COUNT];
+        this->biases = new Data*[LAYER_COUNT];
+        this->outputs = new Data*[LAYER_COUNT];
+        this->activations = new Data*[LAYER_COUNT];
 
-        for(int i = 0; i < size; i++){
+        for(int i = 0; i < LAYER_COUNT; i++){
             this->weights[i] = new Data(layers[i].inputSize, layers[i].outputSize);
             this->biases[i] = new Data(layers[i].inputSize, layers[i].outputSize);
             
@@ -72,15 +69,15 @@ struct Network{
 #ifdef NN_TRAIN
     void compute(Sample *sample, int threadID);
     void backprop(Sample *sample, int threadID);
-    float getOutput(int threadID, int id=0){
-        return this->activations[size-1][threadID]->values[id];
-    }
+    float getOutput(int threadID, int id=0);
+    float applyLoss(Data* target, int threadID);
+    void optimise();
     void mergeGrad();
     void clearGrad();
 #else
     void compute(Sample *sample);
     float getOutput(int id=0){
-        return this->activations[size-1]->values[id];
+        return this->activations[LAYER_COUNT-1]->values[id];
     }
 #endif
 
