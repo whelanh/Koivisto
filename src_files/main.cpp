@@ -23,83 +23,20 @@
 #include "MoveOrderer.h"
 #include "Tuning.h"
 #include "Verification.h"
-#include "uci.h"
-
-#include <iomanip>
-
-using namespace std;
-using namespace bb;
-using namespace move;
-
-// TODO kick this out of the main file...
-void main_tune_features() {
-    eval_init();
-    bb_init();
-    Evaluator* evaluator = new Evaluator();
-    
-    using namespace tuning;
-    
-    loadPositionFile("../resources/other/E12.33-1M-D12-Resolved.book", 10000000);
-    loadPositionFile("../resources/other/E12.41-1M-D12-Resolved.book", 10000000);
-    loadPositionFile("../resources/other/E12.46FRC-1250k-D12-1s-Resolved.book", 10000000);
-    auto K = tuning::computeK(2.86681, 200, 1e-7, 16);
-    
-    for (int i = 0; i < 5000; i++) {
-        
-        std::cout << "--------------------------------------------------- [" << i
-                  << "] ----------------------------------------------" << std::endl;
-        
-        // std::cout << tuning::optimisePSTBlackBox(evaluator, K, pieceScores, 6, 1) << std::endl;
-        // std::cout << tuning::optimisePSTBlackBox(evaluator, K, &evfeatures[21], 2, 1) << std::endl;
-        // std::cout << tuning::optimisePSTBlackBox(evaluator, K, pinnedEval, 15, 1) << std::endl;
-        // std::cout << tuning::optimisePSTBlackBox(evaluator, K, hangingEval, 5, 1) << std::endl;
-        std::cout << tuning::optimisePSTBlackBox(K, &bishop_pawn_same_color_table_o[0], 9, 1, 16) << std::endl;
-        std::cout << tuning::optimisePSTBlackBox(K, &bishop_pawn_same_color_table_e[0], 9, 1, 16) << std::endl;
-        
-        for (Square s = 0; s < 9; s++) {
-            std::cout << "M(" << setw(5) << MgScore(bishop_pawn_same_color_table_o[s]) << "," << setw(5)
-                      << EgScore(bishop_pawn_same_color_table_o[s]) << "), ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        
-        for (Square s = 0; s < 9; s++) {
-            std::cout << "M(" << setw(5) << MgScore(bishop_pawn_same_color_table_e[s]) << "," << setw(5)
-                      << EgScore(bishop_pawn_same_color_table_e[s]) << "), ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        /*for (Square s = 0; s < 23; s++) {
-            std::cout << "M(" << setw(5) << MgScore(*evfeatures[s]) << "," << setw(5) << EgScore(*evfeatures[s])
-                      << "), ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-*/
-        /*for (Square s = 0; s < 15; s++) {
-            std::cout << "M(" << setw(5) << MgScore(pinnedEval[s]) << "," << setw(5) << EgScore(pinnedEval[s]) << "), ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        for (Square s = 0; s < 5; s++) {
-            std::cout << "M(" << setw(5) << MgScore(hangingEval[s]) << "," << setw(5) << EgScore(hangingEval[s])
-                      << "), ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;*/
-    }
-    
-    delete evaluator;
-    bb_cleanUp();
-}
-
 #include "fecppnn/Data.h"
 #include "fecppnn/Network.h"
 #include "fecppnn/config.h"
 #include "fecppnn/optimiser.h"
 #include "fecppnn/sample.h"
 #include "fecppnn/structure.h"
+#include "uci.h"
 
+#include <iomanip>
+#include <omp.h>
+
+using namespace std;
+using namespace bb;
+using namespace move;
 
 // TODO this should be in the nn namespace, probably
 //      with a better name, I think
@@ -108,88 +45,107 @@ struct training_example {
     nn::Data target;
 };
 
-std::vector<training_example> generate_fake_data() {
-    std::vector<training_example> v;
-    
-    for(int i = 0; i < 10000000; i++) {
-        nn::Sample input {};
-        int idx = rand() % (12 * 64);
-        input.indices.push_back(idx);
-        
-        nn::Data target {1, 0};
-        target(0) = idx / (12 * 64.0);
-        
-        training_example e = {
-            input,
-            target
-        };
-        
-        v.push_back(e);
-    }
-    
-    return v;
-}
-
-
 std::vector<training_example> load_samples_from_file() {
     std::vector<training_example> v;
+
+    tuning::loadPositionFile("../resources/other/E12.33-1M-D12-Resolved.book", 10000000);
+//    tuning::loadPositionFile("../resources/other/E12.41-1M-D12-Resolved.book", 10000000);
+//    tuning::loadPositionFile("../resources/other/E12.46FRC-1250k-D12-1s-Resolved.book", 10000000);
     
-    for(int i = 0; i < 1000; i++) {
-        nn::Sample input {};
-        input.indices.push_back(0);
-        
-        nn::Data target {1, 0};
-        target(0) = 1;
-        
+    int counter = 0;
+    for (tuning::TrainingEntry& en : tuning::training_entries) {
+        nn::Sample inSample {};
+        nn::Data   target {1, 0};
+
+        target(0) = en.target;
+        for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
+            U64 bb = en.board.getPieces()[p];
+            while(bb){
+                Square s = bitscanForward(bb);
+                inSample.indices.push_back(p * 64 + s);
+                bb = lsbReset(bb);
+            }
+        }
+        if(counter % 10000 == 0){
+            std::cout << "\rconverted" << setw( 4) << counter << std::flush;;
+        }
+        counter ++;
+    
         training_example e = {
-            input,
+            inSample,
             target
         };
-        
-        
-        v.push_back(e);
-    }
     
+        v.push_back(e);
+        
+    }
+    std::cout << std::endl;
+
     return v;
 }
 
 int main(int argc, char* argv[]) {
+    bb_init();
+    
     int threadID = 0;
 
     nn::Network net {};
-    std::vector<training_example> train_dataset = generate_fake_data();
+    std::vector<training_example> train_dataset = load_samples_from_file();
     net.compute(&train_dataset[0].input, threadID);
 
     float lossSum = 0;
-    for(int epoch = 0; epoch < 20; epoch++){
-        for (int i = 0; i < train_dataset.size(); i++) {
-            net.compute(&train_dataset[i].input, threadID);
-            float loss = net.applyLoss(&train_dataset[i].target, threadID);
-            net.backprop(&train_dataset[i].input, threadID);
-            lossSum += loss;
+    // for each epoch, divide the data into batches and train the batches
+    for(int epoch = 0; epoch < 2000; epoch++){
+        
+        // batchStart is the starting index for the current batch
+        for(int batchStart = 0; batchStart < train_dataset.size(); batchStart+=NN_BATCH_SIZE){
 
-            if(i % NN_BATCH_SIZE == NN_BATCH_SIZE - 1) {
-                net.optimise();
-                net.mergeGrad();
-                net.clearGrad();
+            #pragma omp parallel for schedule(static, NN_BATCH_SIZE / NN_THREADS) num_threads(NN_THREADS) reduction(+:lossSum)
+            for(int index = batchStart; index < batchStart + NN_BATCH_SIZE; index++){
+                if (index >= train_dataset.size()) continue;
+                const int threadID = omp_get_thread_num();
+                net.compute(&train_dataset[index].input, threadID);
+                float loss = net.applyLoss(&train_dataset[index].target, threadID);
+                net.backprop(&train_dataset[index].input, threadID);
+                lossSum += loss;
             }
-            if(i % (1000 * NN_BATCH_SIZE) == 0) {
-    	    	printf(
-                    "\repoch %3d; train loss %3.4f; val loss TODO         ",
-                    epoch,
-                    lossSum
-                );
-                lossSum = 0;
-            }
+    
+            net.mergeGrad();
+            net.optimise();
+            net.clearGrad();
+
+            lossSum /= NN_BATCH_SIZE;
+
+            std::cout << "\repoch" << setw(4) << epoch << "; train loss=" << setw(10) << setprecision(6) << right
+                      << lossSum << "; validation loss=" << setw(10) << setprecision(6) << right << lossSum
+                      << std::flush;
+
+            lossSum = 0;
         }
         std::cout << std::endl;
 
-        for(int i = 0; i < 700; i += 100) {
-            nn::Sample s;
-            s.indices.push_back(i);
-            net.compute(&s, threadID);
-            std::cout << i << " = " << net.getOutput(threadID, 0) << std::endl;
-        }
+//        for (int i = 0; i < train_dataset.size(); i++) {
+//            net.compute(&train_dataset[i].input, threadID);
+//            float loss = net.applyLoss(&train_dataset[i].target, threadID);
+//            net.backprop(&train_dataset[i].input, threadID);
+//            lossSum += loss;
+//
+//            if(i % NN_BATCH_SIZE == NN_BATCH_SIZE - 1) {
+//                net.optimise();
+//                net.mergeGrad();
+//                net.clearGrad();
+//            }
+//            if(i % (100 * NN_BATCH_SIZE) == 0) {
+//
+//                lossSum /= 100 * NN_BATCH_SIZE;
+//                std::cout << "\repoch"            << setw( 4) << epoch
+//                          << "; train loss="      << setw(10) << setprecision(6) << right << lossSum
+//                          << "; validation loss=" << setw(10) << setprecision(6) << right << lossSum << std::flush;
+//
+//                lossSum = 0;
+//            }
+//        }
+//        std::cout << std::endl;
     }
 
 //

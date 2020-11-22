@@ -20,11 +20,10 @@
 
 namespace nn{
 
-
 static Layer layers[LAYER_COUNT]{
     {64*12, 32, &activate_relu, &backprop_relu},
     {32   ,  8, &activate_relu, &backprop_relu},
-    {8    ,  1, &activate_null, &backprop_null},
+    {8    ,  1, &activate_sigmoid, &backprop_sigmoid},
 };
 
 #ifdef NN_TRAIN
