@@ -35,7 +35,8 @@ class Data {
     int width = 0;
     int height = 0;
     int size = 0;
-    float* values;
+    int nGradients;
+    float* values = nullptr;
 #ifdef NN_TRAIN
     Data**  gradient = nullptr;
 #endif
@@ -43,6 +44,8 @@ class Data {
 #ifdef NN_TRAIN
     Data(int width, int createGradients);
     Data(int width, int height, int createGradients);
+    Data(Data &&data);
+    Data(const Data &data);;
 #else
     Data(int width);
     Data(int width, int height);

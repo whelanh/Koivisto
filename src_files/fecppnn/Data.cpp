@@ -19,38 +19,64 @@
 #include "Data.h"
 
 #include <cstring>
+#include <iostream>
 
 #ifdef NN_TRAIN
 nn::Data::Data(int width, int createGradients) {
-    this->width  = width;
-    this->height = 1;
-    this->size   = width;
+    this->width      = width;
+    this->height     = 1;
+    this->size       = width;
+    this->nGradients = createGradients;
     
-    
+//    this->values = (float*) _mm_malloc(64, size * sizeof(float));
     this->values = new (std::align_val_t(64)) float[size] {};
 
     if (createGradients) {
-        this->gradient = new (std::align_val_t(64)) nn::Data*[createGradients];
+        this->gradient = new nn::Data*[createGradients];
         for(int i = 0; i < createGradients; i++){
-            this->gradient[i] = new (std::align_val_t(64)) nn::Data(this->width, this->height, false);
+            this->gradient[i] = new nn::Data(this->width, this->height, false);
         }
     }
 }
 nn::Data::Data(int width, int height, int createGradients) {
-    this->width  = width;
-    this->height = height;
-    this->size   = width * height;
-    
+    this->width      = width;
+    this->height     = height;
+    this->size       = width * height;
+    this->nGradients = createGradients;
     
     this->values = new (std::align_val_t(64)) float[size] {};
     if (createGradients) {
-        this->gradient = new (std::align_val_t(64)) nn::Data*[createGradients];
+        this->gradient = new nn::Data*[createGradients];
         for(int i = 0; i < createGradients; i++){
-            this->gradient[i] = new (std::align_val_t(64)) nn::Data(this->width, this->height, false);
+            this->gradient[i] = new nn::Data(this->width, this->height, false);
         }
-
     }
 }
+nn::Data::Data(nn::Data&& data) {
+    this->width         = data.width;
+    this->height        = data.height;
+    this->size          = data.size;
+    this->values        = data.values;
+    this->gradient      = data.gradient;
+    this->nGradients    = data.nGradients;
+}
+nn::Data::Data(const nn::Data& data) {
+    this->width         = data.width;
+    this->height        = data.height;
+    this->size          = data.size;
+    this->nGradients    = data.nGradients;
+    
+    this->values        = new (std::align_val_t(64)) float[size] {};
+    std::memcpy(this->values, data.values, sizeof(float) * size);
+    
+    if ( this->nGradients) {
+        this->gradient = new nn::Data*[ this->nGradients];
+        for(int i = 0; i < this->nGradients; i++){
+            this->gradient[i] = new nn::Data(*data.gradient[i]);
+        }
+    }
+}
+
 #else
 nn::Data::Data(int width) {
     this->width  = width;
@@ -74,10 +100,10 @@ nn::Data::Data(int width, int height) {
 #endif
 
 nn::Data::~Data() {
-    _mm_free(values);
+    _mm_free(this->values);
 #ifdef NN_TRAIN
-    if (gradient != nullptr) {
-        delete gradient;
+    if (this->gradient != nullptr) {
+        delete this->gradient;
     }
 #endif
 }
@@ -123,4 +149,3 @@ float* nn::Data::getValues()                       const { return values; }
 int    nn::Data::getWidth()                        const { return width; }
 int    nn::Data::getHeight()                       const { return height; }
 int    nn::Data::getSize()                         const { return size; }
-
