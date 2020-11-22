@@ -1,7 +1,7 @@
 #thank you @Andrew Grant for your help with this file! :)
 
 CC      = g++
-SRC     = *.cpp syzygy/tbprobe.c
+SRC     = *.cpp fecppnn/*.cpp syzygy/tbprobe.c
 LIBS    = -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive
 FOLDER  = bin/
 ROOT    = ../
