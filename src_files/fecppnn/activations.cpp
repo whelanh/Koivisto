@@ -5,19 +5,20 @@
 #include "activations.h"
 
 #include <immintrin.h>
+#include <iostream>
 
 void nn::activate_relu(nn::Data* input, const nn::Data* output) {
     
     static __m256 lower = _mm256_set1_ps(0);
 
-    float* outputVals = input->getValues();
-    float* inputVals  = output->getValues();
+    float* outputVals = output->getValues();
+    float*  inputVals = input ->getValues();
 
     int size = input->getSize();
     if(size % 8 != 0){
         size -= size % 8;
     }
-
+    
     for(int i = 0; i < size; i+=8){
         __m256 in  = _mm256_load_ps(&(inputVals[i]));
         __m256 out = _mm256_max_ps(in, lower);

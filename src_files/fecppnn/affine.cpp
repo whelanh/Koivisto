@@ -2,6 +2,8 @@
 // Created by Luecx on 21.11.2020.
 //
 #include "affine.h"
+
+#include <iostream>
 void nn::affine_transformation(nn::Data* matrixData, nn::Data* biasData, nn::Data* inputData, nn::Data* outputData) {
     
     int inputSize = inputData->getSize();
@@ -73,6 +75,7 @@ void nn::affine_transformation(nn::Data* matrixData, nn::Data* biasData, nn::Dat
         _mm256_store_ps(&outputValues[row], acc0);
     }
     
+    
     for (int row = size; row < outputData->size; row++){
         __m256 acc0 = _mm256_setzero_ps();
         for (int col = 0; col < inputSize; col += 8) {
@@ -100,7 +103,8 @@ void nn::affine_transformation_backprop(nn::Data* matrixData, nn::Data* biasData
             matrixData->getGradient(threadID)->get(i,o) += outputData->getGradient(0)->get(o) * inputData->get(i);
             sum += outputData->getGradient(0)->get(o) * matrixData->get(i, o);
         }
-        inputData->getGradient(0)->get(i) += sum;
+        
+        inputData->getGradient(0)->get(i) = sum;
         
     }
     

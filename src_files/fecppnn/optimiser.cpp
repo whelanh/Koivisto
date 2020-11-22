@@ -4,6 +4,8 @@
 
 #include "optimiser.h"
 
+#include <iostream>
+
 #ifdef NN_TRAIN
 
 nn::Optimiser::Optimiser(double alpha) : alpha(alpha) {}
