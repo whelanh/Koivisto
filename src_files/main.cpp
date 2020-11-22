@@ -111,9 +111,9 @@ struct training_example {
 std::vector<training_example> generate_fake_data() {
     std::vector<training_example> v;
     
-    for(int i = 0; i < 100000; i++) {
+    for(int i = 0; i < 10000000; i++) {
         nn::Sample input {};
-        int idx = rand() % 12*64;
+        int idx = rand() % (12 * 64);
         input.indices.push_back(idx);
         
         nn::Data target {1, 0};
@@ -154,31 +154,42 @@ std::vector<training_example> load_samples_from_file() {
 }
 
 int main(int argc, char* argv[]) {
-    
     int threadID = 0;
 
     nn::Network net {};
     std::vector<training_example> train_dataset = generate_fake_data();
     net.compute(&train_dataset[0].input, threadID);
 
-
-    for(int n = 0; n < 1000; n++){
-
-        float lossSum = 0;
+    float lossSum = 0;
+    for(int epoch = 0; epoch < 20; epoch++){
         for (int i = 0; i < train_dataset.size(); i++) {
             net.compute(&train_dataset[i].input, threadID);
             float loss = net.applyLoss(&train_dataset[i].target, threadID);
             net.backprop(&train_dataset[i].input, threadID);
             lossSum += loss;
 
-            if(i % NN_BATCH_SIZE == NN_BATCH_SIZE-1){
+            if(i % NN_BATCH_SIZE == NN_BATCH_SIZE - 1) {
                 net.optimise();
                 net.mergeGrad();
                 net.clearGrad();
             }
-            
+            if(i % (1000 * NN_BATCH_SIZE) == 0) {
+    	    	printf(
+                    "\repoch %3d; train loss %3.4f; val loss TODO         ",
+                    epoch,
+                    lossSum
+                );
+                lossSum = 0;
+            }
         }
-        std::cout << "loss= " << lossSum << std::endl;
+        std::cout << std::endl;
+
+        for(int i = 0; i < 700; i += 100) {
+            nn::Sample s;
+            s.indices.push_back(i);
+            net.compute(&s, threadID);
+            std::cout << i << " = " << net.getOutput(threadID, 0) << std::endl;
+        }
     }
 
 //
