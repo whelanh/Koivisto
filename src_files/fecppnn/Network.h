@@ -75,6 +75,7 @@ struct Network{
     float getOutput(int threadID, int id=0){
         return this->activations[size-1][threadID]->values[id];
     }
+    void mergeGrad();
     void clearGrad();
 #else
     void compute(Sample *sample);

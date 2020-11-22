@@ -14,13 +14,13 @@
 namespace nn{
 
 static Layer layers[LAYER_COUNT]{
-    {8 ,32,&activate_relu, &backprop_relu},
-    {32, 32,&activate_relu, &backprop_relu},
-    {32,  1,&activate_null, &backprop_null},
+    {12*64  , 32, &activate_relu, &backprop_relu},
+    {32     , 32, &activate_relu, &backprop_relu},
+    {32     ,  1, &activate_null, &backprop_null},
 };
 
 #ifdef NN_TRAIN
-static Loss lossFunction = &loss_l1;
+static Loss lossFunction = &loss_l2;
 #endif
 
 }

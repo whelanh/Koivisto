@@ -115,20 +115,27 @@ int main(int argc, char* argv[]) {
     }
     nn::Data target{1,0};
     target(0) = 1;
-    nn::Optimiser opt{0.0001};
+    nn::Optimiser opt{0.001};
     opt.net = &net;
     
     startMeasure();
-    for(int i = 0; i < 10000; i++){
-        net.compute(&sample1, 0);
-        std::cerr << nn::lossFunction(net.activations[LAYER_COUNT-1][0], &target) << std::endl;
-        net.backprop(&sample1, 0);
-        opt.optimise();
-        net.clearGrad();
-    }
+    int threadID = 1;
     
-    net.compute(&sample1, 0);
-    std::cout << net.getOutput(0) << std::endl;
+    for(int i = 0; i < 100; i++){
+        net.compute(&sample1, threadID);
+        std::cout << nn::lossFunction(net.activations[LAYER_COUNT-1][threadID], &target) << std::endl;
+        net.backprop(&sample1, threadID);
+//        if(i % 100 == 99){
+    
+            net.mergeGrad();
+            opt.optimise();
+            net.clearGrad();
+//        }
+    }
+    std::cout << stopMeasure() << std::endl;
+
+    net.compute(&sample1, threadID);
+    std::cout << net.getOutput(threadID) << std::endl;
     
     /**********************************************************************************
      *                                  T U N I N G                                   *

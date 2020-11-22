@@ -9,11 +9,12 @@
 #include "Data.h"
 #include "config.h"
 #include "sample.h"
+#include "immintrin.h"
 
 namespace nn{
 
-void transform(Sample* in, Data* weights, Data* bias, Data* output);
-void transform_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
 
 }
 

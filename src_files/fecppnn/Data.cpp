@@ -18,6 +18,8 @@
 
 #include "Data.h"
 
+#include <cstring>
+
 #ifdef NN_TRAIN
 nn::Data::Data(int width, int createGradients) {
     this->width  = width;
@@ -28,11 +30,10 @@ nn::Data::Data(int width, int createGradients) {
     this->values = new (std::align_val_t(64)) float[size] {};
 
     if (createGradients) {
-        this->gradient = new nn::Data*[createGradients];
+        this->gradient = new (std::align_val_t(64)) nn::Data*[createGradients];
         for(int i = 0; i < createGradients; i++){
-            this->gradient[i] = new nn::Data(this->width, this->height, false);
+            this->gradient[i] = new (std::align_val_t(64)) nn::Data(this->width, this->height, false);
         }
-        
     }
 }
 nn::Data::Data(int width, int height, int createGradients) {
@@ -43,9 +44,9 @@ nn::Data::Data(int width, int height, int createGradients) {
     
     this->values = new (std::align_val_t(64)) float[size] {};
     if (createGradients) {
-        this->gradient = new nn::Data*[createGradients];
+        this->gradient = new (std::align_val_t(64)) nn::Data*[createGradients];
         for(int i = 0; i < createGradients; i++){
-            this->gradient[i] = new nn::Data(this->width, this->height, false);
+            this->gradient[i] = new (std::align_val_t(64)) nn::Data(this->width, this->height, false);
         }
 
     }
@@ -93,10 +94,22 @@ void   nn::Data::randomise(float lower, float upper) {
         this->values[i] = static_cast<float>(rand()) / RAND_MAX * (upper - lower) + lower;
     }
 }
-void   nn::Data::clear(){
-    for(int i = 0; i < size; i++){
-        this->values[i] = 0;
+void   nn::Data::mergeInto(Data* other) {
+    // adds the content of this data object into the other data object.
+    for(int i = 0; i < size; i+= 8){
+        // load our values and the target values into the register
+        __m256 other_values = _mm256_load_ps(&other->values[i]);
+        __m256   our_values = _mm256_load_ps(& this->values[i]);
+        // stores the sum of our and their values inside the other data object.
+        _mm256_store_ps(&other->values[i], _mm256_add_ps(other_values, our_values));
     }
+}
+void   nn::Data::clear(){
+    // clears the content of this data object
+    std::memset(this->values, 0, this->size * sizeof(float));
+//    for(int i = 0; i < size; i++){
+//        this->values[i] = 0;
+//    }
 }
 float  nn::Data::get(int width)                    const { return values[width]; }
 float& nn::Data::get(int width)                          { return values[width]; }

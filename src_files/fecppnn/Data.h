@@ -25,6 +25,7 @@
 #include <new>
 #include <ostream>
 #include "config.h"
+#include <immintrin.h>
 
 namespace nn {
 
@@ -76,6 +77,7 @@ class Data {
     }
 
     void randomise(float lower, float upper);
+    void mergeInto(Data* other);
     void clear();
     
     float* getValues() const;
