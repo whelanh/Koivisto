@@ -130,19 +130,11 @@ void convertFens(const std::string& infile, const std::string& outfile){
 
 int main(int argc, char* argv[]) {
     
-//    bb_init();
-//    convertFens(argv[1], argv[2]);
-//
     if (argc == 1) {
         uci_loop(false);
     } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
         uci_loop(true);
     }
-//    nn::Network net{};
-//    nn::Sample sample{};
-//    sample.indices.push_back(8);sample.indices.push_back(9);sample.indices.push_back(10);sample.indices.push_back(11);sample.indices.push_back(13);sample.indices.push_back(14);sample.indices.push_back(15);sample.indices.push_back(28);sample.indices.push_back(65);sample.indices.push_back(70);sample.indices.push_back(130);sample.indices.push_back(133);sample.indices.push_back(192);sample.indices.push_back(199);sample.indices.push_back(259);sample.indices.push_back(324);sample.indices.push_back(432);sample.indices.push_back(433);sample.indices.push_back(434);sample.indices.push_back(435);sample.indices.push_back(436);sample.indices.push_back(437);sample.indices.push_back(438);sample.indices.push_back(439);sample.indices.push_back(505);sample.indices.push_back(510);sample.indices.push_back(570);sample.indices.push_back(573);sample.indices.push_back(632);sample.indices.push_back(639);sample.indices.push_back(699);sample.indices.push_back(764);
-//    net.compute(&sample,0);
-//    std::cout << net.getOutput(0) << std::endl;
 
     
     return 0;

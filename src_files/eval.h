@@ -38,15 +38,28 @@ void eval_init();
 
 class Evaluator {
     public:
-
+    //    float features[6];
+    
     float phase;
-
-
-    bb::Score evaluate(Board* b);
-
-
+    
+    EvalScore computePinnedPieces(Board* b, Color color);
+    
+    EvalScore computeHangingPieces(Board* b);
+    
+    bb::Score evaluate(Board* b, bool useNN=false);
+    
+    bb::Score standardEval(Board* b);
+    bb::Score  networkEval(Board* b);
+    
+    bb::Score evaluateTempo(Board* b);
+    
+    /**
+     * returns the phase of the last calculation
+     * @return
+     */
     float getPhase();
 };
+
 
 void printEvaluation(Board* b);
 

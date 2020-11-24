@@ -33,6 +33,10 @@ bool                     useTB       = false;
 bool                     printInfo   = true;
 
 SearchOverview overview;
+// tracks if the nn has been disabled in this game
+bool                     nnDisabled = false;
+// true if the nn should be used for this specific run (internal only)
+bool                     useNN = false;
 
 int lmrReductions[256][256];
 
@@ -111,6 +115,8 @@ void search_disable_infoStrings() { printInfo = false; }
  * clears the hash of the transposition table which is used for searches.
  */
 void search_clearHash() { table->clear(); }
+
+void search_clearNNUsage( ){nnDisabled = false;}
 
 /**
  * enables/disables tb probing during search
@@ -418,6 +424,35 @@ Move getDTZMove(Board* board) {
 SearchOverview search_overview() { return overview; }
 
 /**
+ * decides if the nn shall be used for this search. only true if we in a tournament, phase < 0.3
+ * and the last search result was smaller than 3 pawns
+ */
+bool useNNThisRun(Board* b){
+    
+    // if we are not in a tournament, dont use nn at all
+    if(search_timeManager->getMode() != TOURNAMENT) {
+        return false;
+    }
+    // if the nn has been disabled in a previous move, dont use it
+    if(nnDisabled){
+        return false;
+    }
+    // check if the material difference is not too large
+    Evaluator evaluator{};
+    Score hceEval = evaluator.evaluate(b);
+    if(abs(hceEval) > 500){
+        nnDisabled = true;
+        return false;
+    }
+    //also check that the phase is not too large
+    if(evaluator.getPhase() > 0.3){
+        nnDisabled = true;
+        return false;
+    }
+    return true;
+}
+
+/**
  * =================================================================================
  *                                M A I N
  *                              S E A R C H
@@ -433,7 +468,7 @@ SearchOverview search_overview() { return overview; }
  * @return
  */
 Move bestMove(Board* b, Depth maxDepth, TimeManager* timeManager, int threadId) {
-
+    
     // if the main thread calls this function, we need to generate the search data for all the threads first
     if (threadId == 0) {
 
@@ -477,6 +512,9 @@ Move bestMove(Board* b, Depth maxDepth, TimeManager* timeManager, int threadId) 
     // start the basic search on all threads
     Depth d = 1;
     Score s = 0;
+    
+    // check if the nn shall be used
+    useNN = useNNThisRun(b);
 
     // we will create a copy of the board object which will be used during search
     // This is relevant as multiple threads can clearly not use the same object.
@@ -604,7 +642,7 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
     Score       staticEval;
 
     staticEval =
-        inCheck ? -MAX_MATE_SCORE + ply : sd->evaluator.evaluate(b) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
+        inCheck ? -MAX_MATE_SCORE + ply : sd->evaluator.evaluate(b, useNN) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
 
     // we check if the evaluation improves across plies.
     sd->setHistoricEval(staticEval, b->getActivePlayer(), ply);
@@ -997,7 +1035,7 @@ Score qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* td) {
     Score stand_pat;
 
     stand_pat =
-        inCheck ? -MAX_MATE_SCORE + ply : sd->evaluator.evaluate(b) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
+        inCheck ? -MAX_MATE_SCORE + ply : sd->evaluator.evaluate(b, useNN) * ((b->getActivePlayer() == WHITE) ? 1 : -1);
 
     // we can also use the perft_tt entry to adjust the evaluation.
     if (en.zobrist == zobrist) {

@@ -150,6 +150,7 @@ void uci_processCommand(std::string str) {
 
     if (split.at(0) == "ucinewgame") {
         search_clearHash();
+        search_clearNNUsage();
     }
     if (split.at(0) == "uci") {
         uci_uci();
