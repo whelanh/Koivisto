@@ -34,37 +34,17 @@ typedef int32_t EvalScore;
 #define EgScore(s)   ((Score)((uint16_t)((unsigned) ((s) + 0x8000) >> 16)))
 #define showScore(s) std::cout << "(" << MgScore(s) << ", " << EgScore(s) << ")" << std::endl;
 
-extern EvalScore bishop_pawn_same_color_table_o[9];
-extern EvalScore bishop_pawn_same_color_table_e[9];
-
-extern EvalScore* psqt[11];
-extern EvalScore  pieceScores[6];
-extern EvalScore* evfeatures[];
-extern EvalScore  hangingEval[5];
-extern EvalScore  pinnedEval[15];
-extern EvalScore* mobilities[6];
-extern int        mobEntryCount[6];
-
 void eval_init();
 
 class Evaluator {
     public:
-    //    float features[6];
 
     float phase;
 
-    EvalScore computePinnedPieces(Board* b, Color color);
-
-    EvalScore computeHangingPieces(Board* b);
 
     bb::Score evaluate(Board* b);
 
-    bb::Score evaluateTempo(Board* b);
 
-    /**
-     * returns the phase of the last calculation
-     * @return
-     */
     float getPhase();
 };
 

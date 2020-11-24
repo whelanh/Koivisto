@@ -20,10 +20,13 @@
 
 namespace nn{
 
+static std::string weightsFile = "nn.bin";
+static bool        loadWeights = true;
+
 static Layer layers[LAYER_COUNT]{
     {64*12, 32, &activate_relu, &backprop_relu},
-    {32   ,  8, &activate_relu, &backprop_relu},
-    {8    ,  1, &activate_sigmoid, &backprop_sigmoid},
+    {32   , 32, &activate_relu, &backprop_relu},
+    {32   ,  1, &activate_null, &backprop_null},
 };
 
 #ifdef NN_TRAIN

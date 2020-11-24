@@ -63,6 +63,12 @@ struct Network{
             this->activations[i] = new Data(NN_THREADS);
         }
 #endif
+        
+        if(nn::loadWeights) {
+            this->loadWeights(nn::weightsFile);
+        }
+        
+    
     
     }
 
@@ -80,6 +86,8 @@ struct Network{
         return this->activations[LAYER_COUNT-1]->values[id];
     }
 #endif
+    void  loadWeights(const std::string& weights);
+    void writeWeights(const std::string& weights);
 
 
 };

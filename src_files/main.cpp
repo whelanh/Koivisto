@@ -84,80 +84,66 @@ std::vector<training_example> load_samples_from_file() {
     return v;
 }
 
-int main(int argc, char* argv[]) {
-    bb_init();
+void convertFens(const std::string& infile, const std::string& outfile){
+    fstream data;
+    data.open(infile, ios::in);
+    if (data.is_open()) {
+        ofstream outf;
+        outf.open(outfile);
     
-    int threadID = 0;
-
-    nn::Network net {};
-    std::vector<training_example> train_dataset = load_samples_from_file();
-    net.compute(&train_dataset[0].input, threadID);
-
-    float lossSum = 0;
-    // for each epoch, divide the data into batches and train the batches
-    for(int epoch = 0; epoch < 2000; epoch++){
-        
-        // batchStart is the starting index for the current batch
-        for(int batchStart = 0; batchStart < train_dataset.size(); batchStart+=NN_BATCH_SIZE){
-
-            #pragma omp parallel for schedule(static, NN_BATCH_SIZE / NN_THREADS) num_threads(NN_THREADS) reduction(+:lossSum)
-            for(int index = batchStart; index < batchStart + NN_BATCH_SIZE; index++){
-                if (index >= train_dataset.size()) continue;
-                const int threadID = omp_get_thread_num();
-                net.compute(&train_dataset[index].input, threadID);
-                float loss = net.applyLoss(&train_dataset[index].target, threadID);
-                net.backprop(&train_dataset[index].input, threadID);
-                lossSum += loss;
+        string tp;
+        int counter = 0;
+        startMeasure();
+        while (getline(data, tp)) {
+            std::vector<std::string> splits{};
+            splitString(tp, splits, ';');
+            if(splits[1].at(0) == '#'){
+                continue;
             }
-    
-            net.mergeGrad();
-            net.optimise();
-            net.clearGrad();
-
-            lossSum /= NN_BATCH_SIZE;
-
-            std::cout << "\repoch" << setw(4) << epoch << "; train loss=" << setw(10) << setprecision(6) << right
-                      << lossSum << "; validation loss=" << setw(10) << setprecision(6) << right << lossSum
-                      << std::flush;
-
-            lossSum = 0;
+            float res = std::stof(splits[1]);
+            if(abs(res) > 10){
+                continue;
+            }
+            Board b{splits[0]};
+            
+            for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
+                U64 bb = b.getPieces()[p];
+                while(bb){
+                    Square s = bitscanForward(bb);
+                    outf << (p * 64 + s) << " ";
+                    bb = lsbReset(bb);
+                }
+            }
+            counter ++;
+            if(counter % 100000 == 0){
+                int time = stopMeasure();
+                std::cout << "\rpositions:" << std::right << std::setw(10) << counter
+                          << "   pps:" <<  std::right << std::setw(10) << 100.0 / time << "Mpps" << std::flush;
+                startMeasure();
+            }
+            outf << res << std::endl;
         }
-        std::cout << std::endl;
-
-//        for (int i = 0; i < train_dataset.size(); i++) {
-//            net.compute(&train_dataset[i].input, threadID);
-//            float loss = net.applyLoss(&train_dataset[i].target, threadID);
-//            net.backprop(&train_dataset[i].input, threadID);
-//            lossSum += loss;
-//
-//            if(i % NN_BATCH_SIZE == NN_BATCH_SIZE - 1) {
-//                net.optimise();
-//                net.mergeGrad();
-//                net.clearGrad();
-//            }
-//            if(i % (100 * NN_BATCH_SIZE) == 0) {
-//
-//                lossSum /= 100 * NN_BATCH_SIZE;
-//                std::cout << "\repoch"            << setw( 4) << epoch
-//                          << "; train loss="      << setw(10) << setprecision(6) << right << lossSum
-//                          << "; validation loss=" << setw(10) << setprecision(6) << right << lossSum << std::flush;
-//
-//                lossSum = 0;
-//            }
-//        }
-//        std::cout << std::endl;
+        outf.close();
     }
+    std::cout << std::endl;
+}
 
+int main(int argc, char* argv[]) {
+    
+//    bb_init();
+//    convertFens(argv[1], argv[2]);
 //
-//    /**********************************************************************************
-//     *                                  T U N I N G                                   *
-//     **********************************************************************************/
-//
-//    // main_tune_pst_bb(PAWN);
-//    //    eval_init();
-//    //     main_tune_features();
-//    // main_tune_pst();
-//    // main_tune_features_bb();
+    if (argc == 1) {
+        uci_loop(false);
+    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
+        uci_loop(true);
+    }
+//    nn::Network net{};
+//    nn::Sample sample{};
+//    sample.indices.push_back(8);sample.indices.push_back(9);sample.indices.push_back(10);sample.indices.push_back(11);sample.indices.push_back(13);sample.indices.push_back(14);sample.indices.push_back(15);sample.indices.push_back(28);sample.indices.push_back(65);sample.indices.push_back(70);sample.indices.push_back(130);sample.indices.push_back(133);sample.indices.push_back(192);sample.indices.push_back(199);sample.indices.push_back(259);sample.indices.push_back(324);sample.indices.push_back(432);sample.indices.push_back(433);sample.indices.push_back(434);sample.indices.push_back(435);sample.indices.push_back(436);sample.indices.push_back(437);sample.indices.push_back(438);sample.indices.push_back(439);sample.indices.push_back(505);sample.indices.push_back(510);sample.indices.push_back(570);sample.indices.push_back(573);sample.indices.push_back(632);sample.indices.push_back(639);sample.indices.push_back(699);sample.indices.push_back(764);
+//    net.compute(&sample,0);
+//    std::cout << net.getOutput(0) << std::endl;
+
     
     return 0;
 }

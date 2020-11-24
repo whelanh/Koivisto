@@ -81,3 +81,29 @@ void nn::Network::compute(Sample* sample) {
     }
 }
 #endif
+
+
+void nn::Network::loadWeights(const std::string& weights) {
+    FILE* infile = fopen(weights.c_str(), "rb");
+    
+    for(int i = 0; i < LAYER_COUNT; i++){
+        Data* w = this->weights[i];
+        Data* b = this->biases[i];
+        fread(w->values, sizeof(float), w->getSize(), infile);
+        fread(b->values, sizeof(float), b->getSize(), infile);
+    }
+    
+    fclose(infile);
+}
+void nn::Network::writeWeights(const std::string& weights) {
+    FILE* outfile = fopen(weights.c_str(), "wb");
+    
+    for(int i = 0; i < LAYER_COUNT; i++){
+        Data* w = this->weights[i];
+        Data* b = this->biases[i];
+        fwrite(w->getValues(), sizeof(float), w->getSize(), outfile);
+        fwrite(b->getValues(), sizeof(float), b->getSize(), outfile);
+    }
+    
+    fclose(outfile);
+}
