@@ -849,6 +849,7 @@ bb::Score Evaluator:: networkEval(Board* b){
         U64 bb = b->getPieces()[p];
         while(bb){
             Square s = bitscanForward(bb);
+            std::cout << (p * 64 + s) << std::endl;
             sample.indices.push_back(p * 64 + s);
             bb = lsbReset(bb);
         }
