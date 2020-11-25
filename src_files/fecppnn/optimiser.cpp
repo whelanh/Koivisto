@@ -29,6 +29,11 @@ void nn::Adam::initVectors() {
     }
 }
 void nn::Adam::optimise(nn::Data** weights, nn::Data** bias) {
+    
+    if(weights_fmv[0] == nullptr){
+        initVectors();
+    }
+    
     timeStep++;
     for(int i=0; i < LAYER_COUNT;i++){
         Data* w = weights    [i];
