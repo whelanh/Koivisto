@@ -100,10 +100,14 @@ nn::Data::Data(int width, int height) {
 #endif
 
 nn::Data::~Data() {
-    _mm_free(this->values);
+    if(this->values != nullptr){
+        _mm_free(this->values);
+        this->values = nullptr;
+    }
 #ifdef NN_TRAIN
     if (this->gradient != nullptr) {
-        delete this->gradient;
+        delete[] this->gradient;
+        this->gradient = nullptr;
     }
 #endif
 }

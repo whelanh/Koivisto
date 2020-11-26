@@ -22,10 +22,10 @@ void nn::Optimiser::optimise(int size, nn::Data** weights, nn::Data** bias) {
 
 void nn::Adam::initVectors(int size, nn::Data** weights, nn::Data** bias) {
     for(int i = 0; i < size; i++){
-        weights_fmv.emplace_back(Data{weights[i]->size,0});
-        weights_smv.emplace_back(Data{weights[i]->size,0});
-        bias_fmv   .emplace_back(Data{   bias[i]->size,0});
-        bias_smv   .emplace_back(Data{   bias[i]->size,0});
+        weights_fmv.emplace_back(weights[i]->size,0);
+        weights_smv.emplace_back(weights[i]->size,0);
+        bias_fmv   .emplace_back(   bias[i]->size,0);
+        bias_smv   .emplace_back(   bias[i]->size,0);
     }
 }
 void nn::Adam::optimise(int size, nn::Data** weights, nn::Data** bias) {
