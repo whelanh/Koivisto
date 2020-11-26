@@ -6,6 +6,9 @@
 #define KOIVISTO_OPTIMISER_H
 
 #include "Data.h"
+
+#include <vector>
+#include <cmath>
 #ifdef NN_TRAIN
 
 namespace nn{
@@ -16,7 +19,7 @@ struct Optimiser{
 
     Optimiser(double alpha);
 
-    void optimise(Data** weights, Data** bias);
+    void optimise(int size, Data** weights, Data** bias);
 };
 
 
@@ -25,32 +28,19 @@ struct Adam{
     private:
     double alpha = 0.001, beta1 = 0.9, beta2 =0.999, epsilon = 1e-8;
     int timeStep;
-    Data* weights_fmv[LAYER_COUNT]{nullptr};
-    Data* weights_smv[LAYER_COUNT]{nullptr};
-    Data*    bias_fmv[LAYER_COUNT]{nullptr};
-    Data*    bias_smv[LAYER_COUNT]{nullptr};
-    
-    void initVectors();
-    
-    void optimise(Data** weights, Data** bias);
     
     
-};
+    std::vector<Data> weights_fmv;
+    std::vector<Data> weights_smv;
+    std::vector<Data>    bias_fmv;
+    std::vector<Data>    bias_smv;
+    
+    void initVectors(int size, Data** weights, Data** bias);
+    
+    public:
+    Adam(double alpha=0.001, double beta1=0.9, double beta2=0.999, double epsilon=1e-8);
 
-
-struct Adam{
-    
-    private:
-    double alpha = 0.001, beta1 = 0.9, beta2 =0.999, epsilon = 1e-8;
-    int timeStep;
-    Data* weights_fmv[LAYER_COUNT]{nullptr};
-    Data* weights_smv[LAYER_COUNT]{nullptr};
-    Data*    bias_fmv[LAYER_COUNT]{nullptr};
-    Data*    bias_smv[LAYER_COUNT]{nullptr};
-    
-    void initVectors();
-    
-    void optimise(Data** weights, Data** bias);
+    void optimise(int size, Data** weights, Data** bias);
     
     
 };
