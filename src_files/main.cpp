@@ -33,6 +33,7 @@
 
 #include <iomanip>
 #include <omp.h>
+#include <cmath>
 
 using namespace std;
 using namespace bb;
@@ -48,8 +49,7 @@ struct training_example {
 
 std::vector<training_example> convertFens(const std::string& infile){
     std::vector<training_example> examples;
-    examples.reserve(50 * 1000 * 1000);
-    
+    examples.reserve(75 * 1000 * 1000);
     
     fstream data;
     data.open(infile, ios::in);
@@ -75,6 +75,8 @@ std::vector<training_example> convertFens(const std::string& infile){
             }
             else {
                 res = std::stof(splits[1]);
+                res = std::max(res, -20.0f);
+                res = std::min(res,  20.0f);
             }
             
             Board b{splits[0]};
@@ -82,7 +84,7 @@ std::vector<training_example> convertFens(const std::string& infile){
             nn::Sample sample {};
             nn::Data   target {1, 0};
             
-            if(b.getActivePlayer() == WHITE || true){
+            if(b.getActivePlayer() == WHITE){
                 for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
                     U64 bb = b.getPieces()[p];
                     while(bb) {
@@ -118,12 +120,10 @@ std::vector<training_example> convertFens(const std::string& infile){
             
             examples.push_back(e);
             counter++;
-            if(counter > 50) {
+            if (counter > 1000 * 1000) {
                 break;
             }
-            if(counter % 100000 == 0){
-                
-                
+            if(counter % 100000 == 0) {
                 int time = stopMeasure();
                 std::cout << "\rpositions:" << std::right << std::setw(10) << counter
                           << "   pps:" <<  std::right << std::setw(10) << 100.0 / time << "Mpps" << std::flush;
@@ -137,66 +137,70 @@ std::vector<training_example> convertFens(const std::string& infile){
 
 int main(int argc, char* argv[]) {
 
-//    if (argc == 1) {
-//        uci_loop(false);
-//    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
-//        uci_loop(true);
-//    }
+    if (argc == 1) {
+        uci_loop(false);
+    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
+        uci_loop(true);
+    } else if (argc > 1 && strcmp(argv[1], "train") == 0) {
+        #ifdef NN_TRAIN
+        bb_init();
     
-    bb_init();
-    
-    int threadID = 0;
-    
-    nn::Network net {};
-    std::vector<training_example> train_dataset = convertFens("F:\\OneDrive\\ProgrammSpeicher\\CLionProjects\\Koivisto\\resources\\make_fens_from_lichess_pgn\\output\\0.txt");
-    std::cout << train_dataset.size() << std::endl;
-    net.compute(&train_dataset[0].input, threadID);
-    
-    float lossSum = 0;
-    // for each epoch, divide the data into batches and train the batches
-    for(int epoch = 0; epoch < 2000; epoch++) {
+        nn::Network net {};
         
-        startMeasure();
+        int threadID = 0;
         
-        // batchStart is the starting index for the current batch
-        for(int batchStart = 0; batchStart < train_dataset.size(); batchStart += NN_BATCH_SIZE){
+        std::vector<training_example> train_dataset = convertFens("E:/test.fen");
+        net.compute(&train_dataset[0].input, threadID);
+        
+        float lossSum = 0;
+        // for each epoch, divide the data into batches and train the batches
+        for(int epoch = 0; epoch < 2000; epoch++) {
+            startMeasure();
             
-            lossSum = 0;
-#pragma omp parallel for schedule(static, NN_BATCH_SIZE / NN_THREADS) num_threads(NN_THREADS) reduction(+:lossSum)
-            for(int index = batchStart; index < batchStart + NN_BATCH_SIZE; index++){
-                if (index >= train_dataset.size()) continue;
-                const int threadID = omp_get_thread_num();
-                net.compute(&train_dataset[index].input, threadID);
-                float loss = net.applyLoss(&train_dataset[index].target, threadID);
-                if(loss > 10){
-                    exit(-1);
+            // batchStart is the starting index for the current batch
+            for(int batchStart = 0; batchStart < train_dataset.size(); batchStart += NN_BATCH_SIZE){
+                
+                lossSum = 0;
+    #pragma omp parallel for schedule(static, NN_BATCH_SIZE / NN_THREADS) num_threads(NN_THREADS) reduction(+:lossSum)
+                for(int index = batchStart; index < batchStart + NN_BATCH_SIZE; index++){
+                    if (index >= train_dataset.size()) continue;
+                    const int threadID = omp_get_thread_num();
+                    net.compute(&train_dataset[index].input, threadID);
+                    float loss = net.applyLoss(&train_dataset[index].target, threadID);
+                    net.backprop(&train_dataset[index].input, threadID);
+                    lossSum += loss;
                 }
-                net.backprop(&train_dataset[index].input, threadID);
-                lossSum += loss;
+                
+                net.mergeGrad();
+                net.optimise();
+                net.clearGrad();
+                
+                int processedValuesEpoch = batchStart + NN_BATCH_SIZE;
+                int processedValuesBatch = NN_BATCH_SIZE;
+                if(batchStart + NN_BATCH_SIZE > train_dataset.size()){
+                    processedValuesBatch = train_dataset.size() - batchStart;
+                    processedValuesEpoch = train_dataset.size();
+                }
+                lossSum /= processedValuesBatch;
+                
+                if(batchStart % (NN_BATCH_SIZE * 10) == 0) {
+                    std::cout << "\repoch" << setw(4) << epoch <<
+                        "; train loss=" << setw(10) << setprecision(6) << right << lossSum <<
+                        "; validation loss=" << setw(10) << setprecision(6) << right << lossSum <<
+                        "; speed=" << setw(10) << setprecision(0) << right << processedValuesEpoch / stopMeasure() * 1000
+                            << std::flush;
+                }            
             }
-            
-            net.mergeGrad();
-            net.optimise();
-            net.clearGrad();
-            
-            int processedValuesEpoch = batchStart + NN_BATCH_SIZE;
-            int processedValuesBatch = NN_BATCH_SIZE;
-            if(batchStart + NN_BATCH_SIZE > train_dataset.size()){
-                processedValuesBatch = train_dataset.size() - batchStart;
-                processedValuesEpoch = train_dataset.size();
-            }
-            std::cout << lossSum << std::endl;
-            lossSum /= processedValuesBatch;
-            std::cout << lossSum << std::endl;
-            
-            std::cout << "\repoch" << setw(4) << epoch <<
-                "; train loss=" << setw(10) << setprecision(6) << right << lossSum <<
-                "; validation loss=" << setw(10) << setprecision(6) << right << lossSum <<
-                "; speed=" << setw(10) << setprecision(0) << right << processedValuesEpoch / stopMeasure() * 1000
-                      << std::flush;
-            
+
+            std::string fname = "nn.";
+            fname += std::to_string(epoch);
+            fname += ".bin";
+
+            net.writeWeights(fname);
+            net.writeWeights("nn.latest.bin");
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
+        #endif
     }
 
 //    bb::bb_init();

@@ -310,6 +310,10 @@ EvalScore fast_king_psqt[2][64];
 nn::Network network{};
 
 void eval_init() {
+    // TODO should this be here???
+    //      (probably not... uci EvalWeight or something...)
+    network.loadWeights("nn.latest.bin");
+
     for (int i = 0; i < 64; i++) {
         for (int kside = 0; kside < 2; kside++) {
             fast_pawn_psqt[WHITE][psqt_kingside_indexing(kside, kside)][i] =
@@ -845,15 +849,35 @@ bb::Score Evaluator::standardEval(Board* b){
 }
 bb::Score Evaluator:: networkEval(Board* b){
     nn::Sample sample{};
-    for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
-        U64 bb = b->getPieces()[p];
-        while(bb){
-            Square s = bitscanForward(bb);
-            sample.indices.push_back(p * 64 + s);
-            bb = lsbReset(bb);
+     
+    if(b->getActivePlayer() == WHITE) {
+        for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
+            U64 bb = b->getPieces()[p];
+            while(bb) {
+                Square s = bitscanForward(bb);
+                sample.indices.push_back(p * 64 + s);
+                bb = lsbReset(bb);
+            }
+        }
+     }
+     else{
+        for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
+            U64 bb = b->getPieces()[p];
+            while(bb) {
+                Square s = mirrorSquare(bitscanForward(bb));
+                Piece p_correct = p;
+                if(p > WHITE_KING){
+                    p_correct = p-6;
+                }else{
+                    p_correct = p+6;
+                }
+                sample.indices.push_back(p_correct * 64 + s);
+                bb = lsbReset(bb);
+            }
         }
     }
-    network.compute(&sample, 0);
+    network.compute(&sample);
+    std::cout << network.getOutput(0) << std::endl;
     
     return network.getOutput(0) * 100;
 }

@@ -40,7 +40,6 @@ struct Network{
             this->biases[i] = new Data(layers[i].outputSize, NN_THREADS);
             float k = 1 / sqrt(layers[i].inputSize);
             this->weights[i]->randomise(-k, k);
-            this->biases[i]->randomise(-k, k);
     
             this->outputs[i] = new Data*[NN_THREADS];
             this->activations[i] = new Data*[NN_THREADS];
