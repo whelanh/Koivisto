@@ -428,7 +428,7 @@ SearchOverview search_overview() { return overview; }
  * and the last search result was smaller than 3 pawns
  */
 bool useNNThisRun(Board* b){
-    
+    return true;
     // if we are not in a tournament, dont use nn at all
     if(search_timeManager->getMode() != TOURNAMENT) {
         return false;

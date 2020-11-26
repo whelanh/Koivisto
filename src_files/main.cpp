@@ -85,6 +85,7 @@ std::vector<training_example> load_samples_from_file() {
 }
 
 void convertFens(const std::string& infile, const std::string& outfile){
+    bb_init();
     fstream data;
     data.open(infile, ios::in);
     if (data.is_open()) {
@@ -97,13 +98,23 @@ void convertFens(const std::string& infile, const std::string& outfile){
         while (getline(data, tp)) {
             std::vector<std::string> splits{};
             splitString(tp, splits, ';');
+            float res = 0;
             if(splits[1].at(0) == '#'){
-                continue;
+                if(splits[1].at(1)=='-'){
+                    res = -20;
+                }else{
+                    res = 20;
+                }
+            }else{
+                res = std::stof(splits[1]);
             }
-            float res = std::stof(splits[1]);
-            if(abs(res) > 10){
-                continue;
+            if(res > 20){
+                res = 20;
             }
+            if(res < -20){
+                res = -20;
+            }
+            
             Board b{splits[0]};
             
             for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
@@ -130,11 +141,20 @@ void convertFens(const std::string& infile, const std::string& outfile){
 
 int main(int argc, char* argv[]) {
     
-    if (argc == 1) {
-        uci_loop(false);
-    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
-        uci_loop(true);
-    }
+//    if (argc == 1) {
+//        uci_loop(false);
+//    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
+//        uci_loop(true);
+//    }
+
+
+    convertFens(argv[1], argv[2]);
+
+//    bb::bb_init();
+//    eval_init();
+//    Board b{"8/2N5/8/k2p4/8/8/2q1K3/8 w - - 2 76"};
+//    Evaluator ev{};
+//    std::cout << ev.evaluate(&b, true) << std::endl;
 
     
     return 0;

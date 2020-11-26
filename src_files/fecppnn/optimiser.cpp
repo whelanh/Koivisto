@@ -9,8 +9,8 @@
 #ifdef NN_TRAIN
 
 nn::Optimiser::Optimiser(double alpha) : alpha(alpha) {}
-void nn::Optimiser::optimise(int size, nn::Data** weights, nn::Data** bias) {
-    for(int i = 0; i < size; i++){
+void nn::Optimiser::optimise(nn::Data** weights, nn::Data** bias) {
+    for(int i = 0; i < LAYER_COUNT; i++){
         for(int n = 0; n < weights[i]->size; n++){
             weights[i]->values[n] += -(weights[i]->getGradient(0)->get(n) * alpha);
         }
