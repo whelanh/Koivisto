@@ -307,12 +307,13 @@ EvalScore fast_queen_psqt[2][4][64];
 EvalScore fast_king_psqt[2][64];
 
 
-nn::Network network{};
+nn::Network *network;
 
 void eval_init() {
     // TODO should this be here???
     //      (probably not... uci EvalWeight or something...)
-    network.loadWeights("nn.latest.bin");
+    network = new nn::Network();
+    network->loadWeights("nn.latest.bin");
 
     for (int i = 0; i < 64; i++) {
         for (int kside = 0; kside < 2; kside++) {
@@ -366,9 +367,6 @@ void eval_init() {
         fast_king_psqt[BLACK][i] = psqt_king[pst_index_black_s(i)];
     }
 }
-
-
-
 
 bool hasMatingMaterial(Board* b, bool side) {
     if ((b->getPieces()[QUEEN + side * 6] | b->getPieces()[ROOK + side * 6] | b->getPieces()[PAWN + side * 6])
@@ -847,6 +845,7 @@ bb::Score Evaluator::standardEval(Board* b){
         res = res / 10;
     return res;
 }
+
 bb::Score Evaluator:: networkEval(Board* b){
     nn::Sample sample{};
      
@@ -876,10 +875,9 @@ bb::Score Evaluator:: networkEval(Board* b){
             }
         }
     }
-    network.compute(&sample);
-    std::cout << network.getOutput(0) << std::endl;
+    network->compute(&sample,0);
     
-    return network.getOutput(0) * 100;
+    return network->getOutput(0) * 100;
 }
 
 /**

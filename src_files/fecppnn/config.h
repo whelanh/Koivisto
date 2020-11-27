@@ -15,7 +15,7 @@ typedef void  (*BackProp)   (nn::Data* output, const nn::Data* activation);
 typedef float (*Loss)       (nn::Data* output, const nn::Data* target);
 
 
-// #define NN_TRAIN
+#define NN_TRAIN
 #ifndef NN_TRAIN
 #define NN_RUN
 #endif

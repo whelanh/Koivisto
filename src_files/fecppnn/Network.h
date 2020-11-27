@@ -29,6 +29,8 @@ struct Network{
 #endif
     Network() {
         this->layers = nn::layers;
+        
+        
 #ifdef NN_TRAIN
         this->weights = new Data*[LAYER_COUNT];
         this->biases = new Data*[LAYER_COUNT];
