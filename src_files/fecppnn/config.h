@@ -20,8 +20,8 @@ typedef float (*Loss)       (nn::Data* output, const nn::Data* target);
 #define NN_RUN
 #endif
 
-#define NN_THREADS 1
-#define NN_BATCH_SIZE 4096
+#define NN_THREADS 16
+#define NN_BATCH_SIZE 1024
 
 
 

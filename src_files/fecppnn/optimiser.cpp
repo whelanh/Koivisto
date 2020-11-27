@@ -54,7 +54,7 @@ void nn::Adam::optimise(int size, nn::Data** weights, nn::Data** bias) {
                 double m_corrected = (*m)(j)/(1-(pow(beta1,timeStep)));
                 double v_corrected = (*v)(j)/(1-(pow(beta2,timeStep)));
                 (*w)(j) += -(alpha*m_corrected)/(sqrt(v_corrected)+epsilon);
-                
+
             }
             
             

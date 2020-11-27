@@ -54,8 +54,8 @@ void nn::Network::mergeGrad() {
         for(int t = 1; t < NN_THREADS; t++){
             weights[i]->getGradient(t)->mergeInto(weights[i]->getGradient(0));
             biases [i]->getGradient(t)->mergeInto(biases [i]->getGradient(0));
-            weights[i]->clear();
-            biases [i]->clear();
+            weights[i]->getGradient(t)->clear();
+            biases [i]->getGradient(t)->clear();
         }
     }
 }

@@ -32,7 +32,7 @@ static Layer layers[LAYER_COUNT]{
 #ifdef NN_TRAIN
 static Loss lossFunction = &loss_l2;
 
-static Adam optimiser{3e-2};
+static Adam optimiser{0.003};
 #endif
 
 
