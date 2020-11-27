@@ -49,21 +49,21 @@ float nn::Network::applyLoss(Data* target, int threadID) {
 
 void nn::Network::mergeGrad() {
     // merges the gradients of all the weights/biases into the first gradient entry
-    // it does not delete the other gradients so optimally, clearGrad() should be called afterwards
+    // It only deletes the gradients for all non-main threads
     for(int i = 0; i < LAYER_COUNT; i++){
         for(int t = 1; t < NN_THREADS; t++){
             weights[i]->getGradient(t)->mergeInto(weights[i]->getGradient(0));
             biases [i]->getGradient(t)->mergeInto(biases [i]->getGradient(0));
+            weights[i]->clear();
+            biases [i]->clear();
         }
     }
 }
 void nn::Network::clearGrad() {
-    // deletes the gradients for all weights/biases for all threads
+    // deletes the gradients for the main thread
     for (int i = 0; i < LAYER_COUNT; i++) {
-        for (int t = 0; t < NN_THREADS; t++) {
-            weights[i]->getGradient(t)->clear();
-            biases [i]->getGradient(t)->clear();
-        }
+        weights[i]->getGradient(0)->clear();
+        biases [i]->getGradient(0)->clear();
     }
 }
 void nn::Network::optimise() {
