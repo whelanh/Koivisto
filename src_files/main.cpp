@@ -46,10 +46,11 @@ struct training_example {
     nn::Data target;
 };
 
+#define MAX_POSITIONS (1000 * 1000 * 10)
 
 std::vector<training_example> convertFens(const std::string& infile){
     std::vector<training_example> examples;
-    examples.reserve(10);
+    examples.reserve(75 * 1000 * 1000);
     
     fstream data;
     data.open(infile, ios::in);
@@ -120,7 +121,7 @@ std::vector<training_example> convertFens(const std::string& infile){
             
             examples.push_back(e);
             counter++;
-            if (counter > 1000*1000-1) {
+            if (counter > MAX_POSITIONS) {
                 break;
             }
             if(counter % 100000 == 0) {
@@ -136,74 +137,70 @@ std::vector<training_example> convertFens(const std::string& infile){
 }
 
 int main(int argc, char* argv[]) {
+        bool TEST = false;
 
-
-    
-//    if (argc == 1) {
-//        uci_loop(false);
-//    } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
-//        uci_loop(true);
-//    } else if (argc > 1 && strcmp(argv[1], "train") == 0) {
-        #ifdef NN_TRAIN
-        bb_init();
-    
-        nn::Network net {};
+        if(TEST && argc == 1) {
+            uci_loop(false);
+        } else if(argc > 1 && strcmp(argv[1], "train") == 0) {
+            bb_init();
         
-        int threadID = 0;
-        
-        std::vector<training_example> train_dataset = convertFens(R"(F:\OneDrive\ProgrammSpeicher\CLionProjects\Koivisto\resources\make_fens_from_lichess_pgn\output\0.txt)");
-        net.compute(&train_dataset[0].input, threadID);
-        
-        float lossSum = 0;
-        // for each epoch, divide the data into batches and train the batches
-        for(int epoch = 0; epoch < 100; epoch++) {
-            startMeasure();
+            nn::Network net {};
             
-            float epochLoss = 0;
+            int threadID = 0;
             
-            // batchStart is the starting index for the current batch
-            for(int batchStart = 0; batchStart < train_dataset.size(); batchStart += NN_BATCH_SIZE){
+            std::vector<training_example> train_dataset = convertFens("E:/test.fen");
+            net.compute(&train_dataset[0].input, threadID);
+            
+            float lossSum = 0;
+            // for each epoch, divide the data into batches and train the batches
+            for(int epoch = 0; epoch < 100; epoch++) {
+                startMeasure();
                 
-                lossSum = 0;
-    #pragma omp parallel for schedule(static, NN_BATCH_SIZE / 1) num_threads(1) reduction(+:lossSum)
-                for(int index = batchStart; index < batchStart + NN_BATCH_SIZE; index++){
-                    if (index >= train_dataset.size()) continue;
-                    const int threadID = omp_get_thread_num();
-                    net.compute(&train_dataset[index].input, 0);
-                    float loss = net.applyLoss(&train_dataset[index].target, 0);
-                    net.backprop(&train_dataset[index].input, threadID);
-                    lossSum += loss;
-                }
+                float smoothedLoss = 0;
                 
-                net.mergeGrad();
-                net.optimise();
-                net.clearGrad();
-                
-                int processedValuesEpoch = batchStart + NN_BATCH_SIZE;
-                int processedValuesBatch = NN_BATCH_SIZE;
-                if(batchStart + NN_BATCH_SIZE > train_dataset.size()){
-                    processedValuesBatch = train_dataset.size() - batchStart;
-                    processedValuesEpoch = train_dataset.size();
-                }
-                epochLoss += lossSum;
-                lossSum /= processedValuesBatch;
-                
-                
-//                if(batchStart % (NN_BATCH_SIZE * 10) == 0) {
-                    std::cout << "\repoch" << setw(4) << epoch <<
-                        "; train loss(batch)=" << setw(10) << setprecision(6) << right << lossSum <<
-                        "; validation loss(batch)=" << setw(10) << setprecision(6) << right << lossSum <<
-                        "; train loss(epoch)=" << setw(10) << setprecision(6) << right << epochLoss / processedValuesEpoch <<
-                        "; speed=" << setw(10) << setprecision(0) << right << processedValuesEpoch / stopMeasure() * 1000
+                // batchStart is the starting index for the current batch
+                for(int batchStart = 0; batchStart < train_dataset.size(); batchStart += NN_BATCH_SIZE) {
+                    
+                    lossSum = 0;
+                    #pragma omp parallel for schedule(static, NN_BATCH_SIZE / 1) num_threads(1) reduction(+:lossSum)
+                    for(int index = batchStart; index < batchStart + NN_BATCH_SIZE; index++){
+                        if (index >= train_dataset.size()) continue;
+                        const int threadID = omp_get_thread_num();
+                        net.compute(&train_dataset[index].input, 0);
+                        float loss = net.applyLoss(&train_dataset[index].target, 0);
+                        net.backprop(&train_dataset[index].input, threadID);
+                        lossSum += loss;
+                    }
+                    
+                    net.mergeGrad();
+                    net.optimise();
+                    net.clearGrad();
+                    
+                    int processedValuesEpoch = batchStart + NN_BATCH_SIZE;
+                    int processedValuesBatch = NN_BATCH_SIZE;
+                    if(batchStart + NN_BATCH_SIZE > train_dataset.size()) {
+                        processedValuesBatch = train_dataset.size() - batchStart;
+                        processedValuesEpoch = train_dataset.size();
+                    }
+                    smoothedLoss = lossSum;
+                    lossSum /= processedValuesBatch;
+                    
+                    if(batchStart % (NN_BATCH_SIZE * 50) == 0) {
+                        std::cout << "\repoch" << setw(4) << epoch <<
+                            "; train loss(batch ) = " << setw(10) << setprecision(6) << right << lossSum <<
+                            "; train loss(smooth)= "  << setw(10) << setprecision(6) << right << smoothedLoss / (NN_BATCH_SIZE * 50) <<
+                            "; speed = " << setw(5) << setprecision(0) << right << (NN_BATCH_SIZE * 50) / stopMeasure() << "K/s" <<
+                            "; progress = " << setw(5) << setprecision(2) << right << (float) batchStart / train_dataset.size() << "%"
                             << std::flush;
-//                }
-            }
+                        smoothedLoss = 0;
+                        startMeasure();
+                    }
+                }
 
             net.writeWeights("nn.latest.bin");
             std::cout << std::endl;
         }
-        #endif
-//    }
+    }
 
 //    bb::bb_init();
 //    eval_init();

@@ -20,8 +20,8 @@
 
 namespace nn{
 
-static std::string weightsFile = "nn4.bin";
-static bool        loadWeights = true;
+static std::string weightsFile = "nn.placeholder.bin";
+static bool        loadWeights = false;
 
 static Layer layers[LAYER_COUNT]{
     {64*12,128, &activate_relu, &backprop_relu},
