@@ -310,10 +310,7 @@ EvalScore fast_king_psqt[2][64];
 nn::Network *network;
 
 void eval_init() {
-    // TODO should this be here???
-    //      (probably not... uci EvalWeight or something...)
-    network = new nn::Network();
-    network->loadWeights("nn.latest.bin");
+    network = new nn::Network {};
 
     for (int i = 0; i < 64; i++) {
         for (int kside = 0; kside < 2; kside++) {
@@ -848,7 +845,8 @@ bb::Score Evaluator::standardEval(Board* b){
 
 bb::Score Evaluator:: networkEval(Board* b){
     nn::Sample sample{};
-     
+    
+    int mult = 1;
     if(b->getActivePlayer() == WHITE) {
         for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
             U64 bb = b->getPieces()[p];
@@ -860,6 +858,7 @@ bb::Score Evaluator:: networkEval(Board* b){
         }
      }
      else{
+        mult = -1;
         for(Piece p = WHITE_PAWN; p <= BLACK_KING; p++){
             U64 bb = b->getPieces()[p];
             while(bb) {
@@ -877,7 +876,7 @@ bb::Score Evaluator:: networkEval(Board* b){
     }
     network->compute(&sample,0);
     
-    return network->getOutput(0) * 100;
+    return network->getOutput(0) * 100 * mult;
 }
 
 /**

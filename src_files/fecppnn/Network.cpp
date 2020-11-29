@@ -84,6 +84,10 @@ void nn::Network::compute(Sample* sample) {
 
 
 void nn::Network::loadWeights(const std::string& weights) {
+    std::cerr << "loadWeights called! loading " << weights << std::endl;
+    std::cerr << "Before loading: " << std::endl;
+    
+    std::cerr << *(this->weights[2]) << std::endl;
     FILE* infile = fopen(weights.c_str(), "rb");
     
     for(int i = 0; i < LAYER_COUNT; i++){
@@ -92,6 +96,8 @@ void nn::Network::loadWeights(const std::string& weights) {
         fread(w->values, sizeof(float), w->getSize(), infile);
         fread(b->values, sizeof(float), b->getSize(), infile);
     }
+    std::cerr << "After loading: " << std::endl;
+    std::cerr << *(this->weights[2]) << std::endl;
     
     fclose(infile);
 }

@@ -46,7 +46,7 @@ struct training_example {
     nn::Data target;
 };
 
-#define MAX_POSITIONS (1000 * 1000 * 10)
+#define MAX_POSITIONS (1000 * 1000 * 1000)
 
 std::vector<training_example> convertFens(const std::string& infile){
     std::vector<training_example> examples;
@@ -137,9 +137,7 @@ std::vector<training_example> convertFens(const std::string& infile){
 }
 
 int main(int argc, char* argv[]) {
-        bool TEST = false;
-
-        if(TEST && argc == 1) {
+        if(argc == 1) {
             uci_loop(false);
         } else if(argc > 1 && strcmp(argv[1], "train") == 0) {
             bb_init();
@@ -157,6 +155,7 @@ int main(int argc, char* argv[]) {
                 startMeasure();
                 
                 float smoothedLoss = 0;
+                float epochLoss = 0;
                 
                 // batchStart is the starting index for the current batch
                 for(int batchStart = 0; batchStart < train_dataset.size(); batchStart += NN_BATCH_SIZE) {
@@ -182,21 +181,28 @@ int main(int argc, char* argv[]) {
                         processedValuesBatch = train_dataset.size() - batchStart;
                         processedValuesEpoch = train_dataset.size();
                     }
-                    smoothedLoss = lossSum;
+                    smoothedLoss += lossSum;
+                    epochLoss += lossSum;
                     lossSum /= processedValuesBatch;
                     
                     if(batchStart % (NN_BATCH_SIZE * 50) == 0) {
                         std::cout << "\repoch" << setw(4) << epoch <<
                             "; train loss(batch ) = " << setw(10) << setprecision(6) << right << lossSum <<
                             "; train loss(smooth)= "  << setw(10) << setprecision(6) << right << smoothedLoss / (NN_BATCH_SIZE * 50) <<
+                            "; train loss(epoch )= "  << setw(10) << setprecision(6) << right << epochLoss / processedValuesEpoch <<
                             "; speed = " << setw(5) << setprecision(0) << right << (NN_BATCH_SIZE * 50) / stopMeasure() << "K/s" <<
-                            "; progress = " << setw(5) << setprecision(2) << right << (float) batchStart / train_dataset.size() << "%"
+                            "; progress = " << setw(5) << setprecision(2) << right << (float) batchStart / train_dataset.size() * 100 << "%"
                             << std::flush;
                         smoothedLoss = 0;
                         startMeasure();
                     }
                 }
 
+            std::string fname = "nn.";
+            fname += std::to_string(epoch);
+            fname += ".bin";
+
+            net.writeWeights(fname);
             net.writeWeights("nn.latest.bin");
             std::cout << std::endl;
         }

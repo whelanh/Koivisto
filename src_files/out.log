@@ -1,0 +1,1715 @@
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/activations.h:9,
+                 from fecppnn/Layer.h:8,
+                 from fecppnn/Network.h:8,
+                 from eval.cpp:24:
+fecppnn/config.h:33:12: error: 'Layer' in namespace 'nn' does not name a type
+   33 | static nn::Layer layers[LAYER_COUNT]{
+      |            ^~~~~
+In file included from fecppnn/Network.h:8,
+                 from eval.cpp:24:
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void (*)(nn::Data*, const nn::Data*), void (*)(nn::Data*, const nn::Data*))':
+fecppnn/Layer.h:21:89: warning: declaration of 'backprop' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:19:16: note: shadowed declaration is here
+   19 |     BackProp   backprop;
+      |                ^~~~~~~~
+fecppnn/Layer.h:21:49: warning: declaration of 'activation' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:18:16: note: shadowed declaration is here
+   18 |     Activation activation;
+      |                ^~~~~~~~~~
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void (*)(nn::Data*, const nn::Data*), void (*)(nn::Data*, const nn::Data*))':
+fecppnn/Layer.h:21:89: warning: declaration of 'backprop' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:19:16: note: shadowed declaration is here
+   19 |     BackProp   backprop;
+      |                ^~~~~~~~
+fecppnn/Layer.h:21:49: warning: declaration of 'activation' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:18:16: note: shadowed declaration is here
+   18 |     Activation activation;
+      |                ^~~~~~~~~~
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void (*)(nn::Data*, const nn::Data*), void (*)(nn::Data*, const nn::Data*))':
+fecppnn/Layer.h:21:89: warning: declaration of 'backprop' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:19:16: note: shadowed declaration is here
+   19 |     BackProp   backprop;
+      |                ^~~~~~~~
+fecppnn/Layer.h:21:49: warning: declaration of 'activation' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:18:16: note: shadowed declaration is here
+   18 |     Activation activation;
+      |                ^~~~~~~~~~
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from eval.cpp:24:
+fecppnn/Network.h: In constructor 'nn::Network::Network()':
+fecppnn/Network.h:31:28: error: 'layers' is not a member of 'nn'; did you mean 'Layer'?
+   31 |         this->layers = nn::layers;
+      |                            ^~~~~~
+      |                            Layer
+In file included from fecppnn/Network.h:11,
+                 from eval.cpp:24:
+fecppnn/structure.h: At global scope:
+fecppnn/structure.h:24:13: warning: 'nn::lossFunction' defined but not used [-Wunused-variable]
+   24 | static Loss lossFunction = &loss_l2;
+      |             ^~~~~~~~~~~~
+main.cpp:165: warning: ignoring '#pragma omp parallel' [-Wunknown-pragmas]
+  165 |             #pragma omp parallel for schedule(static, NN_BATCH_SIZE / NN_THREADS) num_threads(NN_THREADS) reduction(+:lossSum)
+      | 
+In file included from main.cpp:24:
+Tuning.h: In member function 'void tuning::TrainingEntry::setBoard(const Board&)':
+Tuning.h:39:40: warning: declaration of 'board' shadows a member of 'tuning::TrainingEntry' [-Wshadow]
+   39 |     void         setBoard(const Board& board) { TrainingEntry::board = board; }
+      |                           ~~~~~~~~~~~~~^~~~~
+Tuning.h:35:12: note: shadowed declaration is here
+   35 |     Board  board;
+      |            ^~~~~
+Tuning.h: In member function 'void tuning::TrainingEntry::setTarget(double)':
+Tuning.h:41:35: warning: declaration of 'target' shadows a member of 'tuning::TrainingEntry' [-Wshadow]
+   41 |     void         setTarget(double target) { TrainingEntry::target = target; }
+      |                            ~~~~~~~^~~~~~
+Tuning.h:36:12: note: shadowed declaration is here
+   36 |     double target;
+      |            ^~~~~~
+In file included from fecppnn/Layer.h:8,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from main.cpp:26:
+fecppnn/activations.h: At global scope:
+fecppnn/activations.h:31:6: error: variable or field 'activate_relu' declared void
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:31:24: error: 'Data' is not a member of 'nn'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:31:30: error: 'input' was not declared in this scope
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:31:37: error: expected primary-expression before 'const'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:33:6: error: variable or field 'activate_sigmoid' declared void
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:33:27: error: 'Data' is not a member of 'nn'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:33:33: error: 'input' was not declared in this scope
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                 ^~~~~
+fecppnn/activations.h:33:40: error: expected primary-expression before 'const'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                        ^~~~~
+fecppnn/activations.h:35:6: error: variable or field 'activate_null' declared void
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:35:24: error: 'Data' is not a member of 'nn'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:35:30: error: 'input' was not declared in this scope
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:35:37: error: expected primary-expression before 'const'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:38:6: error: variable or field 'backprop_relu' declared void
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:38:24: error: 'Data' is not a member of 'nn'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:38:30: error: 'activation' was not declared in this scope
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:38:42: error: expected primary-expression before 'const'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+fecppnn/activations.h:40:6: error: variable or field 'backprop_sigmoid' declared void
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:40:27: error: 'Data' is not a member of 'nn'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:40:33: error: 'activation' was not declared in this scope
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                 ^~~~~~~~~~
+fecppnn/activations.h:40:45: error: expected primary-expression before 'const'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                             ^~~~~
+fecppnn/activations.h:42:6: error: variable or field 'backprop_null' declared void
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:42:24: error: 'Data' is not a member of 'nn'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:42:30: error: 'activation' was not declared in this scope
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:42:42: error: expected primary-expression before 'const'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+In file included from fecppnn/Layer.h:9,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from main.cpp:26:
+fecppnn/transform.h:16:46: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                              ^~~~
+fecppnn/transform.h:16:61: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                             ^~~~
+fecppnn/transform.h:16:73: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                                         ^~~~
+fecppnn/transform.h:17:55: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                       ^~~~
+fecppnn/transform.h:17:70: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                      ^~~~
+fecppnn/transform.h:17:82: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                                  ^~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from main.cpp:26:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from main.cpp:26:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+In file included from main.cpp:27:
+fecppnn/Network.h: In constructor 'nn::Network::Network()':
+fecppnn/Network.h:31:28: error: 'layers' is not a member of 'nn'; did you mean 'Layer'?
+   31 |         this->layers = nn::layers;
+      |                            ^~~~~~
+      |                            Layer
+main.cpp: In function 'int main(int, char**)':
+main.cpp:163:44: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<training_example>::size_type' {aka 'long long unsigned int'} [-Wsign-compare]
+  163 |         for(int batchStart = 0; batchStart < train_dataset.size(); batchStart += NN_BATCH_SIZE){
+      |                                 ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+main.cpp:167:27: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<training_example>::size_type' {aka 'long long unsigned int'} [-Wsign-compare]
+  167 |                 if (index >= train_dataset.size()) continue;
+      |                     ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+main.cpp:168:27: warning: declaration of 'threadID' shadows a previous local [-Wshadow]
+  168 |                 const int threadID = omp_get_thread_num();
+      |                           ^~~~~~~~
+main.cpp:152:9: note: shadowed declaration is here
+  152 |     int threadID = 0;
+      |         ^~~~~~~~
+main.cpp:142:14: warning: unused parameter 'argc' [-Wunused-parameter]
+  142 | int main(int argc, char* argv[]) {
+      |          ~~~~^~~~
+main.cpp:142:26: warning: unused parameter 'argv' [-Wunused-parameter]
+  142 | int main(int argc, char* argv[]) {
+      |                    ~~~~~~^~~~~~
+In file included from fecppnn/Network.h:11,
+                 from main.cpp:27:
+fecppnn/structure.h: At global scope:
+fecppnn/structure.h:24:13: warning: 'nn::lossFunction' defined but not used [-Wunused-variable]
+   24 | static Loss lossFunction = &loss_l2;
+      |             ^~~~~~~~~~~~
+search.cpp: In function 'bb::Score pvSearch(Board*, bb::Score, bb::Score, bb::Depth, bb::Depth, ThreadData*, move::Move)':
+search.cpp:886:17: warning: unused variable 'history' [-Wunused-variable]
+  886 |             int history = 0;
+      |                 ^~~~~~~
+In file included from Tuning.cpp:20:
+Tuning.h: In member function 'void tuning::TrainingEntry::setBoard(const Board&)':
+Tuning.h:39:40: warning: declaration of 'board' shadows a member of 'tuning::TrainingEntry' [-Wshadow]
+   39 |     void         setBoard(const Board& board) { TrainingEntry::board = board; }
+      |                           ~~~~~~~~~~~~~^~~~~
+Tuning.h:35:12: note: shadowed declaration is here
+   35 |     Board  board;
+      |            ^~~~~
+Tuning.h: In member function 'void tuning::TrainingEntry::setTarget(double)':
+Tuning.h:41:35: warning: declaration of 'target' shadows a member of 'tuning::TrainingEntry' [-Wshadow]
+   41 |     void         setTarget(double target) { TrainingEntry::target = target; }
+      |                            ~~~~~~~^~~~~~
+Tuning.h:36:12: note: shadowed declaration is here
+   36 |     double target;
+      |            ^~~~~~
+Tuning.cpp: In lambda function:
+Tuning.cpp:230:59: warning: declaration of 'double K' shadows a parameter [-Wshadow]
+  230 |     auto eval_part = [](int threadId, int threads, double K, double* resultTarget) {
+      |                                                    ~~~~~~~^
+Tuning.cpp:227:36: note: shadowed declaration is here
+  227 | double tuning::computeError(double K, int threads) {
+      |                             ~~~~~~~^
+Tuning.cpp:230:43: warning: declaration of 'int threads' shadows a parameter [-Wshadow]
+  230 |     auto eval_part = [](int threadId, int threads, double K, double* resultTarget) {
+      |                                       ~~~~^~~~~~~
+Tuning.cpp:227:43: note: shadowed declaration is here
+  227 | double tuning::computeError(double K, int threads) {
+      |                                       ~~~~^~~~~~~
+Tuning.cpp:234:19: warning: declaration of 'score' shadows a previous local [-Wshadow]
+  234 |         double    score;
+      |                   ^~~~~
+Tuning.cpp:228:12: note: shadowed declaration is here
+  228 |     double score = 0;
+      |            ^~~~~
+Tuning.cpp: In function 'void tuning::evalSpeed()':
+Tuning.cpp:294:23: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<tuning::TrainingEntry>::size_type' {aka 'long long unsigned int'} [-Wsign-compare]
+  294 |     for (int i = 0; i < training_entries.size(); i++) {
+      |                     ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from fecppnn/Layer.h:9,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/activations.h:9,
+                 from fecppnn/activations.cpp:5:
+fecppnn/transform.h:16:46: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                              ^~~~
+fecppnn/transform.h:16:61: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                             ^~~~
+fecppnn/transform.h:16:73: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                                         ^~~~
+fecppnn/transform.h:17:55: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                       ^~~~
+fecppnn/transform.h:17:70: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                      ^~~~
+fecppnn/transform.h:17:82: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                                  ^~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/activations.h:9,
+                 from fecppnn/activations.cpp:5:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/activations.h:9,
+                 from fecppnn/activations.cpp:5:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+In file included from fecppnn/Layer.h:8,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/affine.h:8,
+                 from fecppnn/affine.cpp:4:
+fecppnn/activations.h:31:6: error: variable or field 'activate_relu' declared void
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:31:24: error: 'Data' is not a member of 'nn'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:31:30: error: 'input' was not declared in this scope
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:31:37: error: expected primary-expression before 'const'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:33:6: error: variable or field 'activate_sigmoid' declared void
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:33:27: error: 'Data' is not a member of 'nn'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:33:33: error: 'input' was not declared in this scope
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                 ^~~~~
+fecppnn/activations.h:33:40: error: expected primary-expression before 'const'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                        ^~~~~
+fecppnn/activations.h:35:6: error: variable or field 'activate_null' declared void
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:35:24: error: 'Data' is not a member of 'nn'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:35:30: error: 'input' was not declared in this scope
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:35:37: error: expected primary-expression before 'const'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:38:6: error: variable or field 'backprop_relu' declared void
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:38:24: error: 'Data' is not a member of 'nn'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:38:30: error: 'activation' was not declared in this scope
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:38:42: error: expected primary-expression before 'const'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+fecppnn/activations.h:40:6: error: variable or field 'backprop_sigmoid' declared void
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:40:27: error: 'Data' is not a member of 'nn'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:40:33: error: 'activation' was not declared in this scope
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                 ^~~~~~~~~~
+fecppnn/activations.h:40:45: error: expected primary-expression before 'const'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                             ^~~~~
+fecppnn/activations.h:42:6: error: variable or field 'backprop_null' declared void
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:42:24: error: 'Data' is not a member of 'nn'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:42:30: error: 'activation' was not declared in this scope
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:42:42: error: expected primary-expression before 'const'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+In file included from fecppnn/Layer.h:9,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/affine.h:8,
+                 from fecppnn/affine.cpp:4:
+fecppnn/transform.h:16:46: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                              ^~~~
+fecppnn/transform.h:16:61: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                             ^~~~
+fecppnn/transform.h:16:73: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                                         ^~~~
+fecppnn/transform.h:17:55: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                       ^~~~
+fecppnn/transform.h:17:70: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                      ^~~~
+fecppnn/transform.h:17:82: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                                  ^~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/affine.h:8,
+                 from fecppnn/affine.cpp:4:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/affine.h:8,
+                 from fecppnn/affine.cpp:4:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+In file included from fecppnn/Layer.h:8,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/Data.cpp:19:
+fecppnn/activations.h:31:6: error: variable or field 'activate_relu' declared void
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:31:24: error: 'Data' is not a member of 'nn'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:31:30: error: 'input' was not declared in this scope
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:31:37: error: expected primary-expression before 'const'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:33:6: error: variable or field 'activate_sigmoid' declared void
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:33:27: error: 'Data' is not a member of 'nn'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:33:33: error: 'input' was not declared in this scope
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                 ^~~~~
+fecppnn/activations.h:33:40: error: expected primary-expression before 'const'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                        ^~~~~
+fecppnn/activations.h:35:6: error: variable or field 'activate_null' declared void
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:35:24: error: 'Data' is not a member of 'nn'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:35:30: error: 'input' was not declared in this scope
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:35:37: error: expected primary-expression before 'const'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:38:6: error: variable or field 'backprop_relu' declared void
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:38:24: error: 'Data' is not a member of 'nn'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:38:30: error: 'activation' was not declared in this scope
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:38:42: error: expected primary-expression before 'const'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+fecppnn/activations.h:40:6: error: variable or field 'backprop_sigmoid' declared void
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:40:27: error: 'Data' is not a member of 'nn'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:40:33: error: 'activation' was not declared in this scope
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                 ^~~~~~~~~~
+fecppnn/activations.h:40:45: error: expected primary-expression before 'const'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                             ^~~~~
+fecppnn/activations.h:42:6: error: variable or field 'backprop_null' declared void
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:42:24: error: 'Data' is not a member of 'nn'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:42:30: error: 'activation' was not declared in this scope
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:42:42: error: expected primary-expression before 'const'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+In file included from fecppnn/Layer.h:9,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/Data.cpp:19:
+fecppnn/transform.h:16:46: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                              ^~~~
+fecppnn/transform.h:16:61: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                             ^~~~
+fecppnn/transform.h:16:73: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                                         ^~~~
+fecppnn/transform.h:17:55: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                       ^~~~
+fecppnn/transform.h:17:70: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                      ^~~~
+fecppnn/transform.h:17:82: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                                  ^~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/Data.cpp:19:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/Data.cpp:19:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/Data.cpp: In constructor 'nn::Data::Data(int, int)':
+fecppnn/Data.cpp:25:20: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+   25 | nn::Data::Data(int width, int createGradients) {
+      |                ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In constructor 'nn::Data::Data(int, int)':
+fecppnn/Data.cpp:25:20: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+   25 | nn::Data::Data(int width, int createGradients) {
+      |                ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In constructor 'nn::Data::Data(int, int)':
+fecppnn/Data.cpp:25:20: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+   25 | nn::Data::Data(int width, int createGradients) {
+      |                ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In constructor 'nn::Data::Data(int, int, int)':
+fecppnn/Data.cpp:41:31: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+   41 | nn::Data::Data(int width, int height, int createGradients) {
+      |                           ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:41:20: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+   41 | nn::Data::Data(int width, int height, int createGradients) {
+      |                ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In constructor 'nn::Data::Data(int, int, int)':
+fecppnn/Data.cpp:41:31: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+   41 | nn::Data::Data(int width, int height, int createGradients) {
+      |                           ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:41:20: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+   41 | nn::Data::Data(int width, int height, int createGradients) {
+      |                ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In constructor 'nn::Data::Data(int, int, int)':
+fecppnn/Data.cpp:41:31: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+   41 | nn::Data::Data(int width, int height, int createGradients) {
+      |                           ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:41:20: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+   41 | nn::Data::Data(int width, int height, int createGradients) {
+      |                ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float nn::Data::get(int) const':
+fecppnn/Data.cpp:140:26: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  140 | float  nn::Data::get(int width)                    const { return values[width]; }
+      |                      ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float& nn::Data::get(int)':
+fecppnn/Data.cpp:141:26: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  141 | float& nn::Data::get(int width)                          { return values[width]; }
+      |                      ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float nn::Data::get(int, int) const':
+fecppnn/Data.cpp:142:37: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+  142 | float  nn::Data::get(int width, int height)        const { return values[width + height * this->width]; }
+      |                                 ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:142:26: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  142 | float  nn::Data::get(int width, int height)        const { return values[width + height * this->width]; }
+      |                      ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float& nn::Data::get(int, int)':
+fecppnn/Data.cpp:143:37: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+  143 | float& nn::Data::get(int width, int height)              { return values[width + height * this->width]; }
+      |                                 ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:143:26: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  143 | float& nn::Data::get(int width, int height)              { return values[width + height * this->width]; }
+      |                      ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float nn::Data::operator()(int) const':
+fecppnn/Data.cpp:144:33: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  144 | float  nn::Data::operator()(int width)             const { return get(width); }
+      |                             ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float& nn::Data::operator()(int)':
+fecppnn/Data.cpp:145:33: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  145 | float& nn::Data::operator()(int width)                   { return get(width); }
+      |                             ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float nn::Data::operator()(int, int) const':
+fecppnn/Data.cpp:146:44: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+  146 | float  nn::Data::operator()(int width, int height) const { return get(width, height); }
+      |                                        ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:146:33: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  146 | float  nn::Data::operator()(int width, int height) const { return get(width, height); }
+      |                             ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+fecppnn/Data.cpp: In member function 'float& nn::Data::operator()(int, int)':
+fecppnn/Data.cpp:147:44: warning: declaration of 'height' shadows a member of 'nn::Data' [-Wshadow]
+  147 | float& nn::Data::operator()(int width, int height)       { return get(width, height); }
+      |                                        ~~~~^~~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:36:9: note: shadowed declaration is here
+   36 |     int height = 0;
+      |         ^~~~~~
+fecppnn/Data.cpp:147:33: warning: declaration of 'width' shadows a member of 'nn::Data' [-Wshadow]
+  147 | float& nn::Data::operator()(int width, int height)       { return get(width, height); }
+      |                             ~~~~^~~~~
+In file included from fecppnn/Data.cpp:19:
+fecppnn/Data.h:35:9: note: shadowed declaration is here
+   35 |     int width = 0;
+      |         ^~~~~
+In file included from fecppnn/Layer.h:8,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/loss.h:8,
+                 from fecppnn/loss.cpp:4:
+fecppnn/activations.h:31:6: error: variable or field 'activate_relu' declared void
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:31:24: error: 'Data' is not a member of 'nn'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:31:30: error: 'input' was not declared in this scope
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:31:37: error: expected primary-expression before 'const'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:33:6: error: variable or field 'activate_sigmoid' declared void
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:33:27: error: 'Data' is not a member of 'nn'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:33:33: error: 'input' was not declared in this scope
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                 ^~~~~
+fecppnn/activations.h:33:40: error: expected primary-expression before 'const'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                        ^~~~~
+fecppnn/activations.h:35:6: error: variable or field 'activate_null' declared void
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:35:24: error: 'Data' is not a member of 'nn'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:35:30: error: 'input' was not declared in this scope
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:35:37: error: expected primary-expression before 'const'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:38:6: error: variable or field 'backprop_relu' declared void
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:38:24: error: 'Data' is not a member of 'nn'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:38:30: error: 'activation' was not declared in this scope
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:38:42: error: expected primary-expression before 'const'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+fecppnn/activations.h:40:6: error: variable or field 'backprop_sigmoid' declared void
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:40:27: error: 'Data' is not a member of 'nn'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:40:33: error: 'activation' was not declared in this scope
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                 ^~~~~~~~~~
+fecppnn/activations.h:40:45: error: expected primary-expression before 'const'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                             ^~~~~
+fecppnn/activations.h:42:6: error: variable or field 'backprop_null' declared void
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:42:24: error: 'Data' is not a member of 'nn'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:42:30: error: 'activation' was not declared in this scope
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:42:42: error: expected primary-expression before 'const'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+In file included from fecppnn/Layer.h:9,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/loss.h:8,
+                 from fecppnn/loss.cpp:4:
+fecppnn/transform.h:16:46: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                              ^~~~
+fecppnn/transform.h:16:61: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                             ^~~~
+fecppnn/transform.h:16:73: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                                         ^~~~
+fecppnn/transform.h:17:55: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                       ^~~~
+fecppnn/transform.h:17:70: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                      ^~~~
+fecppnn/transform.h:17:82: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                                  ^~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/loss.h:8,
+                 from fecppnn/loss.cpp:4:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/loss.h:8,
+                 from fecppnn/loss.cpp:4:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/activations.h:9,
+                 from fecppnn/Layer.h:8,
+                 from fecppnn/Network.h:8,
+                 from fecppnn/Network.cpp:4:
+fecppnn/config.h:33:12: error: 'Layer' in namespace 'nn' does not name a type
+   33 | static nn::Layer layers[LAYER_COUNT]{
+      |            ^~~~~
+In file included from fecppnn/Network.h:8,
+                 from fecppnn/Network.cpp:4:
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void (*)(nn::Data*, const nn::Data*), void (*)(nn::Data*, const nn::Data*))':
+fecppnn/Layer.h:21:89: warning: declaration of 'backprop' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:19:16: note: shadowed declaration is here
+   19 |     BackProp   backprop;
+      |                ^~~~~~~~
+fecppnn/Layer.h:21:49: warning: declaration of 'activation' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:18:16: note: shadowed declaration is here
+   18 |     Activation activation;
+      |                ^~~~~~~~~~
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void (*)(nn::Data*, const nn::Data*), void (*)(nn::Data*, const nn::Data*))':
+fecppnn/Layer.h:21:89: warning: declaration of 'backprop' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:19:16: note: shadowed declaration is here
+   19 |     BackProp   backprop;
+      |                ^~~~~~~~
+fecppnn/Layer.h:21:49: warning: declaration of 'activation' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:18:16: note: shadowed declaration is here
+   18 |     Activation activation;
+      |                ^~~~~~~~~~
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void (*)(nn::Data*, const nn::Data*), void (*)(nn::Data*, const nn::Data*))':
+fecppnn/Layer.h:21:89: warning: declaration of 'backprop' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:19:16: note: shadowed declaration is here
+   19 |     BackProp   backprop;
+      |                ^~~~~~~~
+fecppnn/Layer.h:21:49: warning: declaration of 'activation' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fecppnn/Layer.h:18:16: note: shadowed declaration is here
+   18 |     Activation activation;
+      |                ^~~~~~~~~~
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Network.cpp:4:
+fecppnn/Network.h: In constructor 'nn::Network::Network()':
+fecppnn/Network.h:31:28: error: 'layers' is not a member of 'nn'; did you mean 'Layer'?
+   31 |         this->layers = nn::layers;
+      |                            ^~~~~~
+      |                            Layer
+fecppnn/Network.cpp: In member function 'void nn::Network::optimise()':
+fecppnn/Network.cpp:71:52: error: no matching function for call to 'nn::Optimiser::optimise(int, nn::Data**&, nn::Data**&)'
+   71 |     optimiser.optimise(LAYER_COUNT, weights, biases);
+      |                                                    ^
+In file included from fecppnn/structure.h:12,
+                 from fecppnn/Network.h:11,
+                 from fecppnn/Network.cpp:4:
+fecppnn/Optimiser.h:19:10: note: candidate: 'void nn::Optimiser::optimise(nn::Data**, nn::Data**)'
+   19 |     void optimise(Data** weights, Data** bias);
+      |          ^~~~~~~~
+fecppnn/Optimiser.h:19:10: note:   candidate expects 2 arguments, 3 provided
+fecppnn/Network.cpp: In member function 'void nn::Network::loadWeights(const string&)':
+fecppnn/Network.cpp:86:50: warning: declaration of 'weights' shadows a member of 'nn::Network' [-Wshadow]
+   86 | void nn::Network::loadWeights(const std::string& weights) {
+      |                               ~~~~~~~~~~~~~~~~~~~^~~~~~~
+In file included from fecppnn/Network.cpp:4:
+fecppnn/Network.h:20:12: note: shadowed declaration is here
+   20 |     Data** weights;
+      |            ^~~~~~~
+fecppnn/Network.cpp: In member function 'void nn::Network::writeWeights(const string&)':
+fecppnn/Network.cpp:98:51: warning: declaration of 'weights' shadows a member of 'nn::Network' [-Wshadow]
+   98 | void nn::Network::writeWeights(const std::string& weights) {
+      |                                ~~~~~~~~~~~~~~~~~~~^~~~~~~
+In file included from fecppnn/Network.cpp:4:
+fecppnn/Network.h:20:12: note: shadowed declaration is here
+   20 |     Data** weights;
+      |            ^~~~~~~
+In file included from fecppnn/Layer.h:8,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/optimiser.h:8,
+                 from fecppnn/optimiser.cpp:5:
+fecppnn/activations.h:31:6: error: variable or field 'activate_relu' declared void
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:31:24: error: 'Data' is not a member of 'nn'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:31:30: error: 'input' was not declared in this scope
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:31:37: error: expected primary-expression before 'const'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:33:6: error: variable or field 'activate_sigmoid' declared void
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:33:27: error: 'Data' is not a member of 'nn'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:33:33: error: 'input' was not declared in this scope
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                 ^~~~~
+fecppnn/activations.h:33:40: error: expected primary-expression before 'const'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                        ^~~~~
+fecppnn/activations.h:35:6: error: variable or field 'activate_null' declared void
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:35:24: error: 'Data' is not a member of 'nn'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:35:30: error: 'input' was not declared in this scope
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:35:37: error: expected primary-expression before 'const'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:38:6: error: variable or field 'backprop_relu' declared void
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:38:24: error: 'Data' is not a member of 'nn'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:38:30: error: 'activation' was not declared in this scope
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:38:42: error: expected primary-expression before 'const'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+fecppnn/activations.h:40:6: error: variable or field 'backprop_sigmoid' declared void
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:40:27: error: 'Data' is not a member of 'nn'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:40:33: error: 'activation' was not declared in this scope
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                 ^~~~~~~~~~
+fecppnn/activations.h:40:45: error: expected primary-expression before 'const'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                             ^~~~~
+fecppnn/activations.h:42:6: error: variable or field 'backprop_null' declared void
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:42:24: error: 'Data' is not a member of 'nn'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:42:30: error: 'activation' was not declared in this scope
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:42:42: error: expected primary-expression before 'const'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+In file included from fecppnn/Layer.h:9,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/optimiser.h:8,
+                 from fecppnn/optimiser.cpp:5:
+fecppnn/transform.h:16:46: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                              ^~~~
+fecppnn/transform.h:16:61: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                             ^~~~
+fecppnn/transform.h:16:73: error: 'Data' has not been declared
+   16 | void affine_transformation_input(Sample* in, Data* weights, Data* bias, Data* output);
+      |                                                                         ^~~~
+fecppnn/transform.h:17:55: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                       ^~~~
+fecppnn/transform.h:17:70: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                      ^~~~
+fecppnn/transform.h:17:82: error: 'Data' has not been declared
+   17 | void affine_transformation_input_backprop(Sample* in, Data* weights, Data* bias, Data* output, int threadID);
+      |                                                                                  ^~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/optimiser.h:8,
+                 from fecppnn/optimiser.cpp:5:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/optimiser.h:8,
+                 from fecppnn/optimiser.cpp:5:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/optimiser.cpp: In constructor 'nn::Optimiser::Optimiser(double)':
+fecppnn/optimiser.cpp:11:33: warning: declaration of 'alpha' shadows a member of 'nn::Optimiser' [-Wshadow]
+   11 | nn::Optimiser::Optimiser(double alpha) : alpha(alpha) {}
+      |                          ~~~~~~~^~~~~
+In file included from fecppnn/optimiser.cpp:5:
+fecppnn/optimiser.h:15:12: note: shadowed declaration is here
+   15 |     double alpha;
+      |            ^~~~~
+fecppnn/optimiser.cpp: In constructor 'nn::Optimiser::Optimiser(double)':
+fecppnn/optimiser.cpp:11:33: warning: declaration of 'alpha' shadows a member of 'nn::Optimiser' [-Wshadow]
+   11 | nn::Optimiser::Optimiser(double alpha) : alpha(alpha) {}
+      |                          ~~~~~~~^~~~~
+In file included from fecppnn/optimiser.cpp:5:
+fecppnn/optimiser.h:15:12: note: shadowed declaration is here
+   15 |     double alpha;
+      |            ^~~~~
+fecppnn/optimiser.cpp: In constructor 'nn::Optimiser::Optimiser(double)':
+fecppnn/optimiser.cpp:11:33: warning: declaration of 'alpha' shadows a member of 'nn::Optimiser' [-Wshadow]
+   11 | nn::Optimiser::Optimiser(double alpha) : alpha(alpha) {}
+      |                          ~~~~~~~^~~~~
+In file included from fecppnn/optimiser.cpp:5:
+fecppnn/optimiser.h:15:12: note: shadowed declaration is here
+   15 |     double alpha;
+      |            ^~~~~
+In file included from fecppnn/Layer.h:8,
+                 from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/transform.h:9,
+                 from fecppnn/transform.cpp:4:
+fecppnn/activations.h:31:6: error: variable or field 'activate_relu' declared void
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:31:24: error: 'Data' is not a member of 'nn'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:31:30: error: 'input' was not declared in this scope
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:31:37: error: expected primary-expression before 'const'
+   31 | void activate_relu(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:33:6: error: variable or field 'activate_sigmoid' declared void
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:33:27: error: 'Data' is not a member of 'nn'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:33:33: error: 'input' was not declared in this scope
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                 ^~~~~
+fecppnn/activations.h:33:40: error: expected primary-expression before 'const'
+   33 | void activate_sigmoid(nn::Data *input, const nn::Data *output);
+      |                                        ^~~~~
+fecppnn/activations.h:35:6: error: variable or field 'activate_null' declared void
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:35:24: error: 'Data' is not a member of 'nn'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:35:30: error: 'input' was not declared in this scope
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                              ^~~~~
+fecppnn/activations.h:35:37: error: expected primary-expression before 'const'
+   35 | void activate_null(nn::Data *input, const nn::Data *output);
+      |                                     ^~~~~
+fecppnn/activations.h:38:6: error: variable or field 'backprop_relu' declared void
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:38:24: error: 'Data' is not a member of 'nn'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:38:30: error: 'activation' was not declared in this scope
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:38:42: error: expected primary-expression before 'const'
+   38 | void backprop_relu(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+fecppnn/activations.h:40:6: error: variable or field 'backprop_sigmoid' declared void
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~~~~
+fecppnn/activations.h:40:27: error: 'Data' is not a member of 'nn'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                           ^~~~
+fecppnn/activations.h:40:33: error: 'activation' was not declared in this scope
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                 ^~~~~~~~~~
+fecppnn/activations.h:40:45: error: expected primary-expression before 'const'
+   40 | void backprop_sigmoid(nn::Data *activation, const nn::Data *output);
+      |                                             ^~~~~
+fecppnn/activations.h:42:6: error: variable or field 'backprop_null' declared void
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |      ^~~~~~~~~~~~~
+fecppnn/activations.h:42:24: error: 'Data' is not a member of 'nn'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                        ^~~~
+fecppnn/activations.h:42:30: error: 'activation' was not declared in this scope
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                              ^~~~~~~~~~
+fecppnn/activations.h:42:42: error: expected primary-expression before 'const'
+   42 | void backprop_null(nn::Data *activation, const nn::Data *output);
+      |                                          ^~~~~
+In file included from fecppnn/config.h:8,
+                 from fecppnn/Data.h:27,
+                 from fecppnn/transform.h:9,
+                 from fecppnn/transform.cpp:4:
+fecppnn/Layer.h:18:5: error: 'Activation' does not name a type
+   18 |     Activation activation;
+      |     ^~~~~~~~~~
+fecppnn/Layer.h:19:5: error: 'BackProp' does not name a type
+   19 |     BackProp   backprop;
+      |     ^~~~~~~~
+fecppnn/Layer.h:21:60: error: expected ',' or '...' before '(' token
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                                                            ^
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h:24:11: error: class 'nn::Layer' does not have any field named 'activation'
+   24 |           activation(activation),
+      |           ^~~~~~~~~~
+fecppnn/Layer.h:25:11: error: class 'nn::Layer' does not have any field named 'backprop'
+   25 |           backprop(backprop){}
+      |           ^~~~~~~~
+fecppnn/Layer.h:25:20: error: 'backprop' was not declared in this scope
+   25 |           backprop(backprop){}
+      |                    ^~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+fecppnn/Layer.h: In constructor 'nn::Layer::Layer(int, int, void*)':
+fecppnn/Layer.h:21:30: warning: declaration of 'outputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |                          ~~~~^~~~~~~~~~
+fecppnn/Layer.h:16:9: note: shadowed declaration is here
+   16 |     int outputSize;
+      |         ^~~~~~~~~~
+fecppnn/Layer.h:21:15: warning: declaration of 'inputSize' shadows a member of 'nn::Layer' [-Wshadow]
+   21 |     Layer(int inputSize, int outputSize, void (*activation)(Data*, const Data*), void (*backprop)(Data*, const Data*))
+      |           ~~~~^~~~~~~~~
+fecppnn/Layer.h:15:9: note: shadowed declaration is here
+   15 |     int inputSize;
+      |         ^~~~~~~~~
+In file included from fecppnn/Data.h:27,
+                 from fecppnn/transform.h:9,
+                 from fecppnn/transform.cpp:4:
+fecppnn/config.h: At global scope:
+fecppnn/config.h:34:18: error: 'activate_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:34:34: error: 'backprop_relu' was not declared in this scope
+   34 |     {64*12,128, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:18: error: 'activate_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:35:34: error: 'backprop_relu' was not declared in this scope
+   35 |     {128  , 32, &activate_relu, &backprop_relu},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:18: error: 'activate_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                  ^~~~~~~~~~~~~
+fecppnn/config.h:36:34: error: 'backprop_null' was not declared in this scope
+   36 |     {32   ,  1, &activate_null, &backprop_null},
+      |                                  ^~~~~~~~~~~~~
+fecppnn/config.h:37:1: error: could not convert '{(64 * 12), 128, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+   37 | };
+      | ^
+      | |
+      | <brace-enclosed initializer list>
+fecppnn/config.h:37:1: error: could not convert '{128, 32, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+fecppnn/config.h:37:1: error: could not convert '{32, 1, <expression error>, <expression error>}' from '<brace-enclosed initializer list>' to 'nn::Layer'
+make: *** [makefile:33: openbench] Error 1
