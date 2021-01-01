@@ -21,7 +21,6 @@
 
 #include "History.h"
 #include "TimeManager.h"
-#include "syzygy/tbprobe.h"
 
 #include <thread>
 
@@ -280,7 +279,6 @@ void printInfoString(Board* b, Depth d, Score score) {
 
 /**
  * probes the wdl tables if tablebases can be used.
- */
 Score getWDL(Board* board) {
     
     // we cannot prove the tables if there are too many pieces on the board
@@ -325,10 +323,8 @@ Score getWDL(Board* board) {
     return MAX_MATE_SCORE;
 }
 
-/**
  * probes the dtz table. If an entry is being found, it also displays the info string.
  * The displayed depth is usually the distance to zero which is the distance until the 50-move rule is reset.
- */
 Move getDTZMove(Board* board) {
     
     if (bitCount(*board->getOccupied()) > (signed) TB_LARGEST)
@@ -414,6 +410,7 @@ Move getDTZMove(Board* board) {
     
     return 0;
 }
+*/
 
 /**
  * returns an overview of the search which is internally used for various reasons.
@@ -441,9 +438,9 @@ Move bestMove(Board* b, Depth maxDepth, TimeManager* timeManager, int threadId) 
     if (threadId == 0) {
         
         // if there is a dtz move available, do not start any threads or search at all. just do the dtz move
-        Move dtzMove = getDTZMove(b);
-        if (dtzMove != 0)
-            return dtzMove;
+        //Move dtzMove = getDTZMove(b);
+        //if (dtzMove != 0)
+        //    return dtzMove;
         
         // make sure that the given depth isnt too large
         if (maxDepth > MAX_PLY)
@@ -657,6 +654,7 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
     // tablebase probing:
     // search the wdl table if we are not at the root and the root did not use the wdl table to sort the moves
     // **************************************************************************************************************
+    /*
     if (useTB && ply > 0) {
         Score res = getWDL(b);
         
@@ -678,7 +676,7 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
             
             return res;
         }
-    }
+    }*/
     
     if (!skipMove && !inCheck && !pv) {
         // **********************************************************************************************************

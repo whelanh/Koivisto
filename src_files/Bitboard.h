@@ -31,11 +31,11 @@
 #include <string>
 #include <tgmath.h>
 #if defined(__clang__)
-#include <popcntintrin.h>
-#include <intrin.h>
-#elif defined(__EMSCRIPTEN__)
-#include <popcntintrin.h>
-#include <intrin.h>
+//#include <popcntintrin.h>
+//#include <intrin.h>
+//#elif defined(__EMSCRIPTEN__)
+//#include <popcntintrin.h>
+//#include <mmintrin.h>
 #endif
 
 namespace bb {
@@ -811,20 +811,18 @@ inline U64 lookUpBishopXRayAttack(Square index, U64 occupied, U64 opponent) {
  * @return
  */
 inline Square bitscanForward(U64 bb) {
-    //    assert(bb != 0);
-#if   defined(__MINGW64__) || defined(__MINGW32__    )
+    //assert(bb != 0);
+#if   defined(__clang__) //clang, emscripten
     return __builtin_ctzll(bb);
-#elif defined(__clang__)
-    return _BitScanForward(bb);
-#elif defined(__EMSCRIPTEN__)
-    return _BitScanForward(bb);
-#elif defined(_MSC_VER)
+#elif defined(__GNUC__)  //gcc
+    return __builtin_ctzll(bb);
+#elif defined(_MSC_VER)  //Visual Studio C++
     return _BitScanForward64(bb);
 #else
     unsigned pos = 0;
     while (!(bb & ONE))
     {
-       value >>= 1;
+       bb >>= 1;
        ++pos;
     }
     return pos;
@@ -837,12 +835,10 @@ inline Square bitscanForward(U64 bb) {
  * @return
  */
 inline int bitCount(U64 bb) {
-#if   defined(__MINGW64__) || defined(__MINGW32__    )
+#if   defined(__clang__)
     return __builtin_popcountll(bb);
-#elif defined(__clang__)
-    return _mm_popcnt_u64(bb);
-#elif defined(__EMSCRIPTEN__)
-    return _mm_popcnt_u64(bb);
+#elif defined(__GNUC)
+    return __builtin_popcountll(bb);
 #elif defined(_MSC_VER)
     return __popcnt64(bb);
 #else

@@ -1,7 +1,5 @@
-#thank you @Andrew Grant for your help with this file! :)
-
 CC      = g++
-SRC     = *.cpp syzygy/tbprobe.c
+SRC     = *.cpp
 LIBS    = -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive
 FOLDER  = bin/
 ROOT    = ../
@@ -23,6 +21,8 @@ RFLAGS = -O3 $(WFLAGS) -DNDEBUG -flto -static
 PFLAGS = -O0 $(WFLAGS) -DNDEBUG -p -pg
 DFLAGS = -O0 $(WFLAGS) -g
 
+
+EMSCRFLAGS  = -s TOTAL_MEMORY=128MB -s ALLOW_MEMORY_GROWTH=1 -msimd128 
 POPCNTFLAGS = -DUSE_POPCNT -msse3 -mpopcnt
 PEXTFLAGS   = $(POPCNTFLAGS) -DUSE_PEXT -mbmi2
 AVX2FLAGS   = -msse -msse3 -mpopcnt -mavx2 -msse4.1 -mssse3 -msse2
@@ -43,4 +43,7 @@ release:
 	$(CC) $(RFLAGS) $(SRC) $(MAKROS) $(LIBS) $(POPCNTFLAGS) -o $(EXE)-x64-$(PREFIX)-popcnt$(SUFFIX)
 	$(CC) $(RFLAGS) $(SRC) $(MAKROS) $(LIBS) $(POPCNTFLAGS) $(AVX) -o $(EXE)-x64-$(PREFIX)-popcnt-avx$(SUFFIX)
 
-	
+emscripten:
+	mkdir -p $(ROOT)$(FOLDER)
+	emcc $(RFLAGS) $(EMSCRFLAGS) $(SRC) $(MAKROS) $(LIBS) $(POPCNTFLAGS) -o $(EXE)
+

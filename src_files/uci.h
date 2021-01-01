@@ -35,6 +35,7 @@
 #include <thread>
 #include <unistd.h>
 
+
 void uci_loop(bool bench);
 
 void uci_processCommand(std::string str);

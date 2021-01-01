@@ -26,6 +26,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <sstream>
 #include <vector>
 
 constexpr char const* ws_t = " \t\n\r\f\v";
