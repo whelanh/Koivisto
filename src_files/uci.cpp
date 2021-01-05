@@ -19,8 +19,6 @@
 
 #include "uci.h"
 
-#include "syzygy/tbprobe.h"
-
 #include <fstream>
 #include <iostream>
 #include <thread>
@@ -130,7 +128,7 @@ void uci_searchAndPrint(Depth maxDepth, TimeManager* p_timeManager) {
 /**
  * processes a single command.
  */
-void uci_processCommand(std::string str) {
+EMSCRIPTEN_KEEPALIVE extern "C" void uci_processCommand(std::string str) {
 
     // we trim all white spaces on both sides first
     str = trim(str);
@@ -357,20 +355,6 @@ void uci_stop() { search_stop(); }
 void uci_set_option(std::string& name, std::string& value) {
     if (name == "Hash") {
         search_setHashSize(stoi(value));
-    } else if (name == "SyzygyPath") {
-        if (value.empty())
-            return;
-
-        char path[value.length()];
-        strcpy(path, value.c_str());
-        tb_init(path);
-
-        std::cout << "using syzygy table with " << TB_LARGEST << " m_pieces" << std::endl;
-
-        /*
-         * only use TB if loading was successful
-         */
-        search_useTB(TB_LARGEST > 0);
     } else if (name == "Threads") {
         int count           = stoi(value);
         int processor_count = (int) std::thread::hardware_concurrency();
