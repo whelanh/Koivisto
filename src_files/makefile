@@ -20,10 +20,15 @@ CFLAGS = -O3 $(WFLAGS) -DNDEBUG -flto -march=native
 RFLAGS = -O3 $(WFLAGS) -DNDEBUG -flto -static
 PFLAGS = -O0 $(WFLAGS) -DNDEBUG -p -pg
 DFLAGS = -O0 $(WFLAGS) -g
+EFLAGS = -O3 $(WFLAGS) -DNDEBUG -flto -static
+
+EFLAGS += -s EXPORT_NAME="Koivisto" -s ENVIRONMENT=web,worker,node -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=1
+EFLAGS += -s EXIT_RUNTIME=0 -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']" --pre-js pre.js
+EFLAGS += -s ALLOW_MEMORY_GROWTH=1 -s INITIAL_MEMORY=67108864 -s MAXIMUM_MEMORY=2147483648
+EFLAGS += -s FILESYSTEM=0 --closure 1
 
 
-EMSCRFLAGS  = -s TOTAL_MEMORY=128MB -s ALLOW_MEMORY_GROWTH=1 -msimd128 
-POPCNTFLAGS = -DUSE_POPCNT -msse3 -mpopcnt
+POPCNTFLAGS = -DUSE_POPCNT -mpopcnt
 PEXTFLAGS   = $(POPCNTFLAGS) -DUSE_PEXT -mbmi2
 AVX2FLAGS   = -msse -msse3 -mpopcnt -mavx2 -msse4.1 -mssse3 -msse2
 
@@ -45,5 +50,4 @@ release:
 
 emscripten:
 	mkdir -p $(ROOT)$(FOLDER)
-	emcc $(RFLAGS) $(EMSCRFLAGS) $(SRC) $(MAKROS) $(LIBS) $(POPCNTFLAGS) -o $(EXE)
-
+	emcc $(EFLAGS) $(SRC) $(MAKROS) $(LIBS) $(POPCNTFLAGS) -o $(ROOT)$(FOLDER)Koivisto.js
