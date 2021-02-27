@@ -784,7 +784,7 @@ Score pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply, Thread
                 // late move pruning:
                 // if the depth is small enough and we searched enough quiet moves, dont consider this move
                 // **************************************************************************************************
-                if (quiets > isImproving+(depth+2)*(depth+2)/6) {
+                if (quiets > isImproving+(depth+2)*(depth+2)/4) {
                     moveOrderer.skip = true;
                     continue;
                 }
