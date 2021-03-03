@@ -35,7 +35,7 @@ add_executable(Koivisto
         src_files/syzygy/tbconfig.h
         src_files/syzygy/tbprobe.c
         src_files/syzygy/tbchess.c
-        src_files/psqt.cpp src_files/psqt.h src_files/gradient.h)
+        src_files/psqt.cpp src_files/psqt.h src_files/gradient.h src_files/nnue/nnue_eval.h)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMINOR_VERSION=20")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMAJOR_VERSION=4")

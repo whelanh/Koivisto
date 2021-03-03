@@ -23,6 +23,7 @@
 #include "MoveOrderer.h"
 #include "Verification.h"
 #include "uci.h"
+#include "nnue/nnue_eval.h"
 
 #include <iomanip>
 #include "gradient.h"
@@ -40,6 +41,7 @@ int main(int argc, char *argv[]) {
     } else if (argc > 1 && strcmp(argv[1], "bench") == 0) {
         uci_loop(true);
     }
+
 
 //
 //using namespace tuning;
