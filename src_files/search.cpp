@@ -506,6 +506,9 @@ Score Search::pvSearch(Board* b, Score alpha, Score beta, Depth depth, Depth ply
             // get the current move
             Move m = moveOrderer.next(0);
 
+            if (!sameMove(m, hashMove))
+                continue;
+
             if (!b->isLegal(m))
                 continue;
 
