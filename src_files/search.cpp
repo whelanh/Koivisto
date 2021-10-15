@@ -871,7 +871,7 @@ Score Search::qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* 
     U64         zobrist    = b->zobrist();
     Entry       en         = table->get(b->zobrist());
     NodeType    ttNodeType = ALL_NODE;
-
+    Move        hashMove   = 0;
     // **************************************************************************************************************
     // transposition table probing:
     // we probe the transposition table and check if there is an entry with the same zobrist key as
@@ -901,6 +901,9 @@ Score Search::qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* 
 
     // we can also use the perft_tt entry to adjust the evaluation.
     if (en.zobrist == zobrist) {
+
+        hashMove = en.move;
+
         // adjusting eval
         if ((en.type == PV_NODE) || (en.type == CUT_NODE && stand_pat < en.score)
             || (en.type == ALL_NODE && stand_pat > en.score)) {
@@ -924,7 +927,7 @@ Score Search::qSearch(Board* b, Score alpha, Score beta, Depth ply, ThreadData* 
     MoveList* mv = &sd->moves[ply];
 
     // create a moveorderer to sort the moves during the search
-    generateNonQuietMoves(b, mv, 0, sd, ply, inCheck);
+    generateNonQuietMoves(b, mv, hashMove, sd, ply, inCheck);
     MoveOrderer moveOrderer {mv};
 
     // keping track of the best move for the transpositions

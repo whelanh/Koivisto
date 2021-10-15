@@ -67,11 +67,14 @@ inline void scoreMove(Board* board, MoveList* mv, Move hashMove, SearchData* sd,
         }
         
     }else if constexpr (m == GENERATE_NON_QUIET){
-        // scoring when only non quiet moves are generated
-        MoveScore mvvLVA = 100 * (getCapturedPieceType(move)) - 10 * (getMovingPieceType(move))
-                           + (getSquareTo(board->getPreviousMove()) == getSquareTo(move));
-        mv->scoreMove(idx, 100000 + mvvLVA);
-        
+        if (sameMove(hashMove, move)) {
+            mv->scoreMove(idx, 110000);
+        } else {
+            // scoring when only non quiet moves are generated
+            MoveScore mvvLVA = 100 * (getCapturedPieceType(move)) - 10 * (getMovingPieceType(move))
+                            + (getSquareTo(board->getPreviousMove()) == getSquareTo(move));
+            mv->scoreMove(idx, 100000 + mvvLVA);
+        }
     }
 }
 
