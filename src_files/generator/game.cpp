@@ -1,6 +1,7 @@
 
-#ifdef GENERATOR
 #include "game.h"
+#ifdef GENERATOR
+
 #include "../eval.h"
 #include "../movegen.h"
 #include "../search.h"

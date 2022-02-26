@@ -21,40 +21,37 @@
 #include "Board.h"
 #include "Move.h"
 #include "Verification.h"
-#include "uci.h"
-#ifdef GENERATOR
 #include "generator/genpool.h"
-#endif
+#include "movegen.h"
+#include "uci.h"
 
 #include <iomanip>
-#include "movegen.h"
 
 using namespace std;
 using namespace bb;
 using namespace move;
 
+int main(int argc, char* argv[]) {
 
-int main(int argc, char *argv[]) {
+#ifdef GENERATOR
+    bb::init();
+    nn::init();
+    Game::init(argc, argv);
 
+    std::vector<std::string> args(argv, argv + argc);
 
-    #ifdef GENERATOR
-        bb::init();
-        nn::init();
-        Game::init(argc, argv);
-        
-        std::vector<std::string> args(argv, argv + argc);
-    
-        auto getParam =
-            [&](std::string const& option, int def)
-        {
-            std::string val = getValue(args, option);
-            return val.size() ? std::stoi(val) : def;
-        };
-    
-        GeneratorPool pool(getParam("-threads", 1));
-        pool.run(getParam("-games", 10));
-    #else
+    auto                     getParam = [&](std::string const& option, int def) {
+        std::string val = getValue(args, option);
+        return val.size() ? std::stoi(val) : def;
+    };
+
+    GeneratorPool pool(getParam("-threads", 1));
+    pool.run(getParam("-games", 10));
+#else
     uci::mainloop(argc, argv);
-    #endif
+#endif
+    
+    
+    
     return 0;
 }

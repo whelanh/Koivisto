@@ -64,6 +64,8 @@ void position_startpos(std::string moves);
 
 void bench();
 
+void scoremoves(std::string& infile, std::string& outfile, int nodes);
+
 void quit();
     
 }

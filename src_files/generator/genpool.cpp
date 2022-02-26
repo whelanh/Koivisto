@@ -1,8 +1,9 @@
 
+
+#include "game.h"
 #ifdef GENERATOR
 
 #include "genpool.h"
-#include "game.h"
 #include <chrono>
 #include <random>
 
